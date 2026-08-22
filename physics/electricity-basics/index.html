@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Electricity Basics: Current, Voltage, Ohm&#x27;s Law | StudyBonk</title>
+<meta name="description" content="Learn electricity free: charge, current, voltage, resistance, Ohm&#x27;s law, and series vs parallel circuits — with worked examples, flashcards and a quiz.">
+<meta name="keywords" content="electricity basics, ohm&#x27;s law practice, current voltage resistance, series vs parallel circuits, physics electricity help, free physics practice, difference between current and voltage in simple terms, what is ohm&#x27;s law and how do you use it, how to calculate current voltage or resistance, what does a resistor do in a circuit, series vs parallel circuits explained simply, why do bulbs get dimmer in a series circuit, what is electrical charge in simple terms, how does a battery work basics for students, conductor vs insulator examples, what units measure current voltage and resistance, how to remember v = ir">
+<meta name="author" content="TuffyCoder">
+<link rel="canonical" href="https://studybonk.vercel.app/physics/electricity-basics/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="StudyBonk">
+<meta property="og:title" content="Electricity Basics: Current, Voltage, Ohm&#x27;s Law | StudyBonk">
+<meta property="og:description" content="Learn electricity free: charge, current, voltage, resistance, Ohm&#x27;s law, and series vs parallel circuits — with worked examples, flashcards and a quiz.">
+<meta property="og:url" content="https://studybonk.vercel.app/physics/electricity-basics/">
+<meta property="og:image" content="https://studybonk.vercel.app/assets/img/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Electricity Basics: Current, Voltage, Ohm&#x27;s Law | StudyBonk">
+<meta name="twitter:description" content="Learn electricity free: charge, current, voltage, resistance, Ohm&#x27;s law, and series vs parallel circuits — with worked examples, flashcards and a quiz.">
+<meta name="twitter:image" content="https://studybonk.vercel.app/assets/img/og-image.png">
+<meta name="theme-color" content="#4A90E2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1A1A" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="/assets/js/theme-boot.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://studybonk.vercel.app/"}, {"@type": "ListItem", "position": 2, "name": "Learn", "item": "https://studybonk.vercel.app/learn/"}, {"@type": "ListItem", "position": 3, "name": "Physics", "item": "https://studybonk.vercel.app/physics/"}, {"@type": "ListItem", "position": 4, "name": "Electricity Basics", "item": "https://studybonk.vercel.app/physics/electricity-basics/"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Electricity Basics: Charge, Current, Voltage & Ohm's Law", "description": "Learn electricity free: charge, current, voltage, resistance, Ohm's law, and series vs parallel circuits — with worked examples, flashcards and a quiz.", "mainEntityOfPage": "https://studybonk.vercel.app/physics/electricity-basics/", "datePublished": "2026-08-22", "dateModified": "2026-08-22", "image": "https://studybonk.vercel.app/assets/img/og-image.png", "publisher": {"@id": "https://studybonk.vercel.app/#organization"}, "author": {"@type": "Person", "name": "TuffyCoder", "url": "https://www.youtube.com/@TuffyCoder", "jobTitle": "Ethical developer · Privacy-focused builder · Open-source contributor"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What's the difference between current and voltage?", "acceptedAnswer": {"@type": "Answer", "text": "Current is the flow of charge (amperes); voltage is the push driving that flow (volts). River analogy: current is how much water passes per second; voltage is how steep the drop driving it."}}, {"@type": "Question", "name": "What does a resistor actually do?", "acceptedAnswer": {"@type": "Answer", "text": "It converts electrical energy into heat while throttling current. That's a feature in a toaster coil and the reason electronics get warm — and why chargers have vents."}}, {"@type": "Question", "name": "Why are houses wired in parallel?", "acceptedAnswer": {"@type": "Answer", "text": "So every device gets the full voltage, works independently, and one failure doesn't black out the house. The trade-off: every plugged-in device adds another current-hungry branch, which is how circuits overload."}}, {"@type": "Question", "name": "Does electricity get 'used up' in a circuit?", "acceptedAnswer": {"@type": "Answer", "text": "No — charge isn't consumed; energy is. The current leaving a bulb equals the current entering it; the bulb just converts electrical energy into light and heat."}}]}</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="nav-wrap">
+<nav class="nav container" aria-label="Main navigation">
+  <a class="brand" href="/" aria-label="StudyBonk home">
+    <img class="brand-logo" src="/assets/img/logo.svg" alt="" width="38" height="38">
+    <span class="brand-name">Study<em>Bonk</em></span>
+  </a>
+  <ul class="nav-links"><li><a href="/learn/">Learn</a></li><li><a href="/flashcards/">Flashcards</a></li><li><a href="/quiz/">Quiz</a></li><li><a href="/focus/">Focus</a></li><li><a href="/ai/">Bonk AI<span class="nav-badge">Local</span></a></li><li><a href="/dashboard/">Dashboard</a></li></ul>
+  <div class="nav-actions">
+    <span class="chip chip-yellow nowrap" data-nav-xp title="Your XP — saved locally">⚡ 0 XP</span>
+    <button class="theme-toggle" data-theme-toggle aria-label="Toggle light and dark mode" type="button">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4m11.4-11.4 1.4-1.4"/></svg>
+    </button>
+    <a class="btn btn-primary btn-sm nav-cta-desktop" href="/learn/">Start free</a>
+    <button class="nav-burger" aria-expanded="false" aria-label="Open menu" type="button"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+</header>
+<main id="main">
+
+<section class="hero" style="padding-bottom:0">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span class="sep" aria-hidden="true">›</span><a href="/learn/">Learn</a><span class="sep" aria-hidden="true">›</span><a href="/physics/">Physics</a><span class="sep" aria-hidden="true">›</span><span aria-current="page">Electricity Basics</span></nav>
+    <span class="eyebrow">⚛️ Physics · Electricity Basics</span>
+    <h1>Electricity Basics: Charge, Current, Voltage &amp; Ohm&#x27;s Law</h1>
+    <p class="lead">Charge, current, voltage, resistance and Ohm&#x27;s law — the water-park analogy that makes it click.</p>
+    <div class="hero-badges">
+      <span class="chip">🎟️ No sign-up</span>
+      <span class="chip">💾 Saved locally</span>
+      <span class="chip chip-yellow">⚡ Earns XP</span>
+    </div>
+  </div>
+</section>
+<div class="container section-sm">
+  <div class="toc"><strong>On this page</strong><ul><li><a href="#section-0">Charge, current and voltage: the water park analogy</a></li><li><a href="#section-1">Ohm&#x27;s law: the one equation that runs your phone</a></li><li><a href="#section-2">Series and parallel circuits</a></li></ul></div>
+  <article class="article">
+    <div id="section-0"><h2>Charge, current and voltage: the water park analogy</h2><p>Electricity starts with charge, a property of tiny particles: protons (+) and electrons (−). Opposite charges pull together; like charges push apart. Current is charge in motion — the flow of electrons through a wire — measured in amperes (A).</p><p>Voltage is the push that drives that flow, measured in volts (V) — think of it as electrical pressure. A battery is a pump: it pushes charge out of one end, around the circuit, and back to the other. Resistance (ohms, Ω) is anything that throttles the flow — a thin wire, a resistor, a corroded connection.</p><ul><li>Charge comes in two signs: + (protons) and − (electrons)</li><li>Current = flow of charge, measured in amperes (A)</li><li>Voltage = electrical push or pressure, measured in volts (V)</li><li>Resistance = flow throttling, measured in ohms (Ω)</li><li>Water park: current = flow rate, voltage = pump pressure, resistance = pipe narrowness</li></ul></div><div id="section-1"><h2>Ohm&#x27;s law: the one equation that runs your phone</h2><p>Ohm&#x27;s law links all three: V = IR — voltage equals current times resistance. Bump the voltage with the same resistance and more current flows; add resistance at the same voltage and current shrinks. Rearrange the same equation for any missing piece: I = V/R and R = V/I.</p><p>The standard mistake is plugging in mixed units or grabbing the wrong quantity. Convert to volts, amps and ohms first, write the formula, then substitute. That three-second ritual catches nearly every Ohm&#x27;s law error.</p><ul><li>V = IR · I = V/R · R = V/I</li><li>More voltage (same R) → more current</li><li>More resistance (same V) → less current</li><li>Keep units consistent: V, A, Ω</li></ul><div class="example-box"><div class="example-title">💡 Worked example: Ohm&#x27;s law</div><p>A 9 V battery drives current through a 3 Ω resistor. I = V/R = 9 ÷ 3 = 3 A. Swap in a 6 Ω resistor and current drops to 1.5 A — double the resistance, half the current, exactly as Ohm&#x27;s law predicts.</p></div></div><div id="section-2"><h2>Series and parallel circuits</h2><p>In a series circuit, one path connects everything: the same current squeezes through each device in turn. More bulbs in series means more total resistance and dimmer bulbs — and one burned-out bulb opens the only path, killing the whole string. That&#x27;s why old Christmas lights died together.</p><p>In a parallel circuit, each device gets its own branch across the same voltage. Every bulb glows at full brightness, one failure doesn&#x27;t kill the rest, and total resistance drops as you add branches — which is why your house is wired in parallel. Overloaded outlets happen because more parallel branches pull more total current.</p><ul><li>Series: one path, same current through everything</li><li>Series: more bulbs → more resistance → dimmer</li><li>Parallel: branches share the same voltage</li><li>Parallel: one dead bulb doesn&#x27;t kill the others</li><li>Houses are wired in parallel — every outlet gets full voltage</li></ul></div>
+    <h2>Key concepts to memorize</h2>
+    <div class="concept-list"><div class="concept"><strong>Electric charge</strong><span>A basic property of matter; protons carry +, electrons carry −. Opposite charges attract.</span></div><div class="concept"><strong>Current (I)</strong><span>The rate of charge flow past a point, measured in amperes (A).</span></div><div class="concept"><strong>Voltage (V)</strong><span>The electrical &#x27;push&#x27; or potential difference driving charge, measured in volts.</span></div><div class="concept"><strong>Resistance (R)</strong><span>How much a material opposes current, measured in ohms (Ω).</span></div><div class="concept"><strong>Ohm&#x27;s law</strong><span>V = IR: voltage equals current times resistance.</span></div><div class="concept"><strong>Series circuit</strong><span>One loop; identical current everywhere; resistances add.</span></div><div class="concept"><strong>Parallel circuit</strong><span>Branched paths; each branch gets the full source voltage.</span></div><div class="concept"><strong>Conductor vs insulator</strong><span>Conductors (copper, most metals) let charge flow; insulators (rubber, plastic, glass) block it.</span></div></div>
+    <div class="lesson-box">
+      <h3>🎯 Study tips for this topic</h3>
+      <ul><li>Anchor V, I and R to the water analogy first — pressure, flow, narrowness — then attach the symbols.</li><li>Drill the Ohm&#x27;s law triangle: cover the quantity you want; the layout of the other two shows the formula.</li><li>Redraw every circuit as a clean rectangle diagram before solving.</li><li>Practice unit conversion (milliamps to amps) — mixed units cause most wrong answers.</li><li>Predict before you compute (&#x27;more resistance should mean less current&#x27;), then check; physics gets satisfying when predictions land.</li></ul>
+      <div class="btn-row mt-2">
+        <a class="btn btn-primary btn-sm" href="/flashcards/?deck=physics-electricity-basics">Drill 10 flashcards →</a>
+        <a class="btn btn-ghost btn-sm" href="/quiz/?topic=physics-electricity-basics">Take the mini quiz →</a>
+      </div>
+    </div>
+  </article>
+  
+<div class="byline mt-3">
+  <img src="/assets/img/creator-avatar.jpg" alt="TuffyCoder, creator of StudyBonk" width="60" height="60" loading="lazy">
+  <div class="byline-text">
+    <strong>Written by TuffyCoder</strong>
+    <span>Ethical developer · Privacy-focused builder · Open-source contributor · <a href="/about/">About the creator</a></span>
+  </div>
+</div>
+</div>
+
+<section class="section-sm" aria-labelledby="paa-h">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">People also ask</span>
+      <h2 id="paa-h">Questions students also ask</h2>
+    </div>
+    <div class="faq-list"><details class="faq"><summary>What is Ohm&#x27;s law in simple words?</summary><div class="faq-body">V = IR: the push (volts) equals the flow (amps) times the squeeze-back (ohms). Know any two, find the third.</div></details><details class="faq"><summary>Which is dangerous, voltage or current?</summary><div class="faq-body">Current through your body is what harms you — but voltage is what pushes that current. Even modest voltages can drive dangerous current through low-resistance paths like wet skin.</div></details><details class="faq"><summary>Why are parallel circuits brighter than series?</summary><div class="faq-body">Each parallel bulb receives the full source voltage across its own branch. Series bulbs share the voltage, so each gets less and glows dimmer.</div></details><details class="faq"><summary>What are conductors and insulators?</summary><div class="faq-body">Conductors (copper, aluminum, salt water) let charge flow easily; insulators (rubber, plastic, glass) block it. Wires are copper wrapped in plastic for exactly this reason.</div></details></div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="faq-h">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">FAQ</span>
+      <h2 id="faq-h">Questions about electricity basics</h2>
+    </div>
+    <div class="faq-list"><details class="faq"><summary>What&#x27;s the difference between current and voltage?</summary><div class="faq-body">Current is the flow of charge (amperes); voltage is the push driving that flow (volts). River analogy: current is how much water passes per second; voltage is how steep the drop driving it.</div></details><details class="faq"><summary>What does a resistor actually do?</summary><div class="faq-body">It converts electrical energy into heat while throttling current. That&#x27;s a feature in a toaster coil and the reason electronics get warm — and why chargers have vents.</div></details><details class="faq"><summary>Why are houses wired in parallel?</summary><div class="faq-body">So every device gets the full voltage, works independently, and one failure doesn&#x27;t black out the house. The trade-off: every plugged-in device adds another current-hungry branch, which is how circuits overload.</div></details><details class="faq"><summary>Does electricity get &#x27;used up&#x27; in a circuit?</summary><div class="faq-body">No — charge isn&#x27;t consumed; energy is. The current leaving a bulb equals the current entering it; the bulb just converts electrical energy into light and heat.</div></details></div>
+  </div>
+</section>
+
+<section class="section-sm" aria-labelledby="trustband-h">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Why you can trust StudyBonk</span>
+      <h2 id="trustband-h">No accounts. No tracking. Open-source.</h2>
+      <p>Every promise on this page is verifiable — <a href="/trust/">see the proof</a> or <a href="https://github.com/TuffyCoder/StudyBonk">read the code</a>.</p>
+    </div>
+    <div class="grid grid-3"><div class="card card-hover trust-item reveal"><div class="card-icon">🔒</div><h3>Zero data collection</h3><p>StudyBonk has no accounts, no analytics, no cookies and no server-side storage. Your notes, decks and streaks live only in your browser&#x27;s local storage on your own device.</p></div><div class="card card-hover trust-item reveal"><div class="card-icon">📖</div><h3>Open-source transparency</h3><p>The entire platform is open-source on GitHub. You can read every line of code — including this page — before you trust it with a single minute of study time.</p></div><div class="card card-hover trust-item reveal"><div class="card-icon">🧑‍💻</div><h3>A named, accountable author</h3><p>Every page is written and maintained by TuffyCoder, an ethical developer who publishes under a real identity with public social channels and a responsible disclosure policy.</p></div></div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="cta-h">
+  <div class="container">
+    <div class="cta-band reveal">
+      <span class="eyebrow" style="background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.4);color:#fff">100% free · forever</span>
+      <h2 id="cta-h">Learn Electricity Basics the bonky way</h2>
+      <p>Read it, drill it, quiz it — that loop is how memories are made. Free, private, no account.</p>
+      <div class="btn-row" style="justify-content:center;margin-top:1.5rem">
+        <a class="btn btn-lg" href="/flashcards/?deck=physics-electricity-basics">Open the flashcards</a>
+        <a class="btn btn-lg" href="/ai/" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.6)">Try Bonk AI</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<section class="section-sm" aria-label="Promises">
+  <div class="container reminders"><span class="reminder">🎟️ No sign-up required</span><span class="reminder">💾 Everything saved in your browser</span><span class="reminder">🌙 Light &amp; dark mode</span><span class="reminder">🚫 No ads · no tracking · no paywalls</span></div>
+</section>
+<footer class="footer">
+<div class="container">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="brand" href="/" aria-label="StudyBonk home">
+        <img class="brand-logo" src="/assets/img/logo.svg" alt="" width="38" height="38">
+        <span class="brand-name">Study<em>Bonk</em></span>
+      </a>
+      <p>Bonk your brain into shape. A free, ethical, privacy-focused study platform: flashcards, quizzes, focus timer, XP and a local AI tutor. Created by <a href="/about/">TuffyCoder</a>.</p>
+      <div class="social-row"><a class="social-btn" href="https://github.com/TuffyCoder" rel="noopener me" target="_blank" aria-label="TuffyCoder on GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1.17-.02-2.12-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.35.96.1-.75.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.66.41.35.77 1.05.77 2.12 0 1.53-.01 2.76-.01 3.14 0 .3.2.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>GitHub</a><a class="social-btn" href="https://www.youtube.com/@TuffyCoder" rel="noopener me" target="_blank" aria-label="TuffyCoder on YouTube"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.5A3.02 3.02 0 0 0 .5 6.19C0 8.07 0 12 0 12s0 3.93.5 5.81a3.02 3.02 0 0 0 2.12 2.14c1.88.5 9.38.5 9.38.5s7.5 0 9.38-.5a3.02 3.02 0 0 0 2.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.81ZM9.55 15.57V8.43L15.82 12l-6.27 3.57Z"/></svg>YouTube</a><a class="social-btn" href="https://tiktok.com/@tuffycoderdev" rel="noopener me" target="_blank" aria-label="TuffyCoder on TikTok"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.3 0 .6.05.88.13V9.4a6.33 6.33 0 0 0-1-.05A6.34 6.34 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1Z"/></svg>TikTok</a><a class="social-btn" href="https://reddit.com/user/TuffyCoder" rel="noopener me" target="_blank" aria-label="TuffyCoder on Reddit"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 11.78a2.76 2.76 0 0 0-4.72-1.94 13.66 13.66 0 0 0-6.68-2.14l1.32-4.24 3.63.77a1.93 1.93 0 1 0 .2-1.1l-4.42-.94a.55.55 0 0 0-.65.37l-1.58 5.08a13.68 13.68 0 0 0-6.92 2.15 2.76 2.76 0 1 0-3.05 4.48 5.5 5.5 0 0 0-.05.82c0 4.2 4.63 7.6 10.34 7.6s10.34-3.4 10.34-7.6a5.5 5.5 0 0 0-.05-.82A2.76 2.76 0 0 0 24 11.78ZM7.6 13.65a1.38 1.38 0 1 1 1.38 1.38 1.38 1.38 0 0 1-1.38-1.38Zm7.15 4.34a4.71 4.71 0 0 1-3.39 1.13 4.71 4.71 0 0 1-3.38-1.13.55.55 0 0 1 .77-.78 3.72 3.72 0 0 0 2.61.81 3.72 3.72 0 0 0 2.62-.81.55.55 0 1 1 .77.78Zm-.21-2.96a1.38 1.38 0 1 1 1.38-1.38 1.38 1.38 0 0 1-1.38 1.38Z"/></svg>Reddit</a></div>
+      <div class="mt-2 creator-creds"><span class="chip chip-blue">Created by TuffyCoder</span><span class="chip chip-blue">Ethical developer</span><span class="chip chip-blue">Privacy-focused builder</span><span class="chip chip-blue">Open-source contributor</span></div>
+      <p class="creator-sign mt-2">Stay curious, stay bonky. — TuffyCoder 🦊</p>
+    </div>
+    <nav class="footer-col" aria-label="Study"><h3>Study</h3><ul><li><a href="/learn/">Topic Hub</a></li><li><a href="/flashcards/">Free Flashcards</a></li><li><a href="/quiz/">Practice Quizzes</a></li><li><a href="/focus/">Focus Timer</a></li><li><a href="/dashboard/">Study Dashboard</a></li></ul></nav><nav class="footer-col" aria-label="Bonk AI"><h3>Bonk AI</h3><ul><li><a href="/ai/">AI Study Tutor</a></li><li><a href="/ai/#how-it-works">How Bonk AI Works</a></li><li><a href="/privacy/">AI Privacy</a></li></ul></nav><nav class="footer-col" aria-label="Trust"><h3>Trust</h3><ul><li><a href="/trust/">Why Trust StudyBonk</a></li><li><a href="/security/">Security</a></li><li><a href="/about/">Creator</a></li><li><a href="/faq/">FAQ</a></li><li><a href="/marketing/">Creator Marketing Kit</a></li></ul></nav><nav class="footer-col" aria-label="Legal"><h3>Legal</h3><ul><li><a href="/terms/">Terms of Use</a></li><li><a href="/privacy/">Privacy Policy</a></li><li><a href="/cookies/">Cookie-Free Notice</a></li><li><a href="/license/">Open-Source License</a></li></ul></nav>
+  </div>
+  <details class="mt-3 compliance-strip">
+    <summary style="cursor:pointer;font-weight:800;padding:10px 0">🔒 Privacy &amp; security guarantees (click to expand)</summary>
+    <ul class="mt-1"><li>Ad-free, tracker-free, cookie-free platform</li><li>No external analytics</li><li>No third-party scripts</li><li>No data collection</li><li>No user accounts</li><li>All progress saved locally in your browser</li><li>Open-source transparency on GitHub</li><li>Responsible disclosure / bug bounty invitation</li><li>Secure-by-design architecture</li><li>Zero data retention policy</li><li>No hidden APIs</li><li>No server-side storage</li><li>Client-side encryption for sensitive data</li><li>Hosted safely on Vercel&#x27;s global edge network</li></ul>
+  </details>
+  <div class="footer-bottom">
+    <span>© 2026 StudyBonk · Made with 💛 &amp; zero trackers · <a href="/license/">Open-source</a></span>
+    <div class="tech-badges"><span class="chip" title="The whole site is generated by a Python build script.">Built with Python</span><span class="chip" title="Semantic HTML and a hand-crafted design system.">Powered by HTML &amp; CSS</span><span class="chip" title="Vanilla JS — zero frameworks, zero trackers.">Enhanced with JavaScript</span><span class="chip" title="Served safely from Vercel&#x27;s global edge network.">Hosted on Vercel</span><span class="chip" title="Every line is public and auditable.">Open-source on GitHub</span><span class="chip" title="The AI tutor runs 100% in your browser.">Local AI — No API</span></div>
+  </div>
+</div>
+</footer>
+<a class="fab" href="/ai/" aria-label="Ask Bonk AI — local, private AI tutor">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/><circle cx="12" cy="12" r="4"/></svg>
+  <span class="fab-label">Ask Bonk AI</span>
+</a>
+<script type="application/json" id="sb-active-nav">"/learn/"</script>
+<script src="/assets/js/storage.js" defer></script><script src="/assets/js/components.js" defer></script><script src="/assets/js/gamification.js" defer></script><script src="/assets/js/nav.js" defer></script><script src="/assets/js/theme.js" defer></script>
+</body>
+</html>

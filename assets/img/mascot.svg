@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 250" role="img" aria-label="Bonk, the StudyBonk mascot — a goofy blue graduation-cap blob">
+  <!-- shadow -->
+  <ellipse cx="110" cy="238" rx="62" ry="9" fill="#4A90E2" opacity="0.14"/>
+  <!-- left arm (waving) -->
+  <path d="M52 150 Q30 128 40 108" fill="none" stroke="#3571B9" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="40" cy="106" r="11" fill="#4A90E2"/>
+  <!-- right arm -->
+  <path d="M168 152 Q188 162 184 178" fill="none" stroke="#3571B9" stroke-width="16" stroke-linecap="round"/>
+  <!-- feet -->
+  <ellipse cx="84" cy="222" rx="20" ry="11" fill="#3571B9"/>
+  <ellipse cx="136" cy="222" rx="20" ry="11" fill="#3571B9"/>
+  <!-- body -->
+  <path d="M110 78 C158 78 182 112 182 152 C182 198 150 226 110 226 C70 226 38 198 38 152 C38 112 62 78 110 78 Z" fill="#4A90E2"/>
+  <!-- belly -->
+  <ellipse cx="110" cy="176" rx="44" ry="36" fill="#EAF3FC"/>
+  <!-- ears -->
+  <path d="M62 92 L48 58 L84 76 Z" fill="#3571B9"/>
+  <path d="M158 92 L172 58 L136 76 Z" fill="#3571B9"/>
+  <path d="M63 84 L55 66 L76 77 Z" fill="#F5C542"/>
+  <path d="M157 84 L165 66 L144 77 Z" fill="#F5C542"/>
+  <!-- cheeks -->
+  <ellipse cx="70" cy="138" rx="10" ry="7" fill="#F5C542" opacity="0.65"/>
+  <ellipse cx="150" cy="138" rx="10" ry="7" fill="#F5C542" opacity="0.65"/>
+  <!-- eyes -->
+  <circle cx="86" cy="116" r="12" fill="#FFFFFF"/>
+  <circle cx="134" cy="116" r="12" fill="#FFFFFF"/>
+  <circle cx="89" cy="118" r="6" fill="#1A1A1A"/>
+  <circle cx="137" cy="118" r="6" fill="#1A1A1A"/>
+  <circle cx="91.5" cy="115.5" r="2" fill="#FFFFFF"/>
+  <circle cx="139.5" cy="115.5" r="2" fill="#FFFFFF"/>
+  <!-- goofy smile -->
+  <path d="M92 140 Q110 158 128 140" fill="none" stroke="#1A1A1A" stroke-width="5" stroke-linecap="round"/>
+  <path d="M100 149 Q110 156 120 149" fill="#1A1A1A" opacity="0.15"/>
+  <!-- graduation cap -->
+  <path d="M78 82 Q110 70 142 82 L142 66 Q110 54 78 66 Z" fill="#28568C"/>
+  <polygon points="110,38 178,64 110,90 42,64" fill="#1F4470"/>
+  <polygon points="110,38 178,64 110,90 42,64" fill="#28568C"/>
+  <circle cx="110" cy="64" r="5" fill="#F5C542"/>
+  <path d="M110 64 Q168 66 170 96" fill="none" stroke="#F5C542" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="170" cy="100" r="8" fill="#F5C542"/>
+  <!-- star sparkles -->
+  <path d="M28 70 l3.5 7 7 3.5 -7 3.5 -3.5 7 -3.5 -7 -7 -3.5 7 -3.5 Z" fill="#F5C542" opacity="0.85"/>
+  <path d="M196 120 l2.5 5 5 2.5 -5 2.5 -2.5 5 -2.5 -5 -5 -2.5 5 -2.5 Z" fill="#F5C542" opacity="0.7"/>
+  <path d="M18 160 l2 4 4 2 -4 2 -2 4 -2 -4 -4 -2 4 -2 Z" fill="#FFFFFF" opacity="0.8"/>
+</svg>

@@ -1,0 +1,9 @@
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.zcode/
+__pycache__/
+*.pyc
+node_modules/
+.vercel

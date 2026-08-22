@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="StudyBonk logo">
+  <defs>
+    <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4A90E2"/>
+      <stop offset="1" stop-color="#6FB1F5"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="30" fill="url(#lg)"/>
+  <!-- cap -->
+  <polygon points="32,14 52,24 32,34 12,24" fill="#1F4470"/>
+  <path d="M24 28 Q32 24 40 28 L40 34 Q32 30 24 34 Z" fill="#28568C"/>
+  <path d="M48 26 Q50 32 49 38" fill="none" stroke="#F5C542" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="49" cy="40" r="3" fill="#F5C542"/>
+  <!-- face -->
+  <circle cx="25" cy="42" r="6.5" fill="#FFFFFF"/>
+  <circle cx="40" cy="42" r="6.5" fill="#FFFFFF"/>
+  <circle cx="26.5" cy="43" r="3.2" fill="#1A1A1A"/>
+  <circle cx="41.5" cy="43" r="3.2" fill="#1A1A1A"/>
+  <circle cx="27.6" cy="41.8" r="1.1" fill="#FFFFFF"/>
+  <circle cx="42.6" cy="41.8" r="1.1" fill="#FFFFFF"/>
+  <path d="M27 51 Q32.5 56 38 51" fill="none" stroke="#1A1A1A" stroke-width="2.6" stroke-linecap="round"/>
+</svg>
