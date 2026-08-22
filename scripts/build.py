@@ -1005,11 +1005,11 @@ TOOL_MOUNTS = {
 }
 
 TOOL_SCRIPTS = {
-    "flashcards": ["/assets/js/study-data.js", "/assets/js/flashcards.js"],
+    "flashcards": ["/assets/js/study-data.js", "/assets/js/bonk-model.js", "/assets/js/flashcards.js"],
     "quiz": ["/assets/js/study-data.js", "/assets/js/quiz.js"],
     "focus": ["/assets/js/focus.js"],
     "dashboard": ["/assets/js/dashboard.js"],
-    "ai": ["/assets/js/study-data.js", "/assets/js/ai.js"],
+    "ai": ["/assets/js/study-data.js", "/assets/js/bonk-model.js", "/assets/js/ai.js"],
 }
 
 def tool_page(key):
@@ -1475,6 +1475,7 @@ def service_worker_js(all_paths):
         "/assets/js/nav.js", "/assets/js/theme.js", "/assets/js/theme-boot.js",
         "/assets/js/study-data.js", "/assets/js/flashcards.js", "/assets/js/quiz.js",
         "/assets/js/focus.js", "/assets/js/dashboard.js", "/assets/js/ai.js",
+        "/assets/js/bonk-model.js",
         "/assets/img/mascot.svg", "/assets/img/logo.svg", "/assets/img/favicon.svg",
         "/assets/img/og-image.png", "/assets/img/creator-avatar.jpg",
         "/assets/fonts/Baloo2-normal-800.woff2", "/assets/fonts/Nunito-normal-400.woff2",

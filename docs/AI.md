@@ -11,7 +11,7 @@ backend, no cloud, no account. Two engines, one chat.
 | Respond under 0.5 s | Instant Mode template engine answers in ~200 ms |
 | Under ~600 MB RAM | Bonk Lite (Qwen 2.5 0.5B q4f16) ≈ 600 MB; SmolLM2-360M WASM ≈ 500 MB |
 | Distilled + quantized | Q4-F16 MLC weights (WebGPU) / Q8 ONNX (WASM fallback) |
-| WebGPU preferred, WASM fallback | WebLLM engine → Transformers.js pipeline → Instant Mode |
+| WebGPU preferred, WASM fallback | WebLLM engine → Transformers.js pipeline (onnx-community/Qwen2.5-0.5B-Instruct, public + ungated) → Instant Mode |
 | Offline after first load | Model weights cached by the browser (Cache API); app shell cached by `sw.js` |
 | History in localStorage | AES-GCM encrypted via WebCrypto with a device-local key |
 | Never send data anywhere | Only cross-origin request ever made: one-time, opt-in model-weight download (contains zero user data) |
@@ -44,7 +44,7 @@ Model registry:
 | Bonk Core — Qwen2.5-1.5B-Instruct q4f16_1 | ~900 MB | ~1.2 GB | recommended |
 | Bonk Pro — Phi-3.5-mini-instruct q4f16_1 | ~2.2 GB | ~2.6 GB | desktop |
 | Bonk Gemma — gemma-2-2b-it q4f16_1 | ~1.4 GB | ~1.7 GB | desktop |
-| WASM fallback — SmolLM2-360M-Instruct q8 | ~250 MB | ~500 MB | no-WebGPU devices |
+| WASM fallback — onnx-community/Qwen2.5-0.5B-Instruct q8 (public repo, verified via HF API) | ~510 MB | ~500 MB | no-WebGPU devices |
 
 System prompt (fixed, prepended to every conversation):
 

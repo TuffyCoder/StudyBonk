@@ -81,7 +81,7 @@ Opt-in **Model Mode** loads a distilled, quantized model into the browser:
 | Bonk Lite — Qwen 2.5 0.5B Q4 | ~400 MB download | ~600 MB | WebGPU |
 | Bonk Core — Qwen 2.5 1.5B Q4 | ~900 MB | ~1.2 GB | WebGPU |
 | Bonk Pro — Phi-3.5 Mini Q4 | ~2.2 GB | ~2.6 GB | WebGPU |
-| WASM fallback — SmolLM2 360M Q8 | ~250 MB | ~500 MB | WASM |
+| WASM fallback — Qwen 2.5 0.5B Q8 | ~510 MB | ~500 MB | WASM |
 
 Models are downloaded once from public model CDNs (the only cross-origin request StudyBonk ever makes, and it contains zero user data), cached by the browser, and run fully offline afterwards. Chat history is AES-GCM encrypted in `localStorage` with a one-click destroy button.
 

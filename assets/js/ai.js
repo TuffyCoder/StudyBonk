@@ -5,18 +5,19 @@
  *   a flashcard generator, quiz builder, homework explainer, safe arithmetic,
  *   meme mode and productivity coaching. Runs offline on any device.
  * Model Mode: distilled, quantized LLMs (Qwen 2.5, Phi-3.5 Mini, Gemma 2)
- *   running in-browser via WebGPU (vendored WebLLM) with a WASM fallback
- *   (vendored Transformers.js + SmolLM2). No API. No data leaves the device.
+ *   running in-browser via WebGPU with a WASM fallback — no API, no server,
+ *   no data leaving the device. Engine shared via bonk-model.js
+ *   (also powers the /flashcards/ AI importer).
  *
  * Chat history is stored encrypted (AES-GCM, device-local key) in
- * localStorage with a one-click Clear Memory.
- */
+ * localStorage with a one-click Clear Memory. */
 (function () {
   "use strict";
   const mount = document.getElementById("ai-app");
-  if (!mount || !window.SB) return;
+  if (!mount || !window.SB || !window.SB.model) return;
   const S = window.SB.storage;
   const G = window.SB.gamification;
+  const M = window.SB.model;
 
   const SYSTEM_PROMPT = [
     "You are StudyBonk AI.",
@@ -36,20 +37,13 @@
     "Tone: encouraging, playful, slightly goofy. Your mascot is Bonk, a blue graduation-cap blob.",
   ].join("\n");
 
-  const MODELS = [
-    { key: "lite",  name: "Bonk Lite",  emoji: "🐤", id: "Qwen2.5-0.5B-Instruct-q4f16_1-MLC",       ram: "~600 MB RAM · 400 MB download", note: "Fits most laptops & phones" },
-    { key: "core",  name: "Bonk Core",  emoji: "🧠", id: "Qwen2.5-1.5B-Instruct-q4f16_1-MLC",       ram: "~1.2 GB RAM · 900 MB download", note: "The daily driver", recommended: true },
-    { key: "pro",   name: "Bonk Pro",   emoji: "🎓", id: "Phi-3.5-mini-instruct-q4f16_1-MLC",       ram: "~2.6 GB RAM · 2.2 GB download", note: "Maximum brain (desktop)" },
-    { key: "gemma", name: "Bonk Gemma", emoji: "💎", id: "gemma-2-2b-it-q4f16_1-MLC",               ram: "~1.7 GB RAM · 1.4 GB download", note: "Google's little gem" },
-  ];
-
   /* ================= memory (encrypted local storage) ================= */
 
   async function loadHistory() {
     const enc = S.get("ai.history.enc", null);
     if (enc) {
       const plain = await window.SB.crypto.decryptString(enc);
-      if (plain) { try { return JSON.parse(plain); } catch { /* corrupted */ } }
+      if (plain) { try { return JSON.parse(plain); } catch (e) { /* corrupted */ } }
     }
     return S.get("ai.history", []); // legacy plaintext fallback
   }
@@ -133,34 +127,8 @@
       if (typeof val === "number" && isFinite(val)) {
         return "**" + expr.trim() + " = " + Math.round(val * 1e6) / 1e6 + "**\n\n(computed locally — no calculator API was harmed 🦊)";
       }
-    } catch { /* not math */ }
+    } catch (e) { /* not math */ }
     return null;
-  }
-
-  function makeCardsFromText(text, topic) {
-    const lines = text.split("\n").map((l) => l.trim()).filter((l) => l.length > 10);
-    const cards = [];
-    for (const line of lines) {
-      const words = line.split(/\s+/);
-      const key = words.filter((w) => /^[A-Z]/.test(w) && w.length > 3).sort((a, b) => b.length - a.length)[0];
-      if (key && line.includes(key)) {
-        cards.push([line.replace(new RegExp("\\b" + key + "\\b"), "______"), key.replace(/[.,]$/, "")]);
-      } else if (words.length > 6) {
-        const h = words[Math.floor(words.length / 2)].replace(/[.,]$/, "");
-        if (h.length > 3) cards.push([line.replace(h, "______"), h]);
-      }
-      if (cards.length >= 8) break;
-    }
-    if (cards.length < 3) return null;
-    return { title: topic || "Custom deck", cards };
-  }
-
-  function deckAction(cards) {
-    const id = "user-" + Date.now().toString(36);
-    const decks = S.get("userDecks", []);
-    decks.push({ id, title: cards.title, topic: "Custom", cards: cards.cards, custom: true });
-    S.set("userDecks", decks);
-    return { label: "Open your new deck →", href: "/flashcards/?deck=" + id };
   }
 
   const MEMES = [
@@ -174,31 +142,11 @@
   const pick = (a) => a[Math.floor(Math.random() * a.length)];
 
   const COACHES = [
-    {
-      name: "The 2-Minute Launch",
-      body: "Commit to just two minutes of the task. Starting is the hard part; momentum does the rest. 9 times out of 10 you'll keep going past two minutes.",
-      href: "/focus/",
-    },
-    {
-      name: "Pomodoro Protocol",
-      body: "25 minutes on, 5 off, long break every 4 rounds. Small timed chunks make dreadful work survivable — and finishable.",
-      href: "/focus/",
-    },
-    {
-      name: "Active Recall Switch",
-      body: "Close the notes and make yourself produce answers from memory (flashcards, blank page brain dump). It feels harder because it's working.",
-      href: "/flashcards/",
-    },
-    {
-      name: "The One-Thing Rule",
-      body: "Pick exactly one topic for today. Not 'study biology' — 'master the organelles'. Small targets get hit; vague ones get scrolled past.",
-      href: "/learn/",
-    },
-    {
-      name: "Energy First",
-      body: "Match tasks to energy: hard thinking when you're fresh, flashcard grinding when you're tired. Studying at 5% battery is mostly vibes.",
-      href: "/focus/",
-    },
+    { name: "The 2-Minute Launch", body: "Commit to just two minutes of the task. Starting is the hard part; momentum does the rest. 9 times out of 10 you'll keep going past two minutes.", href: "/focus/" },
+    { name: "Pomodoro Protocol", body: "25 minutes on, 5 off, long break every 4 rounds. Small timed chunks make dreadful work survivable — and finishable.", href: "/focus/" },
+    { name: "Active Recall Switch", body: "Close the notes and make yourself produce answers from memory (flashcards, blank page brain dump). It feels harder because it's working.", href: "/flashcards/" },
+    { name: "The One-Thing Rule", body: "Pick exactly one topic for today. Not 'study biology' — 'master the organelles'. Small targets get hit; vague ones get scrolled past.", href: "/learn/" },
+    { name: "Energy First", body: "Match tasks to energy: hard thinking when you're fresh, flashcard grinding when you're tired. Studying at 5% battery is mostly vibes.", href: "/focus/" },
   ];
 
   function instantReply(raw) {
@@ -251,21 +199,16 @@
           ["What do people usually get wrong about " + topic + "?", "Common misconception → name it and correct it."],
           ["How would you explain " + topic + " to a 10-year-old?", "If you can't simplify it, you haven't learned it yet."],
         ];
-        const action = deckAction({ title: "Study starters: " + topic, cards: starter });
+        const decks = S.get("userDecks", []);
+        const id = "user-" + Date.now().toString(36);
+        decks.push({ id, title: "Study starters: " + topic, topic: "Custom", cards: starter, custom: true });
+        S.set("userDecks", decks);
         return {
-          html: "Deck created! These are <strong>active-recall starters</strong> for \"" + esc(topic) + "\" — the kind of questions that force your brain to produce answers instead of recognizing them. Edit or add cards in the deck tool.\n\nWant factual cards? Try one of our topic guides — they have ready-made decks.",
-          actions: [action, { label: "Browse topic decks", href: "/flashcards/" }],
+          html: "Deck created! These are <strong>active-recall starters</strong> for '" + esc(topic) + "' — the kind of questions that force your brain to produce answers instead of recognizing them. Want cards from YOUR notes or a PDF? Use the instant importer on the flashcards page (it can even use a full local AI model).",
+          actions: [{ label: "Open the deck →", href: "/flashcards/?deck=" + id }, { label: "Instant importer (PDF → cards)", href: "/flashcards/" }],
         };
       }
-      const fromNotes = makeCardsFromText(text.replace(/^[^:]*:/, ""), topic || "Pasted notes");
-      if (fromNotes) {
-        const action = deckAction(fromNotes);
-        return {
-          html: "Bonk! I pulled <strong>" + fromNotes.cards.length + " cloze-style cards</strong> out of your text (key terms blanked out — the strongest card format for memorization). Saved to your decks.",
-          actions: [action, { label: "All decks", href: "/flashcards/" }],
-        };
-      }
-      return { html: "Happy to make flashcards! Try:\n• <code>flashcards about the periodic table</code>\n• or paste your notes and say <code>make flashcards</code>", };
+      return { html: "Happy to make flashcards! Try:\n• <code>flashcards about the periodic table</code>\n• or paste your notes into the <strong>instant importer</strong> on the flashcards page — it handles PDFs, text files and URLs, with optional AI-powered generation.", actions: [{ label: "Open the importer →", href: "/flashcards/" }] };
     }
 
     /* -- quiz -- */
@@ -335,25 +278,18 @@
     };
   }
 
-  /* ================= Model Mode (WebLLM / Transformers.js) ================= */
+  /* ================= Model Mode (shared engine in bonk-model.js) ================= */
 
-  let engine = null;       // webllm engine
-  let hfPipe = null;       // transformers.js pipeline
   let activeMode = "instant";
-  let engineKind = null;   // "webgpu" | "wasm"
   let busy = false;
 
   const modeSwitch = document.getElementById("ai-mode-switch");
   const modelPanel = document.getElementById("model-panel");
   const modelStatus = document.getElementById("model-status");
 
-  function hasWebGPU() {
-    return !!navigator.gpu;
-  }
-
   function renderModelPanel() {
-    const webgpu = hasWebGPU();
-    let cards = MODELS.map((m) => {
+    const webgpu = M.hasWebGPU();
+    let cards = M.MODELS.map((m) => {
       const rec = m.recommended ? '<span class="model-tag chip chip-yellow">recommended</span>' : "";
       return (
         '<button class="card model-card' + (m.recommended ? " recommended" : "") + '" data-model="' + m.key + '" type="button">' + rec +
@@ -362,10 +298,18 @@
         '<div class="model-ram">' + m.ram + "</div></button>"
       );
     }).join("");
+    if (!webgpu) {
+      const w = M.WASM_MODEL;
+      cards =
+        '<button class="card model-card recommended" data-model="wasm" type="button">' +
+        '<div class="model-emoji">' + w.emoji + "</div><h3>" + w.name + " — Qwen 2.5 0.5B</h3>" +
+        '<p class="small muted mb-1">WebGPU not detected — CPU fallback (slower, still fully local)</p>' +
+        '<div class="model-ram">' + w.ram + "</div></button>";
+    }
     modelStatus.innerHTML =
       "<h3>Pick a local model</h3>" +
-      "<p class='small muted'>Distilled + quantized (Q4) models streamed once, cached forever, run on <strong>your</strong> " +
-      (webgpu ? "GPU (WebGPU detected 🚀)" : "device. WebGPU not detected — a slower WASM fallback (SmolLM2 360M) will be used, or stick with Instant Mode.") + "</p>" +
+      "<p class='small muted'>Distilled + quantized models streamed once, cached forever, run on <strong>your</strong> " +
+      (webgpu ? "GPU (WebGPU detected 🚀)" : "device via WASM — or stick with Instant Mode.") + "</p>" +
       '<div class="model-cards">' + cards + "</div>" +
       '<div class="progress-track mt-2" id="dl-bar" hidden><div></div></div>' +
       '<p class="small muted mt-1 mb-0" id="dl-text"></p>';
@@ -379,45 +323,17 @@
     busy = true;
     const bar = document.getElementById("dl-bar");
     const txt = document.getElementById("dl-text");
-    const m = MODELS.find((x) => x.key === key);
     try {
-      if (hasWebGPU()) {
-        txt.textContent = "Loading Bonk's WebGPU engine…";
-        bar.hidden = false;
-        const webllm = await import("/assets/vendor/webllm.js");
-        engine = await webllm.CreateMLCEngine(m.id, {
-          initProgressCallback: (p) => {
-            bar.firstElementChild.style.width = Math.round((p.progress || 0) * 100) + "%";
-            txt.textContent = p.text || "Downloading & compiling…";
-          },
-        });
-        engineKind = "webgpu";
-        txt.textContent = "✅ " + m.name + " ready — running locally on your GPU.";
-      } else {
-        txt.textContent = "No WebGPU — falling back to WASM (SmolLM2 360M)…";
-        bar.hidden = false;
-        bar.firstElementChild.style.width = "35%";
-        const tr = await import("/assets/vendor/transformers.js.mjs");
-        tr.env.allowLocalModels = false;
-        if (tr.env.backends && tr.env.backends.onnx && tr.env.backends.onnx.wasm) {
-          tr.env.backends.onnx.wasm.wasmPaths = "https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.7.5/dist/";
-        }
-        hfPipe = await tr.pipeline("text-generation", "onnx-community/SmolLM2-360M-Instruct", {
-          dtype: "q8",
-          progress_callback: (p) => {
-            if (p.status === "progress" && p.total) {
-              bar.firstElementChild.style.width = Math.round((p.loaded / p.total) * 100) + "%";
-              txt.textContent = "Downloading model chunk " + p.file + "…";
-            }
-          },
-        });
-        engineKind = "wasm";
-        txt.textContent = "✅ WASM model ready — smaller brain, same privacy.";
-      }
-      statusLine.textContent = "🧠 " + m.name + " · local model · cached for offline";
-      addMsg("ai", "🧠 <strong>" + m.name + " online.</strong> A whole language model, running inside this tab — no API, no server. Ask me anything study-shaped. (I'm small: I'll flag what you should double-check.)");
+      txt.textContent = "Loading Bonk's local engine…";
+      bar.hidden = false;
+      const info = await M.load(key, (progress, text) => {
+        bar.firstElementChild.style.width = Math.round(progress * 100) + "%";
+        txt.textContent = text;
+      });
+      txt.textContent = "✅ " + info.model.name + " ready — running locally on your " + (info.kind === "webgpu" ? "GPU" : "CPU") + ".";
+      statusLine.textContent = "🧠 " + info.model.name + " · local model · cached for offline";
+      addMsg("ai", "🧠 <strong>" + info.model.name + " online.</strong> A whole language model, running inside this tab — no API, no server. Ask me anything study-shaped. (I'm small: I'll flag what you should double-check.)");
     } catch (err) {
-      engine = null; hfPipe = null; engineKind = null;
       txt.textContent = "⚠️ Couldn't load the model (" + (err && err.message ? err.message.slice(0, 120) : "unknown error") + "). Instant Mode still works perfectly.";
       statusLine.textContent = "⚡ Instant Mode · model load failed · still fully local";
     }
@@ -426,32 +342,9 @@
 
   async function modelReply(userText, history) {
     const messages = [{ role: "system", content: SYSTEM_PROMPT }];
-    const memory = mem().name ? [{ role: "system", content: "The student's preferred name is " + mem().name + "." }] : [];
-    messages.push(...memory, ...history.slice(-10), { role: "user", content: userText });
-
-    if (engine && engineKind === "webgpu") {
-      let out = "";
-      const chunks = await engine.chat.completions.create({
-        messages,
-        stream: true,
-        temperature: 0.6,
-        max_tokens: 420,
-      });
-      for await (const chunk of chunks) {
-        const delta = chunk.choices[0]?.delta?.content || "";
-        out += delta;
-      }
-      return out.trim() || "…my brain glitched. Try again?";
-    }
-    if (hfPipe && engineKind === "wasm") {
-      const out = await hfPipe(messages, { max_new_tokens: 260, do_sample: true, temperature: 0.6 });
-      const text = Array.isArray(out) ? out[0].generated_text : out.generated_text;
-      // pipeline returns full chat text; strip prompt echoes
-      const str = Array.isArray(text) ? text[text.length - 1].content : String(text);
-      const cleaned = str.split("<|im_end|>")[0].trim();
-      return cleaned || "…WASM brain sputtered. Try again?";
-    }
-    throw new Error("no engine");
+    if (mem().name) messages.push({ role: "system", content: "The student's preferred name is " + mem().name + "." });
+    messages.push(...history.slice(-10), { role: "user", content: userText });
+    return M.generate(messages, { temperature: 0.6, maxTokens: 420 });
   }
 
   /* ================= wiring ================= */
@@ -463,7 +356,7 @@
     const history = await loadHistory();
     const typing = addTyping();
 
-    const useModel = activeMode === "model" && (engine || hfPipe);
+    const useModel = activeMode === "model" && M.info().ready;
     let reply;
     try {
       if (useModel) {
@@ -480,7 +373,7 @@
         busy = false;
         return;
       }
-    } catch {
+    } catch (e) {
       reply = "Hmm, my model brain hiccuped. Falling back to Instant Mode…\n\n" + instantReply(userText).html;
     }
 
@@ -523,9 +416,9 @@
       b.setAttribute("aria-selected", String(on));
     });
     modelPanel.hidden = activeMode !== "model";
-    if (activeMode === "model" && !engine && !hfPipe) renderModelPanel();
+    if (activeMode === "model" && !M.info().ready) renderModelPanel();
     statusLine.textContent = activeMode === "model"
-      ? "🧠 Model mode · " + (engine || hfPipe ? "ready" : "pick a model below") + " · runs locally, cached offline"
+      ? "🧠 Model mode · " + (M.info().ready ? "ready" : "pick a model below") + " · runs locally, cached offline"
       : "⚡ Instant Mode · runs offline · zero download";
   });
 
@@ -555,7 +448,7 @@
     const returning = history.length > 0;
     addMsg("ai", returning
       ? "Welcome back" + (mem().name ? ", <strong>" + esc(mem().name) + "</strong>" : "") + "! 🦊 Your last " + history.filter((m) => m.role === "user").length + " questions are still in local memory. What are we bonking today?"
-      : "Hey, I'm <strong>Bonk AI</strong> 🦊 — a tiny-but-smart study tutor that runs <strong>entirely in your browser</strong>. No API, no account, no data leaving this device.\n\nInstant Mode is on: flashcard generation, quiz building, homework breakdowns and study coaching at zero download. Want a real language model instead? Switch to <strong>Full Model</strong> — a quantized Qwen/Phi/Gemma brain that runs locally via WebGPU.\n\nTry: <code>flashcards about cell biology</code>");
+      : "Hey, I'm <strong>Bonk AI</strong> 🦊 — a tiny-but-smart study tutor that runs <strong>entirely in your browser</strong>. No API, no account, no data leaving this device.\n\nInstant Mode is on: flashcard generation, quiz building, homework breakdowns and study coaching at zero download. Want a real language model instead? Switch to <strong>Full Model</strong> — a quantized Qwen/Phi/Gemma brain that runs locally via WebGPU (CPU WASM fallback included).\n\nTry: <code>flashcards about cell biology</code>");
   }
 
   greet();

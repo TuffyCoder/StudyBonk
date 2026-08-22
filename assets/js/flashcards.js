@@ -147,6 +147,62 @@
     openDeck(id);
   }
 
+  /* ---------- AI-powered generation (real local model via bonk-model.js) ---------- */
+
+  const AI_SYSTEM_PROMPT =
+    "You are a flashcard generator. From the user's study material, create flashcards. " +
+    "Output ONLY lines in the exact format: front | back — one card per line, no numbering, " +
+    "no bullets, no extra text before or after. Make 8 to 14 cards. Fronts are clear questions " +
+    "or terms; backs are one concise answer. Use only information from the material.";
+
+  function parseAiCards(output) {
+    const cards = [];
+    const seen = new Set();
+    for (const line of String(output).split(/\r?\n/)) {
+      const m = line.replace(/^\s*[-*\d.)\]]+\s*/, "").match(/^(.{2,200}?)\s*\|\s*(.{1,300})$/);
+      if (!m) continue;
+      const key = m[1].trim().toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      cards.push([m[1].trim(), m[2].trim()]);
+      if (cards.length >= 40) break;
+    }
+    return cards;
+  }
+
+  async function ensureModel(feedbackEl) {
+    if (!window.SB.model) {
+      feedbackEl.textContent = "AI engine unavailable in this browser — using the smart extractor instead.";
+      return false;
+    }
+    if (window.SB.model.info().ready) return true;
+    const gpu = window.SB.model.hasWebGPU();
+    feedbackEl.textContent = (gpu ? "🧠 Loading Bonk Core (Qwen 2.5 1.5B, ~900 MB, one-time)…" : "🧊 No WebGPU — loading the WASM model (Qwen 2.5 0.5B, ~510 MB, one-time)…") +
+      " Runs 100% locally; cached for offline after this.";
+    try {
+      const info = await window.SB.model.load(gpu ? "core" : "wasm", (progress, text) => {
+        feedbackEl.textContent = "🧠 Downloading & compiling — " + Math.round((progress || 0) * 100) + "% · " + String(text).slice(0, 90);
+      });
+      feedbackEl.textContent = "✅ " + info.model.name + " loaded — generating flashcards locally…";
+      return true;
+    } catch (err) {
+      feedbackEl.textContent = "⚠️ Model couldn't load (" + String(err && err.message || err).slice(0, 100) + ") — using the smart extractor instead.";
+      return false;
+    }
+  }
+
+  async function aiGenerateCards(text, feedbackEl) {
+    const ok = await ensureModel(feedbackEl);
+    if (!ok) return null;
+    const messages = [
+      { role: "system", content: AI_SYSTEM_PROMPT },
+      { role: "user", content: "Create flashcards from this material:\n\n" + text.slice(0, 4000) },
+    ];
+    const out = await window.SB.model.generate(messages, { temperature: 0.3, maxTokens: 700 });
+    const cards = parseAiCards(out);
+    return cards.length >= 3 ? cards : null;
+  }
+
   /* ---------- library view ---------- */
   function renderLibrary() {
     const decks = allDecks();
@@ -180,6 +236,7 @@
       '<button data-tab="url" type="button">🔗 From URL</button>' +
       "</div>" +
       '<input id="new-deck-title" type="text" placeholder="Deck name (optional — e.g. Bio Chapter 4)" maxlength="60" style="width:100%;padding:12px 16px;border-radius:12px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font-body)">' +
+      '<label class="chip chip-purple mt-2" style="cursor:pointer;display:inline-flex"><input type="checkbox" id="ai-toggle" style="accent-color:var(--purple);width:16px;height:16px"> 🧠 Generate with a real local AI model (better on messy text — one-time download, runs on-device)</label>' +
       '<div id="import-tab-paste" class="mt-2">' +
       '<textarea id="paste-text" rows="6" placeholder="Paste anything: class notes, a chapter, vocab lists…\n\nFormats it understands:\nMitochondria | The cell power plant\nQ: What is osmosis?\nA: Water moving across a membrane" style="width:100%;padding:12px;border-radius:12px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font-body)"></textarea>' +
       '<button class="btn btn-primary mt-2" id="paste-go">⚡ Turn it into flashcards</button>' +
@@ -211,11 +268,30 @@
     });
 
     const feedback = document.getElementById("deck-feedback");
+    const aiOn = () => document.getElementById("ai-toggle").checked;
+
+    // Shared funnel: raw text -> (optional) local AI generation -> deck
+    async function processText(text, title, fb) {
+      if (aiOn()) {
+        fb.textContent = "🧠 Asking the local AI model to write your flashcards…";
+        try {
+          const aiCards = await aiGenerateCards(text, fb);
+          if (aiCards) {
+            finishImport(title, aiCards, fb);
+            return;
+          }
+          fb.textContent = "ℹ️ The model's output wasn't clean card format — using the smart extractor instead.";
+        } catch (e) {
+          fb.textContent = "ℹ️ AI generation unavailable (" + String(e && e.message || e).slice(0, 80) + ") — using the smart extractor.";
+        }
+      }
+      finishImport(title, extractCards(text), fb);
+    }
 
     document.getElementById("paste-go").onclick = () => {
       const text = document.getElementById("paste-text").value.trim();
       if (text.length < 20) { feedback.textContent = "Paste some text first (a few sentences at least)."; return; }
-      finishImport(document.getElementById("new-deck-title").value.trim(), extractCards(text), feedback);
+      processText(text, document.getElementById("new-deck-title").value.trim(), feedback);
     };
 
     document.getElementById("file-input").onchange = async (e) => {
@@ -233,7 +309,7 @@
           text = await file.text();
         }
         status.textContent = "⚡ Extracting flashcards…";
-        finishImport(title, extractCards(text), status);
+        await processText(text, title, status);
       } catch (err) {
         status.textContent = "⚠️ Couldn't read that file (" + (err.message || "unknown error").slice(0, 100) + "). Scanned PDFs without a text layer can't be read locally — copy the text and paste it instead.";
       }
@@ -245,7 +321,7 @@
       try {
         parsed = new URL(url);
         if (parsed.protocol !== "http:" && parsed.protocol !== "https:") throw new Error("bad protocol");
-      } catch (e) {
+      } catch (e2) {
         feedback.textContent = "That doesn't look like a valid URL (include http:// or https://).";
         return;
       }
@@ -254,9 +330,9 @@
         const text = await urlToText(url);
         let title = document.getElementById("new-deck-title").value.trim();
         if (!title) {
-          try { title = new URL(url).hostname.replace(/^www\./, ""); } catch (e) { title = "Imported deck"; }
+          try { title = parsed.hostname.replace(/^www\./, ""); } catch (e3) { title = "Imported deck"; }
         }
-        finishImport(title, extractCards(text), feedback);
+        await processText(text, title, feedback);
       } catch (err) {
         feedback.textContent = "⚠️ Couldn't fetch that URL (" + (err.message || "blocked").slice(0, 100) + "). Most sites block cross-site reading — open the page, copy its text, and use the Paste tab.";
       }
