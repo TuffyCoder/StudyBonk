@@ -1,6 +1,6 @@
 /* StudyBonk flashcards: deck library, Leitner spaced repetition sessions,
- * custom deck builder with JSON import/export. Requires storage.js,
- * gamification.js, components.js and study-data.js. */
+ * instant importer (text / PDF / file / URL -> deck) with JSON import/export.
+ * Requires storage.js, gamification.js, components.js and study-data.js. */
 (function () {
   "use strict";
   const mount = document.getElementById("flashcard-app");
@@ -15,9 +15,6 @@
   /* ---------- SRS state ---------- */
   function getSrs() { return S.get("srs", {}); }
   function setSrs(srs) { S.set("srs", srs); }
-  function cardState(deckId, idx) {
-    return (getSrs()[deckId] || {})[idx] || { box: 1, due: 0 };
-  }
 
   /* ---------- custom decks ---------- */
   function userDecks() { return S.get("userDecks", []); }
@@ -34,6 +31,120 @@
       const st = srs[i] || { box: 1, due: 0 };
       return st.due <= now;
     }).length;
+  }
+
+  /* ---------- instant importer: text / file / PDF / URL -> deck ---------- */
+
+  const STOPWORDS = new Set(("the a an and or but of to in on for with is are was were be been it its this that these those " +
+    "as at by from into if then than so such can could will would should may might must not no you your they their we our " +
+    "he she his her one two also more most other some any each about over under between during after before").split(" "));
+
+  function extractCards(text) {
+    const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+    const cards = [];
+    const seen = new Set();
+    const push = (f, b) => {
+      f = String(f).trim(); b = String(b).trim();
+      if (f.length < 2 || b.length < 1 || f.length > 300 || b.length > 500) return;
+      const key = f.toLowerCase();
+      if (seen.has(key)) return;
+      seen.add(key);
+      cards.push([f, b]);
+    };
+
+    // 1) explicit "front | back" lines
+    // 2) "Q: ... / A: ..." pairs
+    // 3) definition patterns — keep the richest structured result, then fall back to cloze.
+    const best = [];
+    for (const l of lines) {
+      const parts = l.split("|");
+      if (parts.length >= 2 && parts[0].trim() && parts[1].trim()) push(parts[0], parts.slice(1).join("|"));
+    }
+    if (cards.length > best.length) best.splice(0, best.length, ...cards);
+    if (best.length >= 3) return best.slice(0, 60);
+
+    cards.length = 0; seen.clear();
+    for (let i = 0; i < lines.length - 1; i++) {
+      const q = lines[i].match(/^Q[:.)]?\s+(.+)/i);
+      const a = lines[i + 1].match(/^A[:.)]?\s+(.+)/i);
+      if (q && a) push(q[1], a[1]);
+    }
+    if (cards.length > best.length) best.splice(0, best.length, ...cards);
+    if (best.length >= 3) return best.slice(0, 60);
+
+    cards.length = 0; seen.clear();
+    for (const l of lines) {
+      const m = l.match(/^([A-Z][^.?!]{2,60}?)\s+(?:is|are|means|refers to|is defined as)\s+([^.]{10,}[.!?]?)/);
+      if (m) push("What is " + m[1].trim() + "?", m[2].trim());
+      else {
+        const s = l.match(/^(.{2,60}?)\s+[-\u2013\u2014]\s+(.{3,300})$/) || l.match(/^([^:]{2,40}):\s+(.{10,300})$/);
+        if (s) push(s[1].trim(), s[2].trim());
+      }
+    }
+    if (cards.length > best.length) best.splice(0, best.length, ...cards);
+    if (best.length >= 2) return best.slice(0, 60);
+
+    // 4) fallback: cloze deletion on substantive sentences
+    cards.length = 0; seen.clear();
+    const sentences = text.replace(/\s+/g, " ").split(/(?<=[.!?])\s+/).filter((s) => s.split(" ").length >= 8 && s.length < 320);
+    for (const s of sentences) {
+      const words = s.split(" ").map((w) => w.replace(/^[^A-Za-z0-9]+|[^A-Za-z0-9]+$/g, ""));
+      let key = null;
+      for (const w of words) {
+        if (w.length < 5 || STOPWORDS.has(w.toLowerCase())) continue;
+        if (!key || w.length > key.length) key = w;
+      }
+      if (!key) continue;
+      const re = new RegExp("\\b" + key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b");
+      if (!re.test(s)) continue;
+      push(s.replace(re, "______"), key);
+      if (cards.length >= 40) break;
+    }
+    return cards.length >= 3 ? cards.slice(0, 60) : best.concat(cards).slice(0, 60);
+  }
+
+  async function pdfToText(file) {
+    const pdfjs = await import("/assets/vendor/pdf.min.mjs");
+    pdfjs.GlobalWorkerOptions.workerSrc = "/assets/vendor/pdf.worker.min.mjs";
+    const buf = await file.arrayBuffer();
+    const doc = await pdfjs.getDocument({ data: buf }).promise;
+    const parts = [];
+    for (let p = 1; p <= doc.numPages && p <= 60; p++) {
+      const page = await doc.getPage(p);
+      const content = await page.getTextContent();
+      parts.push(content.items.map((i) => i.str).join(" "));
+    }
+    return parts.join("\n");
+  }
+
+  async function urlToText(url) {
+    const res = await fetch(url, { redirect: "follow" });
+    if (!res.ok) throw new Error("the site responded with HTTP " + res.status);
+    const ct = (res.headers.get("content-type") || "").toLowerCase();
+    let body = await res.text();
+    if (ct.includes("html") || /^\s*<(!doctype|html)/i.test(body)) {
+      body = body
+        .replace(/<script[\s\S]*?<\/script>/gi, " ")
+        .replace(/<style[\s\S]*?<\/style>/gi, " ")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+    }
+    return body;
+  }
+
+  function finishImport(title, cards, feedbackEl) {
+    if (!cards || cards.length < 3) {
+      if (feedbackEl) feedbackEl.textContent = "Couldn't find enough card material (need 3+). Tip: lines like 'term | definition' work best, or paste richer text.";
+      return;
+    }
+    const id = "user-" + Date.now().toString(36);
+    const decks = userDecks();
+    decks.push({ id, title: title || "Imported deck", topic: "Custom", cards, custom: true });
+    setUserDecks(decks);
+    G.award("card", { deck_builder: true });
+    window.SB.ui.confetti(1200);
+    window.SB.ui.toast("⚡ " + cards.length + " flashcards created — saved locally!", "good");
+    openDeck(id);
   }
 
   /* ---------- library view ---------- */
@@ -58,37 +169,98 @@
       '<div class="btn-row mb-3" style="justify-content:space-between">' +
       "<h2 style='margin:0'>Deck library</h2>" +
       '<div class="btn-row">' +
-      '<button class="btn btn-ghost btn-sm" id="new-deck-btn">➕ New custom deck</button>' +
       '<button class="btn btn-ghost btn-sm" id="import-deck-btn">📥 Import JSON</button>' +
       "</div></div>" + html +
-      '<div class="card card-glass mt-3"><h3>Make your own deck</h3>' +
-      "<p class='muted'>One card per line, formatted <code>front | back</code>. Your decks stay on this device — export anytime.</p>" +
-      '<div class="grid grid-2"><input id="new-deck-title" type="text" placeholder="Deck name (e.g. Bio Chapter 4)" maxlength="60">' +
-      '<button class="btn btn-primary" id="create-deck-btn">Create deck</button></div>' +
-      '<textarea id="new-deck-cards" rows="5" placeholder="Mitochondria | The cell\'s power plant&#10;Ribosome | Builds proteins" style="width:100%;margin-top:12px;padding:12px;border-radius:12px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font-body)"></textarea>' +
-      '<p class="small muted mb-0" id="deck-feedback"></p></div>';
+      '<div class="card card-glass mt-3" id="instant-importer">' +
+      "<h2 class='mt-0'>⚡ Instant importer — anything to flashcards</h2>" +
+      "<p class='muted'>Paste notes, upload a <strong>PDF</strong> or text file, or drop a URL. StudyBonk detects 'term | definition', 'Q:/A:' pairs, 'term - definition' and definition sentences — and falls back to smart cloze cards. Everything is processed on your device; nothing is uploaded anywhere.</p>" +
+      '<div class="mode-switch mb-2" id="import-tabs">' +
+      '<button class="active" data-tab="paste" type="button">📝 Paste text</button>' +
+      '<button data-tab="file" type="button">📄 Upload PDF / file</button>' +
+      '<button data-tab="url" type="button">🔗 From URL</button>' +
+      "</div>" +
+      '<input id="new-deck-title" type="text" placeholder="Deck name (optional — e.g. Bio Chapter 4)" maxlength="60" style="width:100%;padding:12px 16px;border-radius:12px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font-body)">' +
+      '<div id="import-tab-paste" class="mt-2">' +
+      '<textarea id="paste-text" rows="6" placeholder="Paste anything: class notes, a chapter, vocab lists…\n\nFormats it understands:\nMitochondria | The cell power plant\nQ: What is osmosis?\nA: Water moving across a membrane" style="width:100%;padding:12px;border-radius:12px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font-body)"></textarea>' +
+      '<button class="btn btn-primary mt-2" id="paste-go">⚡ Turn it into flashcards</button>' +
+      "</div>" +
+      '<div id="import-tab-file" class="mt-2" hidden>' +
+      '<label class="btn btn-yellow" style="cursor:pointer" for="file-input">📄 Choose PDF, .txt or .md</label>' +
+      '<input id="file-input" type="file" accept=".pdf,.txt,.md,.markdown,.csv,application/pdf,text/plain" hidden>' +
+      '<p class="small muted mt-2 mb-0" id="file-status">PDFs are parsed locally in your browser (first import loads a small local parser).</p>' +
+      "</div>" +
+      '<div id="import-tab-url" class="mt-2" hidden>' +
+      '<div class="grid grid-2">' +
+      '<input id="url-input" type="url" placeholder="https://example.com/article" style="padding:12px 16px;border-radius:12px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font-body)">' +
+      '<button class="btn btn-primary" id="url-go">🔗 Fetch and convert</button></div>' +
+      '<p class="small muted mt-2 mb-0">Only works on pages that allow cross-site reading (many don\'t — if it fails, copy the text and use Paste). The fetch happens directly from your browser.</p>' +
+      "</div>" +
+      '<p class="small muted mb-0 mt-2" id="deck-feedback"></p>' +
+      "</div>";
 
-    document.getElementById("new-deck-btn").onclick = () =>
-      document.getElementById("new-deck-title").focus();
-    document.getElementById("create-deck-btn").onclick = createDeck;
     document.getElementById("import-deck-btn").onclick = importDeck;
-  }
 
-  function createDeck() {
-    const title = document.getElementById("new-deck-title").value.trim();
-    const raw = document.getElementById("new-deck-cards").value.trim();
-    const fb = document.getElementById("deck-feedback");
-    if (!title) { fb.textContent = "Give your deck a name first."; return; }
-    const cards = raw.split("\n").map((l) => l.split("|")).filter((p) => p.length >= 2 && p[0].trim() && p[1].trim()).map((p) => [p[0].trim(), p.slice(1).join("|").trim()]);
-    if (!cards.length) { fb.textContent = "No valid cards found — use “front | back”, one per line."; return; }
-    const id = "user-" + Date.now().toString(36);
-    const decks = userDecks();
-    decks.push({ id, title, topic: "Custom", cards, custom: true });
-    setUserDecks(decks);
-    G.award("card", { deck_builder: true });
-    window.SB.ui.toast("🏗️ Deck created: " + title + " (" + cards.length + " cards)", "good");
-    location.hash = "";
-    openDeck(id);
+    const tabs = document.getElementById("import-tabs");
+    tabs.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-tab]");
+      if (!btn) return;
+      tabs.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b === btn));
+      ["paste", "file", "url"].forEach((t) => {
+        document.getElementById("import-tab-" + t).hidden = t !== btn.dataset.tab;
+      });
+    });
+
+    const feedback = document.getElementById("deck-feedback");
+
+    document.getElementById("paste-go").onclick = () => {
+      const text = document.getElementById("paste-text").value.trim();
+      if (text.length < 20) { feedback.textContent = "Paste some text first (a few sentences at least)."; return; }
+      finishImport(document.getElementById("new-deck-title").value.trim(), extractCards(text), feedback);
+    };
+
+    document.getElementById("file-input").onchange = async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const status = document.getElementById("file-status");
+      const title = document.getElementById("new-deck-title").value.trim() || file.name.replace(/\.(pdf|txt|md|markdown|csv)$/i, "");
+      try {
+        status.textContent = "📖 Reading " + file.name + " locally…";
+        let text;
+        if (/\.pdf$/i.test(file.name) || file.type === "application/pdf") {
+          status.textContent = "📖 Parsing PDF on your device (a few seconds)…";
+          text = await pdfToText(file);
+        } else {
+          text = await file.text();
+        }
+        status.textContent = "⚡ Extracting flashcards…";
+        finishImport(title, extractCards(text), status);
+      } catch (err) {
+        status.textContent = "⚠️ Couldn't read that file (" + (err.message || "unknown error").slice(0, 100) + "). Scanned PDFs without a text layer can't be read locally — copy the text and paste it instead.";
+      }
+    };
+
+    document.getElementById("url-go").onclick = async () => {
+      const url = document.getElementById("url-input").value.trim();
+      let parsed;
+      try {
+        parsed = new URL(url);
+        if (parsed.protocol !== "http:" && parsed.protocol !== "https:") throw new Error("bad protocol");
+      } catch (e) {
+        feedback.textContent = "That doesn't look like a valid URL (include http:// or https://).";
+        return;
+      }
+      feedback.textContent = "🔗 Fetching page directly in your browser…";
+      try {
+        const text = await urlToText(url);
+        let title = document.getElementById("new-deck-title").value.trim();
+        if (!title) {
+          try { title = new URL(url).hostname.replace(/^www\./, ""); } catch (e) { title = "Imported deck"; }
+        }
+        finishImport(title, extractCards(text), feedback);
+      } catch (err) {
+        feedback.textContent = "⚠️ Couldn't fetch that URL (" + (err.message || "blocked").slice(0, 100) + "). Most sites block cross-site reading — open the page, copy its text, and use the Paste tab.";
+      }
+    };
   }
 
   function importDeck() {
@@ -108,9 +280,9 @@
           const decks = userDecks();
           decks.push({ id: "user-" + Date.now().toString(36), title: deck.title, topic: "Custom", cards, custom: true });
           setUserDecks(decks);
-          window.SB.ui.toast("📥 Imported “" + deck.title + "” (" + cards.length + " cards)", "good");
+          window.SB.ui.toast("📥 Imported '" + deck.title + "' (" + cards.length + " cards)", "good");
           renderLibrary();
-        } catch {
+        } catch (e) {
           window.SB.ui.toast("That file doesn't look like a StudyBonk deck.", "info");
         }
       };
@@ -161,7 +333,7 @@
     const card = deck.cards[queue[pos].idx];
     mount.innerHTML =
       '<div class="text-center mb-2"><a href="/flashcards/" class="btn btn-ghost btn-sm">← All decks</a> ' +
-      '<span class="chip chip-blue">' + deck.title + "</span> " +
+      '<span class="chip chip-blue">' + esc(deck.title) + "</span> " +
       '<span class="chip">' + (pos + 1) + " / " + queue.length + "</span>" +
       (deck.custom ? ' <button class="btn btn-ghost btn-sm" id="export-this">📤 Export</button>' : "") + "</div>" +
       '<div class="flashcard-stage"><div class="flashcard" id="flashcard" role="button" tabindex="0" aria-label="Flashcard — press to flip">' +
@@ -244,8 +416,7 @@
       '<div class="stat-row mb-2"><div class="stat-box"><strong>+' + (session.reviewed * 10 + 20) + "</strong><span>XP this session</span></div>" +
       '<div class="stat-box"><strong>' + session.reviewed + "</strong><span>cards reviewed</span></div></div>" +
       '<div class="btn-row" style="justify-content:center">' +
-      '<a class="btn btn-primary" href="/quiz/?topic=' + encodeURIComponent(session.deck.id) + '">Quiz me on this →</a>' +
-      '<a class="btn btn-ghost" href="/flashcards/">Back to decks</a></div></div>';
+      '<a class="btn btn-primary" href="/flashcards/">Back to decks</a></div></div>';
     session = null;
     history.replaceState(null, "", "/flashcards/");
   }

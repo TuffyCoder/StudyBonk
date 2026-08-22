@@ -198,8 +198,9 @@ FEATURES = [
         "icon": "🃏",
         "title": "Smart Flashcards",
         "body": (
-            "Flip, learn, repeat. Built-in decks for every topic plus "
-            "spaced repetition that schedules cards you're about to forget."
+            "Flip, learn, repeat. Built-in decks for every topic, spaced "
+            "repetition, and an instant importer that turns PDFs, notes or "
+            "URLs into flashcards — on your device."
         ),
         "href": "/flashcards/",
     },

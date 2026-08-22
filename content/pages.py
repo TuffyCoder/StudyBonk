@@ -127,12 +127,16 @@ TOOL_PAGES = {
             "best free flashcard app without account",
             "how to make flashcards online for free",
             "spaced repetition flashcards free no subscription",
+            "convert pdf to flashcards free online",
+            "turn notes into flashcards automatically",
             "how does the leitner system work",
             "flashcards that work offline in browser",
             "how many flashcards should i study per day",
             "free alternative to quizlet flashcards",
             "private flashcard app no tracking",
             "how to study flashcards effectively",
+            "make flashcards from a website url free",
+            "flashcard generator from text free no signup",
             "create custom flashcard decks and export them",
         ],
         "sections": [
@@ -163,6 +167,20 @@ TOOL_PAGES = {
                 ],
             },
             {
+                "h2": "Instant importer: PDF, notes or URL to flashcards",
+                "paras": [
+                    "Got a lecture PDF, messy notes, or an article open in another tab? Drop it into the instant importer and StudyBonk builds a deck on the spot — no account, no upload, no waiting. The PDF is parsed entirely inside your browser; the file never leaves your device.",
+                    "The importer recognizes the formats students actually use: “term | definition” lines, “Q:/A:” pairs, “term - definition” lists, and definition sentences (“Osmosis is…”). When the text has no clear structure, it falls back to cloze cards — the sentence with its key term blanked out, which is one of the strongest memory formats there is.",
+                ],
+                "bullets": [
+                    "Upload a PDF (up to 60 pages, parsed locally), .txt, .md or .csv",
+                    "Paste any text — notes, chapters, vocab lists",
+                    "Fetch a URL directly (works where sites allow cross-site reading)",
+                    "Automatic format detection: pipes, Q/A, definitions, cloze",
+                    "Every imported deck is saved locally, exportable as JSON",
+                ],
+            },
+            {
                 "h2": "Build your own decks (and keep them)",
                 "paras": [
                     "Paste your notes as \"front | back\" lines and StudyBonk builds a custom deck instantly. Custom decks live in your browser alongside your progress, and you can export them as JSON to back up or share with a friend — the file goes device to device, never through a server.",
@@ -184,6 +202,8 @@ TOOL_PAGES = {
              "Yes. After your first visit, the whole app is cached and works offline — flashcards included. Changes save locally and sync nowhere, because there's nothing to sync to."),
             ("What's better: flashcards or re-reading notes?",
              "Flashcards, by a wide margin — the research on the testing effect is unambiguous. Re-reading feels productive but builds familiarity, not recall. Flashcards force retrieval, which is what strengthens memory."),
+            ("Can I turn a PDF into flashcards?",
+             "Yes — the instant importer on the flashcards page accepts PDFs up to 60 pages, parses them locally in your browser (the file is never uploaded anywhere), and converts the text into a deck automatically. Text-based PDFs work best; scanned images without a text layer can't be read locally, so copy-paste those."),
             ("Can I share a custom deck with a friend?",
              "Yes — export it as a JSON file and send it however you like (chat, email, USB stick). The file is plain data your friend imports into their own StudyBonk."),
         ],
