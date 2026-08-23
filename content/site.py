@@ -45,6 +45,7 @@ FOOTER_COLUMNS = [
         "title": "Study",
         "links": [
             ("Topic Hub", "/learn/"),
+            ("Study Hacks: Get A+", "/study-hacks/"),
             ("Free Flashcards", "/flashcards/"),
             ("Practice Quizzes", "/quiz/"),
             ("Focus Timer", "/focus/"),

@@ -715,3 +715,289 @@ ERROR404 = {
         "instead."
     ),
 }
+
+STUDY_HACKS = {
+    "meta_title": "How to Get A+ Grades: Every Study Skill & Hack | StudyBonk",
+    "meta_description": "The complete A+ playbook: active recall, spaced repetition, note-taking, focus hacks, memorization techniques, exam protocols and the 1-week sprint plan. Free.",
+    "h1": "The A+ Playbook: Every Study Skill & Hack That Actually Works",
+    "lead": (
+        "Every evidence-backed study skill, hack and protocol on one page — from "
+        "how A+ students take notes and prepare for exams to emergency cramming "
+        "and the biology of learning. No fluff, no paid tools, no gimmicks. "
+        "Skim the table of contents, or read it like the syllabus of a course "
+        "called Getting Straight A's."
+    ),
+    "keywords": [
+        "how to get straight a's",
+        "study hacks",
+        "study skills",
+        "how to get a plus grades",
+        "how to study effectively",
+        "exam preparation tips",
+        "memorization techniques",
+        "how to become a top student",
+        "a+ student habits",
+        "best ways to study for exams",
+    ],
+    "longtail": [
+        "how to get all a's in high school",
+        "how to get straight a's without studying all day",
+        "study hacks that actually work scientifically proven",
+        "how do top students study differently",
+        "how to go from b student to a student",
+        "how to study for exams effectively in less time",
+        "how to memorize anything fast for a test",
+        "what to do the night before an exam",
+        "how to cram for a test the right way",
+        "how to stay motivated to study every day",
+        "best study routine for straight a students",
+        "how to take notes that help you remember",
+        "how to stop forgetting what i study",
+        "how to focus when studying is boring",
+        "how much should i study to get a plus grades",
+        "how to prepare for finals week step by step",
+    ],
+    "sections": [
+        {
+            "h2": "1. The A+ mindset: grades are systems, not talent",
+            "paras": [
+                "The single biggest discovery awaiting every B student: A+ students are not smarter, they run better systems. They track what's graded, prepare for the format of each assessment, and never rely on motivation. A grade is the output of a repeatable process — change the process and the grade follows.",
+                "Concretely: know every graded item and its weight in week one, always study for the test you'll actually take (format included), and treat every lost point as information. Students who review their errors systematically outperform students who study longer but never analyze their misses.",
+            ],
+            "bullets": [
+                "Map the syllabus in week one: every deadline, every weight",
+                "Study for the format: multiple choice, essay, or problem-solving each need different prep",
+                "Keep an error log — every lost point gets a written reason and a fix",
+                "Never compare hours; compare systems",
+            ],
+        },
+        {
+            "h2": "2. Backwards planning: start from the exam date",
+            "paras": [
+                "A+ students plan backwards. Take the exam date, reserve the last 3 days for full practice tests and review, then distribute the remaining topics across the days you have. Ten topics in ten days is a schedule; ten topics 'sometime this week' is a wish.",
+                "Break every topic into sessions of 30–50 minutes with a concrete objective ('master the quadratic formula problems', not 'do math'). Vague sessions wander; specific sessions compound.",
+            ],
+            "bullets": [
+                "Exam date minus 3 days = practice-test window",
+                "One topic per session, one concrete objective per session",
+                "Hardest topics get scheduled when your energy peaks, not at midnight",
+                "Leave one buffer day — life happens to schedules",
+            ],
+        },
+        {
+            "h2": "3. Note-taking that feeds memory",
+            "paras": [
+                "Notes are not a transcript; they're raw material for self-testing. Whatever method you use — Cornell, outline, or mind maps — the test is simple: can you turn today's notes into questions within 24 hours? If yes, they're working. If they're just pretty, they're decoration.",
+                "Use the 24-hour rule: revisit and rework notes within a day, converting headings into questions and highlighting nothing until you've written a summary from memory. The notes you can study FROM beat the notes you can study WITH.",
+            ],
+            "bullets": [
+                "Cornell method for lecture subjects: cues on the left, notes right, summary below",
+                "Mind maps for connected concepts; outlines for sequential ones",
+                "Turn every heading into a question within 24 hours",
+                "Write a 3-sentence from-memory summary after each lecture",
+                "Handwrite when precision matters — it slows you down exactly enough to think",
+            ],
+        },
+        {
+            "h2": "4. Active recall: the #1 skill of every A+ student",
+            "paras": [
+                "If you adopt exactly one habit from this page, make it this: close the book and force your brain to produce the answer. Re-reading feels productive but builds only familiarity; retrieval builds memory. Decades of research on the testing effect show self-testing beats re-studying by a wide margin.",
+                "Practical forms: flashcards (the classic), the blank-page brain dump, blurting (write everything you know about a topic, then check gaps), and teaching the material out loud to an imaginary classmate. All four hurt more than re-reading — that discomfort is the learning.",
+            ],
+            "bullets": [
+                "Flashcards for facts, terms, formulas — spaced, not crammed",
+                "Blank-page dumps after every chapter",
+                "Blurting before checking notes",
+                "Teach it out loud; stumbling points = gap list",
+                "If it feels easy, you're probably not learning",
+            ],
+            "example": {
+                "title": "The question sandwich",
+                "body": "Before reading a chapter, write 3 questions you expect it to answer. Read it. After, answer your own questions from memory before checking. You've now studied the chapter three times in one sitting — once forward, twice as retrieval.",
+            },
+        },
+        {
+            "h2": "5. Spaced repetition: never re-learn what you already learned",
+            "paras": [
+                "Memory decays on a curve — unless you interrupt the decay at growing intervals. Reviewing on day 1, day 3, day 7, day 16 and day 35 moves material into long-term storage at a fraction of the total study time cramming would need. This is the entire logic behind flashcard schedulers.",
+                "You don't need to track intervals by hand: StudyBonk's flashcard tool schedules cards automatically (Leitner boxes), so the right card surfaces on the right day. Old-school version: a box with five dividers and a simple rule — get it right, it moves right; get it wrong, back to slot one.",
+            ],
+            "bullets": [
+                "Interval ladder: 1 → 3 → 7 → 16 → 35 days",
+                "Miss a day? Resume, don't restart",
+                "Space practice tests too: one per week beats four in the last week",
+                "Apply it beyond cards: re-solve old problems from scratch",
+            ],
+        },
+        {
+            "h2": "6. Focus engineering: make distraction expensive",
+            "paras": [
+                "Willpower is a terrible plan. A+ students engineer their environment so focusing is the path of least resistance: phone in another room (not face-down — another room), one tab, one topic, a timer running. Every app on your phone is designed by experts to beat your attention; don't fight fair.",
+                "Use timed blocks (25 or 50 minutes) with real breaks in between — stand, water, window, not feed. The first four minutes of any session are the hardest; starting is a skill you build like a muscle. Two minutes of 'just start' beats an hour of planning to start.",
+            ],
+            "bullets": [
+                "Phone in another room during sessions",
+                "One tab rule — single-task or nothing",
+                "Pomodoro 25/5 for grind work, 50/10 for deep work",
+                "Breaks are for body and eyes, not for feeds",
+                "The 2-minute launch: commit to just starting",
+            ],
+        },
+        {
+            "h2": "7. The memorization toolkit",
+            "paras": [
+                "For pure memory loads — vocab, dates, structures, processes — use the techniques memory champions use. Mnemonics and acronyms compress lists (PMAT for the phases of mitosis). The memory palace pins abstract items to places you know intimately. Chunking turns 20 items into 5 groups of 4, which is how working memory actually works.",
+                "Elaboration is the quiet superpower: every 'why does this make sense?' you answer doubles the number of paths back to the fact. Boring facts + vivid imagery + a story = unforgettable. Weird is memorable; neutral is not.",
+            ],
+            "bullets": [
+                "Acronyms for ordered lists, acrostics for unordered ones",
+                "Memory palace for anything sequential (imagine walking your house)",
+                "Chunking: group items into fours, name each group",
+                "Elaborate: connect every new fact to one you already know",
+                "Say it, draw it, explain it — three channels beat one",
+            ],
+        },
+        {
+            "h2": "8. Exam prep protocol: practice like you'll perform",
+            "paras": [
+                "The final week is for rehearsal, not first contact. Full practice tests under real conditions — timed, no notes, no pauses — do three jobs: they find gaps, they train pacing, and they drain the exam's power to scare you. Every mock exam error goes in the error log with a fix.",
+                "Alternate days: test day, fix day. Test → find gaps → fix gaps → re-test. By the last two days you should be reviewing the error log and your condensed one-page sheet, not learning anything new. New material the night before is stress, not progress.",
+            ],
+            "bullets": [
+                "At least 2 full timed practice tests before any big exam",
+                "Error log: what, why, fix — review it daily in the last week",
+                "Condense everything to one page by test eve",
+                "Nothing new in the final 24 hours; review and sleep instead",
+            ],
+        },
+        {
+            "h2": "9. Test-day execution",
+            "paras": [
+                "An A+ is partly a performance. Sleep beats a 3 a.m. chapter every time — memory consolidates during sleep, so an all-nighter trades tomorrow's recall for tonight's illusion of progress. Eat something real, arrive early, and run a two-pass strategy: all easy points first, marked hard ones second.",
+                "For multiple choice: predict the answer before reading options, then choose the closest match — this defeats the trap answers written to exploit vague familiarity. For essays: 3 minutes of outline buys 20 minutes of coherent writing. For math: write units and check answers by estimation, not re-doing.",
+            ],
+            "bullets": [
+                "Sleep 7–9 hours; it's the highest-yield study tool that feels like slacking",
+                "Two-pass strategy: bank every easy point first",
+                "Predict before you read options (MCQ anti-trap technique)",
+                "Outline essays before writing a single sentence",
+                "Panic protocol: exhale slowly, name 5 things you can see, restart",
+            ],
+        },
+        {
+            "h2": "10. Essays and assignments: draft ugly, edit pretty",
+            "paras": [
+                "Top-grade writing is a two-step process: a fast, bad first draft and a ruthless edit. Never edit while drafting — perfectionism mid-draft is how deadlines die. Start from the rubric: every requirement becomes a checkbox, because that's exactly how graders grade.",
+                "Structure beats flourish: claim → evidence → explanation in every paragraph. If a sentence doesn't serve the argument, it's deleted, not decorated. And finish early enough to leave one full day between draft and final edit — fresh eyes catch what tired eyes can't.",
+            ],
+            "bullets": [
+                "Turn the rubric into a literal checklist",
+                "Ugly first draft, fast; structure pass; polish pass",
+                "Claim → evidence → explanation, every paragraph",
+                "One day between drafting and final editing",
+            ],
+        },
+        {
+            "h2": "11. Motivation and consistency: streaks beat sprints",
+            "paras": [
+                "Motivation is weather; systems are climate. A+ students don't feel like studying more often than anyone else — they've made it the default. Fixed time, fixed place, small minimum ('two pomodoros counts as a full day'), and visible streaks. Missing once is an accident; missing twice is the start of a new habit.",
+                "Gamify honestly: XP, streaks and quests (StudyBonk's whole design) work because progress you can see is progress you protect. Track your streak somewhere you'll see daily, and protect it with a minimum viable session on bad days.",
+            ],
+            "bullets": [
+                "Same time, same place — decide once, not daily",
+                "Minimum viable session counts (2 pomodoros = done)",
+                "Never miss twice",
+                "Make progress visible: streaks, XP, checkmarks",
+            ],
+        },
+        {
+            "h2": "12. The biology of learning: sleep, movement, fuel",
+            "paras": [
+                "Your brain is an organ, and its grades depend on its maintenance. Sleep is when memories move into long-term storage — under-sleeping undoes the studying you did that day. Exercise increases blood flow (and measurably, memory). Water and real food keep the machine steady; energy drinks borrow energy from tomorrow at interest.",
+                "The highest-ROI habits are boring: 7–9 hours of sleep, a 20-minute walk on study days, water at the desk. No supplement, app or nootropic comes close to fixing what bad sleep breaks.",
+            ],
+            "bullets": [
+                "Sleep 7–9 hours — non-negotiable for memory consolidation",
+                "20 minutes of movement on heavy study days",
+                "Water at the desk; caffeine early, not after 2pm",
+                "10-minute post-study review before bed = overnight consolidation boost",
+            ],
+        },
+        {
+            "h2": "13. Emergency protocol: cramming the right way",
+            "paras": [
+                "Sometimes it's already tomorrow. Cramming works better than its reputation — if you cram correctly: triage ruthlessly, prioritize what's most likely and most graded, and use retrieval, not re-reading. You will forget it all in a week, but the exam is not in a week.",
+                "Order of operations: list topics by (likelihood on exam × points) → study the top ones with active recall only → one timed pass of practice questions → sleep at least 6 hours. Trade breadth for depth: 5 topics known cold beat 15 topics vaguely recognized.",
+            ],
+            "bullets": [
+                "Triage: high-probability, high-points topics first",
+                "Retrieval only — no passive re-reading when time is short",
+                "One timed practice pass, then error-log the misses",
+                "Sleep ≥6 hours; an all-nighter subtracts more than it adds",
+            ],
+        },
+        {
+            "h2": "14. Subject-specific cheat codes",
+            "paras": [
+                "Every subject has a shortcut-shaped skill that unlocks disproportionate points. Math is recognizing problem types — drill by type, not by chapter. Languages are frequency-ranked vocabulary — learn the top 1,000 words first. History is causation chains — learn the story, not the date list. Sciences are definitions plus process diagrams — redraw them from memory.",
+                "Essays in any subject: collect the recurring question stems ('compare and contrast', 'to what extent') and pre-draft skeletons for each. Most exams recycle structures; prepare the structure once, adapt the content live.",
+            ],
+            "bullets": [
+                "Math: drill by problem type; make a formula sheet from memory",
+                "Languages: frequency-ranked vocab first, then immersion",
+                "History: causation chains and timelines drawn by hand",
+                "Sciences: redraw every process diagram from memory",
+                "All subjects: pre-draft essay skeletons for recurring question stems",
+            ],
+        },
+        {
+            "h2": "15. The 1-week A+ sprint plan",
+            "paras": [
+                "If you have one week and want the maximum grade improvement possible, run this exactly. It compresses everything above into a schedule — and yes, it works for a subject you've been ignoring all semester, though it will cost you a boring week.",
+            ],
+            "bullets": [
+                "Day 1: Syllabus triage — list every topic, mark what's likely and heavily weighted; make flashcards for definitions",
+                "Day 2–3: One topic per session, active recall only (blurting + flashcards); evening error log",
+                "Day 4: First full timed practice test; log every miss with a fix",
+                "Day 5: Fix day — attack the error log, re-learn weak topics, second practice test if ready",
+                "Day 6: Final pass — error log + one-page summary sheet; light flashcard review; early sleep",
+                "Day 7 (test day): Breakfast, two-pass strategy, no new material",
+            ],
+        },
+    ],
+    "takeaways_title": "If you remember nothing else",
+    "takeaways": [
+        "Test yourself, don't re-read — retrieval is the engine of memory",
+        "Space it out — 1, 3, 7, 16, 35 days beats one long night",
+        "Plan backwards from the exam, one topic per session",
+        "Practice like you'll perform: timed, closed-book mock exams",
+        "Sleep is a study technique — protect it",
+        "Track lost points in an error log; that log is your last-week curriculum",
+    ],
+    "faqs": [
+        ("How do I get straight A's without studying all day?",
+         "You don't study less — you study smarter: active recall instead of re-reading, spaced repetition instead of cramming, and backwards planning so every session targets something graded. Most straight-A students study fewer raw hours than struggling classmates; their hours just have a higher hit rate because every minute is self-testing, not reviewing."),
+        ("What is the single most effective study technique?",
+         "Active recall — closing the book and making yourself produce the answer (flashcards, brain dumps, teaching aloud). It's the most replicated finding in learning science: testing yourself beats re-reading and highlighting by a wide margin. Combine it with spaced repetition (reviewing at 1, 3, 7, 16, 35-day intervals) and you have the core of every A+ system."),
+        ("How many hours a day do I need to study for A's?",
+         "Quality beats quantity: 2–3 highly focused hours of active-recall study daily outperforms 6 hours of passive review. Consistency matters more than duration — 90 minutes every day builds more than 10 hours on Sunday, because spacing is what drives memory."),
+        ("Is cramming ever effective?",
+         "As an emergency protocol, yes — if you cram with retrieval (self-testing, practice problems) instead of re-reading, and sleep at least 6 hours. You'll pass tomorrow's exam and forget most of it within a week. For anything you need long-term (finals, cumulative subjects), spaced repetition wins overwhelmingly."),
+        ("How do top students study differently?",
+         "Three habits: they self-test instead of re-reading, they study for the test's actual format using past papers and practice tests, and they keep error logs so every lost point becomes a fixed weakness. They also sleep. The myth of the caffeinated all-night genius is exactly that — a myth."),
+        ("What should I do the night before an exam?",
+         "Review your one-page summary sheet and error log, do a light flashcard pass, prepare logistics (materials, alarm, route), and sleep 7–9 hours. Learning anything new the night before adds stress, not points — memory consolidates during sleep, so the last hours of sleep are worth more than the last hours of study."),
+    ],
+    "paa": [
+        ("What are the best study hacks that actually work?",
+         "Active recall, spaced repetition, backwards planning from the exam date, timed practice tests, error logs, and phone-in-another-room focus blocks. Everything else is decoration on these six."),
+        ("How can I become an A+ student?",
+         "Run a system, not vibes: map the syllabus week one, convert notes to questions within 24 hours, self-test daily, mock-exam before every test, and log every lost point. A's are the output of the system."),
+        ("Does highlighting help you study?",
+         "Barely — highlighting creates the illusion of learning (familiarity, not recall). Convert your highlights into flashcards or questions and it becomes useful; on its own it's mostly coloring."),
+        ("Is it better to study at night or in the morning?",
+         "Whenever your focus is genuinely highest — but protect sleep either way. Morning-after-sleep typically beats late-night for retention; 3am sessions trade tomorrow's memory consolidation for tonight's anxiety."),
+        ("How do I study for multiple exams at once?",
+         "Interleave: rotate subjects across the day (one topic per session) rather than blocking whole days per subject. Interleaving feels harder and produces better retention plus better judgment about which strategy each problem needs."),
+    ],
+}

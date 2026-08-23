@@ -698,6 +698,18 @@ def learn_page():
     )
     body = f"""
 {page_hero(pages.LEARN['h1'], pages.LEARN['lead'], eyebrow='Topic hub', chips=['No sign-up required', 'Everything saved in your browser', 'Light & dark mode'])}
+<section class="section-sm">
+  <div class="container">
+    <a class="card card-hover card-link reveal" href="/study-hacks/" style="display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap">
+      <div style="font-size:2.4rem" aria-hidden="true">🏆</div>
+      <div style="flex:1;min-width:220px">
+        <h3 style="margin-bottom:.2rem">The A+ Playbook: every study skill &amp; hack</h3>
+        <p class="mb-0">15 evidence-backed skills, the 1-week A+ sprint plan, test-day protocols and emergency cramming — all on one free page.</p>
+      </div>
+      <span class="btn btn-yellow">Read the playbook →</span>
+    </a>
+  </div>
+</section>
 <section class="section" aria-labelledby="pillars-h">
   <div class="container">
     <div class="section-head"><span class="eyebrow">Pillar topics</span><h2 id="pillars-h">Seven pillars, one bonk at a time</h2></div>
@@ -1380,6 +1392,71 @@ def support_page():
     )
 
 
+def study_hacks_page():
+    h = pages.STUDY_HACKS
+    trail = [("Home", "/"), ("Study Hacks", "/study-hacks/")]
+    toc = "".join(
+        f'<li><a href="#section-{i}">{E(sec["h2"])}</a></li>'
+        for i, sec in enumerate(h["sections"])
+    )
+    sections_html = ""
+    for i, sec in enumerate(h["sections"]):
+        sections_html += f'<div id="section-{i}">' + content_sections_html([sec]) + "</div>"
+    takeaways = "".join(f"<li>{E(t)}</li>" for t in h["takeaways"])
+    # cross-links into the Study Skills pillar clusters + tools
+    skills = next((p for p in PILLARS if p["slug"] == "skills"), None)
+    cluster_links = ""
+    if skills:
+        cluster_links = "".join(
+            f'<a class="chip" style="cursor:pointer" href="/skills/{c["slug"]}/">{E(c["title"])}</a>'
+            for c in skills["clusters"]
+        )
+    body = f"""
+{page_hero(h['h1'], h['lead'], eyebrow='The A+ Playbook', chips=['🎟️ No sign-up', '💾 Save this page', '15 skills · 6 FAQs · 1 sprint plan'])}
+<div class="container section-sm">
+  {breadcrumb_html(trail)}
+  <div class="toc"><strong>Contents — every skill on this page</strong><ul>{toc}</ul></div>
+  <article class="article">
+    {sections_html}
+    <div class="lesson-box">
+      <h3>🏆 {E(h['takeaways_title'])}</h3>
+      <ul>{takeaways}</ul>
+      <div class="btn-row mt-2">
+        <a class="btn btn-primary btn-sm" href="/flashcards/">Start active recall now →</a>
+        <a class="btn btn-ghost btn-sm" href="/focus/">Focus timer →</a>
+        <a class="btn btn-ghost btn-sm" href="/quiz/">Practice quizzes →</a>
+      </div>
+    </div>
+    <h2>Go deeper on each skill</h2>
+    <p>Every skill above has a full dedicated guide in the Study Skills pillar:</p>
+    <div class="topic-meta" style="margin-bottom:1rem">{cluster_links}</div>
+  </article>
+  {byline_block()}
+</div>
+{paa_section(h['paa'])}
+{faq_section(h['faqs'], 'Getting A\\u2019s — FAQ')}
+{trust_band()}
+{cta_band('Your A+ starts with one pomodoro', 'Read the playbook, then run Day 1 of the sprint plan tonight. Free, private, no account — just start.', 'Start a focus session', '/focus/')}"""
+
+    return render(
+        {
+            "path": "/study-hacks/",
+            "title": h["meta_title"],
+            "description": h["meta_description"],
+            "keywords": h["keywords"],
+            "longtail": h["longtail"],
+            "schema": [
+                schema_breadcrumb(trail),
+                schema_article(h["h1"], "/study-hacks/", h["meta_description"]),
+                schema_faq(h["faqs"]),
+                schema_howto("How to get A+ grades", h["meta_description"], h["takeaways"]),
+            ],
+            "nav_active": "/learn/",
+        },
+        body,
+    )
+
+
 def legal_page(doc, path, label, extra_schema=None, keywords=None):
     sections = ""
     for h2, paras_, bullets in doc["sections"]:
@@ -1635,6 +1712,7 @@ def main():
 
     # Support
     emit("support/index.html", support_page())
+    emit("study-hacks/index.html", study_hacks_page())
 
     # Legal
     if TERMS:
