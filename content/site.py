@@ -32,6 +32,7 @@ SITE = {
 # Displayed in the top navbar (desktop) and the mobile drawer.
 NAV = [
     {"label": "Learn", "href": "/learn/", "children": "pillars"},
+    {"label": "Study Hacks 💡", "href": "/study-hacks/"},
     {"label": "Flashcards", "href": "/flashcards/"},
     {"label": "Quiz", "href": "/quiz/"},
     {"label": "Focus", "href": "/focus/"},

@@ -209,22 +209,36 @@
     const groups = {};
     for (const d of decks) (groups[d.topic] = groups[d.topic] || []).push(d);
 
+    // subject icon lookup from the pillar data
+    const topicEmoji = {};
+    if (window.SB_DATA) for (const p of window.SB_DATA.pillars) topicEmoji[p.title] = p.emoji;
+
     let html = "";
     for (const [topic, list] of Object.entries(groups)) {
-      const cards = list.map((d) =>
-        '<a class="card card-hover card-link" href="?deck=' + encodeURIComponent(d.id) + '">' +
-        '<div class="card-kicker">' + topic + (d.custom ? " · your deck" : "") + "</div>" +
-        "<h3>" + d.title.replace(/^[^:]+:\s*/, "") + "</h3>" +
-        '<div class="topic-meta"><span class="chip chip-blue">' + d.cards.length + " cards</span>" +
-        '<span class="chip chip-yellow">' + dueCount(d) + " due now</span></div></a>"
-      ).join("");
-      html += '<section class="mb-3"><h2>' + topic + '</h2><div class="deck-grid">' + cards + "</div></section>";
+      const cards = list.map((d) => {
+        const body =
+          '<div class="card-kicker">' + topic + (d.custom ? " · your deck" : "") + "</div>" +
+          "<h3>" + d.title.replace(/^[^:]+:\s*/, "") + "</h3>" +
+          '<div class="topic-meta"><span class="chip chip-blue">' + d.cards.length + " cards</span>" +
+          '<span class="chip chip-yellow">' + dueCount(d) + " due now</span></div>";
+        if (d.custom) {
+          return (
+            '<div class="card card-hover" style="position:relative">' +
+            '<a href="?deck=' + encodeURIComponent(d.id) + '" style="all:unset;cursor:pointer;display:block;color:inherit">' + body + "</a>" +
+            '<button class="btn btn-ghost btn-sm deck-delete" data-delete-deck="' + d.id + '" title="Delete this deck" aria-label="Delete deck ' + esc(d.title) + '" style="position:absolute;top:12px;right:12px;padding:6px 10px">🗑️</button>' +
+            "</div>"
+          );
+        }
+        return '<a class="card card-hover card-link" href="?deck=' + encodeURIComponent(d.id) + '">' + body + "</a>";
+      }).join("");
+      html += '<section class="mb-3"><h2>' + (topicEmoji[topic] ? topicEmoji[topic] + " " : "") + topic + '</h2><div class="deck-grid">' + cards + "</div></section>";
     }
 
     mount.innerHTML =
       '<div class="btn-row mb-3" style="justify-content:space-between">' +
       "<h2 style='margin:0'>Deck library</h2>" +
       '<div class="btn-row">' +
+      '<button class="btn btn-primary btn-sm" id="new-blank-deck">➕ New deck</button>' +
       '<button class="btn btn-ghost btn-sm" id="import-deck-btn">📥 Import JSON</button>' +
       "</div></div>" + html +
       '<div class="card card-glass mt-3" id="instant-importer">' +
@@ -256,6 +270,37 @@
       "</div>";
 
     document.getElementById("import-deck-btn").onclick = importDeck;
+
+    // delete custom decks
+    mount.querySelectorAll("[data-delete-deck]").forEach((btn) => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const id = btn.dataset.deleteDeck;
+        const deck = userDecks().find((d) => d.id === id);
+        if (!deck) return;
+        if (!confirm("Delete deck '" + deck.title + "' (" + deck.cards.length + " cards) and its study schedule? This can't be undone.")) return;
+        setUserDecks(userDecks().filter((d) => d.id !== id));
+        const srs = getSrs();
+        delete srs[id];
+        setSrs(srs);
+        window.SB.ui.toast("🗑️ Deck deleted", "info");
+        renderLibrary();
+      };
+    });
+
+    // new blank deck (add cards inside the deck session)
+    document.getElementById("new-blank-deck").onclick = () => {
+      const title = prompt("Deck name:", "My deck");
+      if (title === null) return;
+      const clean = title.trim() || "My deck";
+      const id = "user-" + Date.now().toString(36);
+      const decks = userDecks();
+      decks.push({ id, title: clean, topic: "Custom", cards: [], custom: true });
+      setUserDecks(decks);
+      G.award("card", { deck_builder: true });
+      openDeck(id); // opens with the add-cards panel ready
+    };
 
     const tabs = document.getElementById("import-tabs");
     tabs.addEventListener("click", (e) => {
@@ -403,27 +448,48 @@
     return x;
   }
 
+  function intervalLabel(days) {
+    if (days <= 0) return "today";
+    if (days === 1) return "1 day";
+    if (days >= 30) return "35 days";
+    return days + " days";
+  }
+
   function renderCard() {
     const { deck, queue, pos } = session;
+    if (deck.cards.length === 0) return renderAddCards(true);
     if (pos >= queue.length) return finishSession();
     const card = deck.cards[queue[pos].idx];
+    const box = queue[pos].state.box || 1;
+    // compute the next interval each rating produces (Leitner boxes 1-6)
+    const nextBox = { again: 1, hard: Math.max(1, box), good: Math.min(6, box + 1), easy: Math.min(6, box + 2) };
+    const nextHint = session.lastRating
+      ? " · last card: " + session.lastRating
+      : "";
     mount.innerHTML =
       '<div class="text-center mb-2"><a href="/flashcards/" class="btn btn-ghost btn-sm">← All decks</a> ' +
       '<span class="chip chip-blue">' + esc(deck.title) + "</span> " +
       '<span class="chip">' + (pos + 1) + " / " + queue.length + "</span>" +
-      (deck.custom ? ' <button class="btn btn-ghost btn-sm" id="export-this">📤 Export</button>' : "") + "</div>" +
+      '<span class="chip chip-green">box ' + box + "/6</span>" +
+      (deck.custom
+        ? ' <button class="btn btn-ghost btn-sm" id="add-cards-btn">➕ Add cards</button>' +
+          ' <button class="btn btn-ghost btn-sm" id="export-this">📤 Export</button>' +
+          ' <button class="btn btn-ghost btn-sm" id="delete-this" style="border-color:var(--red);color:var(--red)">🗑️ Delete deck</button>'
+        : "") + "</div>" +
+      '<div id="add-cards-panel"></div>' +
       '<div class="flashcard-stage"><div class="flashcard" id="flashcard" role="button" tabindex="0" aria-label="Flashcard — press to flip">' +
       '<div class="flashcard-face flashcard-front"><span class="face-label">Question — tap to flip</span><div class="face-text">' + esc(card[0]) + "</div></div>" +
       '<div class="flashcard-face flashcard-back"><span class="face-label">Answer</span><div class="face-text">' + esc(card[1]) + "</div></div>" +
       "</div></div>" +
       '<div class="quiz-progress mt-3" id="fc-progress">' + progressDots() + "</div>" +
       '<div class="btn-row mt-3" id="rating-row" style="justify-content:center;visibility:hidden">' +
-      '<button class="btn btn-ghost btn-sm" data-rate="again">😵 Again</button>' +
-      '<button class="btn btn-ghost btn-sm" data-rate="hard">🤔 Hard</button>' +
-      '<button class="btn btn-primary btn-sm" data-rate="good">😀 Good</button>' +
-      '<button class="btn btn-yellow btn-sm" data-rate="easy">🚀 Easy</button>' +
+      '<button class="btn btn-ghost btn-sm" data-rate="again" title="Reset to box 1 — you will see this card again today">😵 Again<br><span class="small">returns ' + intervalLabel(BOX_DAYS[0]) + "</span></button>" +
+      '<button class="btn btn-ghost btn-sm" data-rate="hard" title="Keep the current interval">🤔 Hard<br><span class="small">returns ' + intervalLabel(BOX_DAYS[nextBox.hard - 1]) + "</span></button>" +
+      '<button class="btn btn-primary btn-sm" data-rate="good" title="Move up one box (longer interval)">😀 Good<br><span class="small">returns ' + intervalLabel(BOX_DAYS[nextBox.good - 1]) + "</span></button>" +
+      '<button class="btn btn-yellow btn-sm" data-rate="easy" title="Move up two boxes (much longer interval)">🚀 Easy<br><span class="small">returns ' + intervalLabel(BOX_DAYS[nextBox.easy - 1]) + "</span></button>" +
       "</div>" +
-      '<p class="flashcard-hint">Click the card or press <kbd>space</kbd> to flip · <kbd>1</kbd>–<kbd>4</kbd> to rate</p>';
+      '<p class="flashcard-hint">Click the card or press <kbd>space</kbd> to flip · <kbd>1</kbd>–<kbd>4</kbd> to rate' + nextHint + "</p>" +
+      '<p class="small muted mb-0">Spaced repetition (Leitner): rate honestly — <strong>Again</strong> relearns today, <strong>Good</strong> climbs the 1→3→7→16→35 day ladder, <strong>Easy</strong> skips ahead. The interval shown on each button is exactly when this card returns.</p>';
 
     const el = document.getElementById("flashcard");
     el.addEventListener("click", flip);
@@ -432,8 +498,62 @@
       const rate = e.target.closest("[data-rate]");
       if (rate) rateCard(rate.dataset.rate);
     });
-    if (deck.custom) document.getElementById("export-this").onclick = () => exportDeck(deck);
+    if (deck.custom) {
+      document.getElementById("add-cards-btn").onclick = () => renderAddCards(false);
+      document.getElementById("export-this").onclick = () => exportDeck(deck);
+      document.getElementById("delete-this").onclick = () => {
+        if (!confirm("Delete deck '" + deck.title + "' (" + deck.cards.length + " cards) and its schedule? This can't be undone.")) return;
+        setUserDecks(userDecks().filter((d) => d.id !== deck.id));
+        const srs = getSrs();
+        delete srs[deck.id];
+        setSrs(srs);
+        session = null;
+        document.onkeydown = null;
+        window.SB.ui.toast("🗑️ Deck deleted", "info");
+        history.replaceState(null, "", "/flashcards/");
+        renderLibrary();
+      };
+    }
     document.onkeydown = keyHandler;
+  }
+
+  /* add-cards panel for custom decks (inline, no prompts) */
+  function renderAddCards(empty) {
+    const deck = session ? session.deck : null;
+    if (!deck) return;
+    document.onkeydown = null;
+    mount.innerHTML =
+      '<div class="text-center mb-2"><a href="/flashcards/" class="btn btn-ghost btn-sm">← All decks</a> ' +
+      '<span class="chip chip-blue">' + esc(deck.title) + "</span> " +
+      '<span class="chip">' + deck.cards.length + " cards</span></div>" +
+      '<div class="card card-glass" style="max-width:620px;margin-inline:auto">' +
+      "<h2 class='mt-0' style='font-size:1.3rem'>➕ Add cards to this deck</h2>" +
+      "<p class='muted small mb-2'>One card per line, formatted <code>front | back</code>.</p>" +
+      '<textarea id="add-cards-input" rows="6" placeholder="Term | Definition&#10;Question | Answer" style="width:100%;padding:12px;border-radius:12px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font-body)"></textarea>' +
+      '<div class="btn-row mt-2">' +
+      '<button class="btn btn-primary" id="add-cards-save">Save cards</button>' +
+      (empty ? "" : '<button class="btn btn-ghost" id="add-cards-cancel">Cancel</button>') +
+      "</div>" +
+      '<p class="small muted mb-0 mt-2" id="add-cards-feedback"></p></div>';
+    const back = () => openDeck(deck.id);
+    document.getElementById("add-cards-save").onclick = () => {
+      const raw = document.getElementById("add-cards-input").value.trim();
+      const fb = document.getElementById("add-cards-feedback");
+      const decks = userDecks();
+      const mine = decks.find((d) => d.id === deck.id);
+      if (!mine) { fb.textContent = "This deck no longer exists."; return; }
+      const added = raw.split("\n").map((l) => l.split("|"))
+        .filter((p) => p.length >= 2 && p[0].trim() && p[1].trim())
+        .map((p) => [p[0].trim(), p.slice(1).join("|").trim()]);
+      if (!added.length) { fb.textContent = "No valid cards found — use 'front | back', one per line."; return; }
+      mine.cards = mine.cards.concat(added);
+      setUserDecks(decks);
+      window.SB.ui.toast("➕ " + added.length + " cards added to '" + mine.title + "'", "good");
+      back();
+    };
+    const cancel = document.getElementById("add-cards-cancel");
+    if (cancel) cancel.onclick = back;
+    document.getElementById("add-cards-input").focus();
   }
 
   function progressDots() {
@@ -453,6 +573,12 @@
     document.getElementById("rating-row").style.visibility = "visible";
   }
 
+  function intervalLabel(days) {
+    if (days <= 0) return "relearn today";
+    if (days === 1) return "back tomorrow";
+    return "back in " + days + " days";
+  }
+
   function rateCard(rating) {
     if (!session.flipped) return;
     const { deck, queue, pos } = session;
@@ -467,6 +593,13 @@
     srs[deck.id][queue[pos].idx] = st;
     setSrs(srs);
     G.award("card");
+
+    const label = { again: "😵 Again", hard: "🤔 Hard", good: "😀 Good", easy: "🚀 Easy" }[rating];
+    session.lastRating = label + " → " + intervalLabel(BOX_DAYS[st.box - 1]);
+
+    // "Again" re-queues the card for another pass in THIS session
+    if (rating === "again") session.queue.push({ idx: queue[pos].idx, state: st });
+
     session.reviewed += 1;
     session.pos += 1;
     session.flipped = false;

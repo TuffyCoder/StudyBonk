@@ -257,17 +257,33 @@
       ).join(" ");
       html += '<div class="card card-hover mb-2"><h3>' + p.emoji + " " + esc(p.title) + '</h3><div class="topic-meta">' + chips + "</div></div>";
     }
-    // user-imported quizzes
+    // user-imported quizzes (with delete buttons)
     const mine = userQuizzes();
     if (mine.length) {
-      const chips = mine.slice().reverse().map((q) =>
-        '<a class="chip chip-yellow" style="cursor:pointer" href="?topic=' + encodeURIComponent(q.id) + "&len=all\">" + esc(q.title) + " · " + q.questions.length + " Q</a>"
-      ).join(" ");
-      html += '<div class="card card-glass mb-2"><h3>🦊 Your Bonk AI quizzes</h3><div class="topic-meta">' + chips + "</div></div>";
+      const rows = mine.slice().reverse().map((q) =>
+        '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">' +
+        '<a class="chip chip-yellow" style="cursor:pointer" href="?topic=' + encodeURIComponent(q.id) + "&len=all\">" + esc(q.title) + " · " + q.questions.length + " Q</a>" +
+        '<button class="btn btn-ghost btn-sm" data-del-quiz="' + q.id + '" title="Delete this quiz" aria-label="Delete quiz ' + esc(q.title) + '" style="padding:4px 9px;border-color:var(--red);color:var(--red)">✕</button>' +
+        "</div>"
+      ).join("");
+      html += '<div class="card card-glass mb-2"><h3>🦊 Your Bonk AI quizzes</h3><div class="topic-meta" style="flex-direction:column;align-items:flex-start;gap:10px">' + rows + "</div></div>";
     }
     html += '<div class="card card-glass mt-3 text-center"><h3>🥊 Bonk Challenge</h3><p class="muted">Speed round: 10 random questions, 60 seconds, explanations after the buzzer.</p><button class="btn btn-yellow" id="challenge-btn">Start speed round</button></div>';
     mount.innerHTML = html;
     document.getElementById("challenge-btn").onclick = () => startQuiz(shuffle(allQuestions()).slice(0, 10), "⚡ Bonk Challenge: Speed Round", true);
+    mount.querySelectorAll("[data-del-quiz]").forEach((btn) => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const id = btn.dataset.delQuiz;
+        const q = userQuizzes().find((x) => x.id === id);
+        if (!q) return;
+        if (!confirm("Delete quiz '" + q.title + "' (" + q.questions.length + " questions)? This can't be undone.")) return;
+        setUserQuizzes(userQuizzes().filter((x) => x.id !== id));
+        window.SB.ui.toast("🗑️ Quiz deleted", "info");
+        renderStart();
+      };
+    });
     wireImporter(mount);
     history.replaceState(null, "", "/quiz/");
   }
