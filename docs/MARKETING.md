@@ -1,6 +1,6 @@
 # StudyBonk Marketing Kit 📣
 
-The public, always-fresh version lives at **https://studybonk.vercel.app/marketing/**
+The public, always-fresh version lives at **https://studybonk.pages.dev/marketing/**
 (data source: `content/marketing.py`). This doc is the working playbook.
 
 ## Positioning
@@ -37,7 +37,7 @@ One-liners by platform:
 
 ## CTA line
 
-> Study free at **studybonk.vercel.app** — no sign-up, seriously.
+> Study free at **studybonk.pages.dev** — no sign-up, seriously.
 
 ## Honesty rules (non-negotiable)
 

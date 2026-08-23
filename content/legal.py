@@ -18,15 +18,15 @@ TERMS = {
     "h1": "Terms of Use",
     "intro": [
         "StudyBonk is free, open-source and account-free, so these terms are shorter than most. The short version: use the site freely, keep ownership of everything you create, and remember that the AI tutor can make mistakes. The longer version is below, written in plain English rather than legalese.",
-        "By using studybonk.vercel.app you agree to these terms. If you disagree with them, simply stop using the site — since there are no accounts, there is nothing to cancel.",
+        "By using studybonk.pages.dev you agree to these terms. If you disagree with them, simply stop using the site — since there are no accounts, there is nothing to cancel.",
     ],
     "sections": [
         ("Acceptance of terms", [
-            "These Terms of Use govern your use of StudyBonk, a free educational website available at studybonk.vercel.app. By accessing or using the site, you accept these terms in full. If you do not accept them, please do not use the site.",
+            "These Terms of Use govern your use of StudyBonk, a free educational website available at studybonk.pages.dev. By accessing or using the site, you accept these terms in full. If you do not accept them, please do not use the site.",
             "Because StudyBonk has no accounts or sign-ups, there is no click-through agreement to accept — your use of the site is the agreement. These terms apply to every page and feature, including the flashcards, quizzes, focus timer and AI tutor.",
         ], []),
         ("What StudyBonk is", [
-            "StudyBonk is a free educational tool designed to help students study more effectively. It is a static website hosted on Vercel, built and maintained by TuffyCoder, and paid for at zero cost to you.",
+            "StudyBonk is a free educational tool designed to help students study more effectively. It is a static website hosted on Cloudflare Pages, built and maintained by TuffyCoder, and paid for at zero cost to you.",
         ], [
             "Study guides across math, science, history, SAT prep and study skills",
             "Flashcards with built-in spaced repetition",
@@ -92,7 +92,7 @@ PRIVACY = {
             "Most privacy policies explain how your data is handled. This one mostly explains why there is no data to handle: every feature that would normally require a server — progress, decks, gamification, the AI tutor — was engineered to run entirely in your browser instead.",
         ], []),
         ("What we do not collect", [
-            "For the avoidance of doubt, here is the full inventory of what StudyBonk does not have. We run no analytics of any kind and keep no server logs of user activity beyond what Vercel's standard static hosting necessarily does at the network edge to serve pages (routing and denial-of-service protection, for example). Those infrastructure-level functions are operated by Vercel, not StudyBonk, and are not used to profile users.",
+            "For the avoidance of doubt, here is the full inventory of what StudyBonk does not have. We run no analytics of any kind and keep no server logs of user activity beyond what Cloudflare's standard static hosting necessarily does at the network edge to serve pages (routing and denial-of-service protection, for example). Those infrastructure-level functions are operated by Cloudflare, not StudyBonk, and are not used to profile users.",
         ], [
             "No accounts, emails, names or passwords",
             "No analytics or usage statistics",
@@ -134,7 +134,7 @@ PRIVACY = {
             "There is no server-side copy to request or delete — there never was one.",
         ]),
         ("Third parties", [
-            "StudyBonk shares data with no third parties, because it has no data to share. There are no advertisers, analytics vendors, font CDNs or embedded social buttons. The only third party involved in operating the site is Vercel, which statically hosts the pages and serves them from its edge network; Vercel serves files and never receives your study activity from StudyBonk. The AI model download described above comes from public model CDNs without any user data attached.",
+            "StudyBonk shares data with no third parties, because it has no data to share. There are no advertisers, analytics vendors, font CDNs or embedded social buttons. The only third party involved in operating the site is Cloudflare Pages, which statically hosts the pages and serves them from its edge network; Cloudflare serves files and never receives your study activity from StudyBonk. The AI model download described above comes from public model CDNs without any user data attached.",
         ], []),
         ("Changes to this policy", [
             "If StudyBonk's architecture ever changes in a way that affects privacy, this policy will be updated here with a new 'Last updated' date, and — because the site is open-source — the change will be visible in the repository's history before it ever reaches you. The commitment this page documents is architectural, not aspirational: no collection, by design.",
@@ -155,7 +155,7 @@ COOKIES = {
     "sections": [
         ("Zero cookies, zero trackers", [
             "StudyBonk does not set any cookies — not analytics cookies, not advertising cookies, not even strictly-necessary ones. It also loads no third-party scripts, pixels or fingerprinting libraries of any kind.",
-            "You don't have to take this on faith. The site is open-source at github.com/TuffyCoder/StudyBonk, and you can inspect every page's network activity in your browser's developer tools: the cookies tab for studybonk.vercel.app will stay empty.",
+            "You don't have to take this on faith. The site is open-source at github.com/TuffyCoder/StudyBonk, and you can inspect every page's network activity in your browser's developer tools: the cookies tab for studybonk.pages.dev will stay empty.",
         ], []),
         ("What we use instead: localStorage", [
             "To remember your progress between visits, StudyBonk uses your browser's localStorage — a standard web feature that lets a site save small amounts of data on your own device. Your XP, streaks, flashcard decks, focus stats, theme preference and encrypted AI chat history are written there.",
@@ -176,10 +176,10 @@ COOKIES = {
             "Clearing cookies in your browser does not necessarily clear localStorage — see the next section.",
         ]),
         ("How to clear your StudyBonk data", [
-            "If you want a fresh start — or you're on a shared computer — you can wipe everything StudyBonk has saved. In most browsers: open Settings, find the privacy or site-data section, view site data for studybonk.vercel.app, and delete it. Browsers usually also let you clear site data for the site you're currently on via the padlock icon in the address bar.",
+            "If you want a fresh start — or you're on a shared computer — you can wipe everything StudyBonk has saved. In most browsers: open Settings, find the privacy or site-data section, view site data for studybonk.pages.dev, and delete it. Browsers usually also let you clear site data for the site you're currently on via the padlock icon in the address bar.",
             "One friendly warning: clearing site data erases your XP, streaks, decks and AI history permanently — that's the flip side of a no-account design. Export a JSON backup from the dashboard first if you want to keep your progress.",
         ], [
-            "Browser settings → Privacy → Site data → studybonk.vercel.app → delete.",
+            "Browser settings → Privacy → Site data → studybonk.pages.dev → delete.",
             "Or: padlock icon next to the address bar → site settings → clear data.",
             "Export a dashboard backup first if you want to keep your progress.",
         ]),
@@ -221,10 +221,10 @@ LICENSE_PAGE = {
             "No additional restrictions: don't add legal terms or technology that limit others' reuse.",
         ]),
         ("How to attribute", [
-            "Attribution should name the source and link back. The recommended form is a line like: 'StudyBonk by TuffyCoder (studybonk.vercel.app), licensed under CC BY 4.0' — placed wherever you would naturally cite a source: a caption, a footer or a credits page. For code, keeping the LICENSE file and a mention of the repository is sufficient under MIT.",
+            "Attribution should name the source and link back. The recommended form is a line like: 'StudyBonk by TuffyCoder (studybonk.pages.dev), licensed under CC BY 4.0' — placed wherever you would naturally cite a source: a caption, a footer or a credits page. For code, keeping the LICENSE file and a mention of the repository is sufficient under MIT.",
         ], [
             "Credit line: StudyBonk by TuffyCoder.",
-            "Link: https://studybonk.vercel.app (and/or github.com/TuffyCoder/StudyBonk for code).",
+            "Link: https://studybonk.pages.dev (and/or github.com/TuffyCoder/StudyBonk for code).",
             "Note changes if you modified the content.",
         ]),
         ("Where the source lives", [

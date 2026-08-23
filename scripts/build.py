@@ -3,7 +3,7 @@
 
 Reads content from content/*.py and emits the complete site (HTML pages,
 sitemap.xml, robots.txt, manifest, service worker, study-data.js) into the
-repository root, ready for Vercel.
+repository root, ready for Cloudflare Pages.
 
 Zero dependencies — Python 3.9+ standard library only.
 Run:  python3 scripts/build.py
@@ -197,6 +197,7 @@ def head_html(page):
     return f"""<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="google-site-verification" content="tOkOPOpDyPZoDlFZc0LQm5t3YLm3O89T6ci_YGpoHH0" />
 <title>{E(page['title'])}</title>
 <meta name="description" content="{E(page['description'])}">
 <meta name="keywords" content="{E(', '.join(kw))}">
@@ -513,13 +514,6 @@ def home_page():
         f'<h3>{E(title)}</h3><p>{E(body)}</p></div>'
         for icon, title, body in h["ai_points"]
     )
-    testimonials = "".join(
-        f'<div class="card testimonial reveal"><span class="testimonial-quote-mark" aria-hidden="true">&ldquo;</span>'
-        f'<blockquote>{E(t["quote"])}</blockquote>'
-        f'<div class="testimonial-author"><div class="testimonial-avatar">{t["emoji"]}</div>'
-        f'<div><strong>{E(t["name"])}</strong><span>{E(t["role"])}</span></div></div></div>'
-        for t in site.TESTIMONIALS
-    )
     topic_cards = "".join(
         f'<a class="card card-hover topic-card card-link" href="/{p["slug"]}/">'
         f'<div class="topic-emoji" aria-hidden="true">{p["emoji"]}</div>'
@@ -630,17 +624,6 @@ def home_page():
     </div>
     <div class="grid grid-3">{ai_points}</div>
     <div class="btn-row mt-3" style="justify-content:center"><a class="btn btn-primary" href="/ai/">Chat with Bonk AI →</a></div>
-  </div>
-</section>
-
-<section class="section" aria-labelledby="testi-h">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">Testimonials</span>
-      <h2 id="testi-h">{E(h['testimonials_title'])}</h2>
-      <p>{E(h['testimonials_note'])}</p>
-    </div>
-    <div class="grid grid-2">{testimonials}</div>
   </div>
 </section>
 
@@ -1298,7 +1281,7 @@ def marketing_page():
             "isFamilyFriendly": True,
         })
     body = f"""
-{page_hero('The StudyBonk Creator Kit', 'Ready-to-film hooks, Shorts scripts, captions and POV concepts for spreading the bonk. Everything here is yours to use — no attribution required, though a link to studybonk.vercel.app is always appreciated.', eyebrow='Marketing kit', chips=['Free to use', 'Meme-friendly', 'Creator-approved'])}
+{page_hero('The StudyBonk Creator Kit', 'Ready-to-film hooks, Shorts scripts, captions and POV concepts for spreading the bonk. Everything here is yours to use — no attribution required, though a link to studybonk.pages.dev is always appreciated.', eyebrow='Marketing kit', chips=['Free to use', 'Meme-friendly', 'Creator-approved'])}
 <section class="section-sm" aria-labelledby="hooks-h"><div class="container">
   <div class="section-head"><span class="eyebrow">TikTok</span><h2 id="hooks-h">10 scroll-stopping hooks</h2></div>
   <div class="article" style="margin-inline:auto">{hooks}</div>
@@ -1312,7 +1295,7 @@ def marketing_page():
   <div><div class="section-head"><span class="eyebrow">POV</span><h2>Viral POV concepts</h2></div>{povs}</div>
 </div></section>
 <section class="section-sm"><div class="container"><div class="cta-band reveal">
-  <h2>{E(m.get('cta_line', 'Study free at studybonk.vercel.app'))}</h2>
+  <h2>{E(m.get('cta_line', 'Study free at studybonk.pages.dev'))}</h2>
   <div class="btn-row" style="justify-content:center;margin-top:1.2rem"><a class="btn btn-lg" href="/">Open StudyBonk</a></div>
 </div></div></section>
 {trust_band()}"""
@@ -1332,6 +1315,66 @@ def marketing_page():
                 schema_breadcrumb([("Home", "/"), ("Creator Kit", "/marketing/")]),
             ] + video_schema,
             "nav_active": "",
+        },
+        body,
+    )
+
+
+def support_page():
+    socials = "".join(
+        '<a class="social-btn" href="' + s["url"] + '" rel="noopener" target="_blank" aria-label="' + E(s["name"]) + '">' + SOCIAL_ICONS[s["icon"]] + E(s["name"]) + "</a>"
+        for s in site.SOCIALS
+    )
+    ways = (
+        '<div class="grid grid-3">'
+        '<div class="card card-hover reveal"><div class="card-icon yellow">👀</div><h3>Follow the socials</h3>'
+        "<p>Every follow tells the algorithm students want free, private, ethical tools. It costs nothing and helps a lot.</p>"
+        '<div class="social-row mt-2">' + socials + "</div></div>"
+        '<a class="card card-hover card-link reveal" href="https://www.reddit.com/r/studybonk/" rel="noopener" target="_blank">'
+        '<div class="card-icon">💬</div><h3>Join r/studybonk</h3>'
+        "<p>The official community: share decks, request topics, report bugs, post streaks, and vote on what gets built next.</p>"
+        '<div class="topic-meta"><span class="chip chip-yellow">Free to join</span><span class="chip">Feedback drives the roadmap</span></div></a>'
+        '<div class="card card-hover reveal"><div class="card-icon green">📣</div><h3>Tell one friend</h3>'
+        "<p>Word of mouth is the only marketing StudyBonk has. Send the link to one person who's studying tonight — that's it.</p>"
+        '<div class="btn-row mt-2"><a class="btn btn-ghost btn-sm" href="/marketing/">Grab share-ready content →</a></div></div>'
+        "</div>"
+    )
+    body = (
+        page_hero("Support StudyBonk — for free, in 10 seconds",
+                  "StudyBonk has no ads, no paywalls and no data to sell — so support is simple: follow, join, share. Any one of these keeps the bonks coming.",
+                  eyebrow="Support 💛", chips=["100% free ways to help", "No donations needed", "Community-driven"])
+        + '<section class="section-sm"><div class="container">'
+        + '<div class="section-head"><span class="eyebrow">Three free ways</span><h2>Pick any (or all three)</h2></div>'
+        + ways
+        + "</div></section>"
+        + trust_band()
+        + cta_band("Now go study — that helps most of all", None, "Open the study hub", "/learn/")
+    )
+    return render(
+        {
+            "path": "/support/",
+            "title": "Support StudyBonk — Free Ways to Help | StudyBonk",
+            "description": "Support the free, private study platform in 10 seconds: follow the socials, join the r/studybonk community, and share StudyBonk with a friend. No donations needed.",
+            "keywords": ["support studybonk", "studybonk community", "studybonk reddit"],
+            "longtail": [
+                "how to support free study apps",
+                "studybonk community reddit",
+                "free study app community",
+                "how to help free open source projects",
+                "follow studybonk socials",
+            ],
+            "schema": [
+                schema_breadcrumb([("Home", "/"), ("Support", "/support/")]),
+                {
+                    "@context": "https://schema.org",
+                    "@type": "WebPage",
+                    "name": "Support StudyBonk",
+                    "url": S["url"] + "/support/",
+                    "description": "Free ways to support StudyBonk: follow socials, join the community, share.",
+                    "publisher": {"@id": S["url"] + "/#organization"},
+                },
+            ],
+            "nav_active": "/support/",
         },
         body,
     )
@@ -1589,6 +1632,9 @@ def main():
     # Marketing
     if MARKETING:
         emit("marketing/index.html", marketing_page())
+
+    # Support
+    emit("support/index.html", support_page())
 
     # Legal
     if TERMS:

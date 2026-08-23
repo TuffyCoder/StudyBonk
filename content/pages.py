@@ -74,12 +74,6 @@ HOME = {
         ("🧠", "Productivity coach", "Pomodoro plans, anti-procrastination scripts, energy management."),
         ("🔒", "Zero telemetry", "Your chats live in local storage on your device. One click clears them forever."),
     ],
-    "testimonials_title": "Early testers said bonk yes",
-    "testimonials_note": (
-        "Illustrative quotes from our beta design personas — StudyBonk is "
-        "new, and we refuse to fabricate reviews. Real testimonials ship as "
-        "real users arrive."
-    ),
     "faq_title": "Questions students actually ask",
 }
 
@@ -566,7 +560,7 @@ ABOUT = {
         {
             "h2": "How StudyBonk stays free",
             "paras": [
-                "Static hosting on Vercel's generous free tier, zero server costs (there are no servers), fonts bundled locally, and an AI that runs on your hardware instead of a paid API. The marginal cost of one more student is approximately zero — so the price is zero.",
+                "Static hosting on Cloudflare Pages' generous free tier, zero server costs (there are no servers), fonts bundled locally, and an AI that runs on your hardware instead of a paid API. The marginal cost of one more student is approximately zero — so the price is zero.",
                 "No premium tier is coming. No \"StudyBonk Pro.\" If it ever can't run for free, it shuts down honestly rather than becoming another freemium trap.",
             ],
         },
@@ -657,7 +651,7 @@ SECURITY = {
         {
             "h2": "Architecture",
             "paras": [
-                "StudyBonk is a fully static site: HTML, CSS and client-side JavaScript served from Vercel's global edge network. There is no backend, no database, no login system, and no server-side storage. The most common web attack surfaces simply do not exist here.",
+                "StudyBonk is a fully static site: HTML, CSS and client-side JavaScript served from Cloudflare's global edge network. There is no backend, no database, no login system, and no server-side storage. The most common web attack surfaces simply do not exist here.",
                 "What remains is hardened: a strict Content-Security-Policy that forbids third-party scripts, X-Frame-Options and frame-ancestors to prevent clickjacking, referrer policy, and no cookies for attackers to hijack. Sensitive local data (like AI chat history) is encrypted at rest with a device-local key via the WebCrypto API.",
             ],
             "bullets": [

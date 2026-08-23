@@ -229,7 +229,7 @@ COMPARES = [
             ("Does StudyBonk have a leaderboard?",
              "Your progress is the leaderboard: XP, levels from Bonk Novice to Bonk Legend, streaks and daily quests, all stored privately in your browser. There's no public ranking of students, because nothing about you ever leaves your device."),
             ("Do I need a game PIN or a host account to use StudyBonk?",
-             "No. There is no host, no PIN and no account — open studybonk.vercel.app and you're studying in seconds. Kahoot is built around a host creating games; StudyBonk is built around you, alone, getting better."),
+             "No. There is no host, no PIN and no account — open studybonk.pages.dev and you're studying in seconds. Kahoot is built around a host creating games; StudyBonk is built around you, alone, getting better."),
         ],
         "longtail": [
             "kahoot alternatives free for students",

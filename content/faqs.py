@@ -22,7 +22,7 @@ FAQS = [
     ("What topics does StudyBonk cover?",
      "Seven pillars — math, biology, chemistry, physics, history, SAT prep and study skills — each with six deep-dive guides, a flashcard deck and explained quizzes for every guide. More pillars ship over time."),
     ("Do I need to install anything?",
-     "No. StudyBonk runs in any modern browser at studybonk.vercel.app. Optionally install it as an app (PWA) for a home-screen icon and offline access."),
+     "No. StudyBonk runs in any modern browser at studybonk.pages.dev. Optionally install it as an app (PWA) for a home-screen icon and offline access."),
     ("What happens if I clear my browser data?",
      "Clearing site data erases your local progress — the one real cost of a no-account design. Export a backup from the dashboard before clearing, switching browsers, or using private mode."),
     ("Is StudyBonk safe for kids?",

@@ -99,7 +99,7 @@
     running = !running;
     if (running) {
       timerId = setInterval(tick, 1000);
-      if (remaining === settings.focus * 60) window.SB.ui.toast("🧠 25 minutes. Just start. Bonk!", "info");
+      if (remaining === settings.focus * 60) window.SB.ui.toast("🧠 " + settings.focus + " minutes. Just start. Bonk!", "info");
     } else {
       clearInterval(timerId);
     }

@@ -10,7 +10,7 @@ first strategy, structured data everywhere, and honest E-E-A-T signals.
 | Meta title ≤60 chars | CTR-optimized with power words + `| StudyBonk` suffix |
 | Meta description ≤155 | benefit + free + no sign-up hook |
 | Keywords + long-tail meta | 10–20 question-based keywords per page |
-| Canonical URLs | `https://studybonk.vercel.app` + clean paths |
+| Canonical URLs | `https://studybonk.pages.dev` + clean paths |
 | OpenGraph + Twitter cards | bundled og-image (1200×630, first-party) |
 | JSON-LD | see schema matrix below |
 | Internal linking | pillar ↔ clusters ↔ tools, breadcrumbs on all pages |

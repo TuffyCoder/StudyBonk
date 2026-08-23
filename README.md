@@ -2,7 +2,7 @@
 
 **A free, ethical, privacy-first study platform — with Duolingo-style gamification and a local AI tutor.**
 
-🌐 **Live:** https://studybonk.vercel.app
+🌐 **Live:** https://studybonk.pages.dev
 📦 **Source:** https://github.com/TuffyCoder/StudyBonk
 👤 **Creator:** [TuffyCoder](https://www.youtube.com/@TuffyCoder) · ethical developer, privacy-focused builder, open-source contributor
 
@@ -23,12 +23,12 @@ StudyBonk is a complete study toolkit that respects students:
 
 ## Built with
 
-![Built with Python](https://img.shields.io/badge/built%20with-Python-3776AB) ![HTML & CSS](https://img.shields.io/badge/powered%20by-HTML%20%26%20CSS-E34F26) ![Enhanced with JavaScript](https://img.shields.io/badge/enhanced%20with-JavaScript-F7DF1E) ![Hosted on Vercel](https://img.shields.io/badge/hosted%20on-Vercel-000) ![Local AI — No API](https://img.shields.io/badge/local%20AI-no%20API-4A90E2)
+![Built with Python](https://img.shields.io/badge/built%20with-Python-3776AB) ![HTML & CSS](https://img.shields.io/badge/powered%20by-HTML%20%26%20CSS-E34F26) ![Enhanced with JavaScript](https://img.shields.io/badge/enhanced%20with-JavaScript-F7DF1E) ![Hosted on Cloudflare](https://img.shields.io/badge/hosted%20on-Cloudflare-F38020) ![Local AI — No API](https://img.shields.io/badge/local%20AI-no%20API-4A90E2)
 
 - **Python** — the static-site generator (`scripts/build.py`, stdlib only)
 - **HTML & CSS** — hand-crafted semantic markup + design system
 - **JavaScript** — vanilla ES2020 modules, zero frameworks, zero trackers
-- **Vercel** — static hosting on the global edge network
+- **Cloudflare Pages** — static hosting on the global edge network
 - **Local AI** — vendored WebLLM + Transformers.js; quantized Qwen 2.5 / Phi-3.5 Mini / Gemma 2 models
 
 ## Repository layout
@@ -64,11 +64,11 @@ python3 -m http.server 8080   # → http://localhost:8080
 python3 scripts/fetch_avatar.py
 ```
 
-The generated HTML is committed, so Vercel deploys with **no build step**. After editing `content/` or `assets/`, re-run `build.py` and commit the result.
+The generated HTML is committed, so Cloudflare Pages deploys with **no build step**. After editing `content/` or `assets/`, re-run `build.py` and commit the result.
 
-## Deployment (Vercel)
+## Deployment (Cloudflare Pages)
 
-Import the repo at [vercel.com/new](https://vercel.com/new). Framework preset: **Other**. No build command, no output directory — the repo root is the site. `vercel.json` ships security headers (strict CSP, no framing, no-referrer) and immutable asset caching.
+Connect the repo in Cloudflare Pages (Workers & Pages → Create → Pages). No build command, no output directory — the repo root is the site. The `_headers` file ships security headers (strict CSP, no framing, no-referrer) and immutable asset caching.
 
 ## The local AI
 
