@@ -1,0 +1,51 @@
+# llms.txt — AI Crawler Access Rules
+# This file tells AI and LLM crawlers what content they may or may not use.
+
+# ===========================
+# GLOBAL POLICY
+# ===========================
+User-agent: *
+Disallow: /private/
+Disallow: /api/
+Disallow: /user-data/
+Disallow: /account/
+Disallow: /auth/
+Allow: /
+
+# ===========================
+# BLOCK SPECIFIC AI CRAWLERS
+# ===========================
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: Meta-LLM
+Disallow: /
+
+User-agent: Amazon-Bedrock
+Disallow: /
+
+# ===========================
+# ALLOW INDEXING BUT NOT TRAINING
+# ===========================
+
+# X-Robots-Tag: noai
+# X-Robots-Tag: notrain
+
+# ===========================
+# NOTES
+# ===========================
+# - Place this file at: https://studybonk.pages.dev/llms.txt
+# - This does NOT block normal search engines (Google, Bing, etc.)
+# - This only affects AI crawlers that respect llms.txt rules.
