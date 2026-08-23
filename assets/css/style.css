@@ -83,6 +83,10 @@
 /* ---------- Base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
 
+/* Buttons must inherit text color (esp. cards/panels inside <button>) —
+   otherwise dark mode renders system-black text on dark surfaces. */
+button { color: inherit; font-family: inherit; }
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--nav-h) + 16px);

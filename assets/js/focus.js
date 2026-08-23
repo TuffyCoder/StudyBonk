@@ -17,6 +17,7 @@
   let running = false;
   let completedFocus = 0; // this cycle chain
   let timerId = null;
+  let lastFocusDefault = settings.focus * 60;
   const CIRC = 2 * Math.PI * 124; // dial circumference
 
   const $ = (id) => document.getElementById(id);
@@ -113,21 +114,49 @@
     paint();
   });
 
-  $("timer-settings").addEventListener("click", () => {
-    const focus = prompt("Focus minutes (5–90):", settings.focus);
-    if (focus === null) return;
-    const short = prompt("Short break minutes (1–30):", settings.short);
-    if (short === null) return;
-    const long = prompt("Long break minutes (5–45):", settings.long);
-    if (long === null) return;
-    const clamp = (v, lo, hi, d) => { const n = +v; return isNaN(n) ? d : Math.min(hi, Math.max(lo, n)); };
-    settings.focus = clamp(focus, 5, 90, 25);
-    settings.short = clamp(short, 1, 30, 5);
-    settings.long = clamp(long, 5, 45, 15);
+  /* Inline settings panel (replaces prompt chains: every value saves
+   * immediately, so a 5-minute focus never reverts to 25). */
+  const settingsPanel = document.createElement("div");
+  settingsPanel.className = "card card-glass mt-2";
+  settingsPanel.id = "focus-settings-panel";
+  settingsPanel.hidden = true;
+  settingsPanel.style.textAlign = "left";
+  settingsPanel.innerHTML =
+    "<h3 class='mt-0' style='font-size:1.05rem'>⏱️ Timer settings (saved as you type)</h3>" +
+    '<div class="grid grid-3">' +
+    '<label style="font-weight:800;font-size:.9rem">Focus minutes<input id="set-focus" type="number" min="5" max="90" step="1" value="' + settings.focus + '" style="width:100%;margin-top:6px;padding:9px 12px;border-radius:10px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font-body)"></label>' +
+    '<label style="font-weight:800;font-size:.9rem">Short break<input id="set-short" type="number" min="1" max="30" step="1" value="' + settings.short + '" style="width:100%;margin-top:6px;padding:9px 12px;border-radius:10px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font-body)"></label>' +
+    '<label style="font-weight:800;font-size:.9rem">Long break<input id="set-long" type="number" min="5" max="45" step="1" value="' + settings.long + '" style="width:100%;margin-top:6px;padding:9px 12px;border-radius:10px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font-body)"></label>' +
+    "</div>" +
+    '<p class="small muted mt-2 mb-0">Changes apply instantly and save locally. Tip: use <strong>5/2</strong> for sprint mode or <strong>50/10</strong> for deep work.</p>';
+  mount.querySelector(".card").appendChild(settingsPanel);
+
+  function applySettings() {
+    const clamp = (el, lo, hi, d) => {
+      const n = parseInt(el.value, 10);
+      const v = isNaN(n) ? d : Math.min(hi, Math.max(lo, n));
+      if (String(el.value) !== String(v)) el.value = v;
+      return v;
+    };
+    settings.focus = clamp(document.getElementById("set-focus"), 5, 90, 25);
+    settings.short = clamp(document.getElementById("set-short"), 1, 30, 5);
+    settings.long = clamp(document.getElementById("set-long"), 5, 45, 15);
     S.set("focusSettings", settings);
-    if (!running) { mode = "focus"; remaining = settings.focus * 60; }
+    if (!running && mode === "focus" && remaining !== settings.focus * 60) {
+      // only reset the clock if it hasn't been started from the default state
+      if (remaining === lastFocusDefault) remaining = settings.focus * 60;
+    }
+    lastFocusDefault = settings.focus * 60;
     paint();
-    window.SB.ui.toast("⚙️ Timer updated — saved locally", "good");
+  }
+  ["set-focus", "set-short", "set-long"].forEach((id) => {
+    const el = document.getElementById(id);
+    el.addEventListener("input", applySettings);
+    el.addEventListener("change", applySettings);
+  });
+
+  $("timer-settings").addEventListener("click", () => {
+    settingsPanel.hidden = !settingsPanel.hidden;
   });
 
   paint();

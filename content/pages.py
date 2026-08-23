@@ -232,6 +232,8 @@ TOOL_PAGES = {
             "free online quizzes with answer explanations",
             "practice quizzes that explain why answers are right",
             "best free quiz app for students no login",
+            "turn a pdf into a quiz with ai free",
+            "generate quiz from text online free",
             "how to practice for tests without paying",
             "math practice quiz with step by step solutions",
             "biology practice questions with explanations free",
@@ -239,8 +241,24 @@ TOOL_PAGES = {
             "SAT practice questions with explanations",
             "how to learn from wrong answers on practice tests",
             "gamified quiz app with XP and streaks free",
+            "ai quiz generator from notes offline",
+            "make a quiz from a website article free",
         ],
         "sections": [
+            {
+                "h2": "Bonk AI quiz maker: PDF, notes or URL to quiz",
+                "paras": [
+                    "Upload a lecture PDF, paste your notes, or drop in an article URL, and Bonk AI — a real language model running entirely inside your browser — writes a multiple-choice quiz with four options per question and a one-line explanation for every answer. The PDF is parsed on your device and never uploaded anywhere.",
+                    "Imported quizzes are saved locally and listed under \"Your Bonk AI quizzes\" so you can retake them any time, share via export, or delete with one click. Without the model, a True/False generator keeps the feature working on any device.",
+                ],
+                "bullets": [
+                    "Paste text, upload a PDF (up to 60 pages) or fetch a URL",
+                    "6–10 AI-written questions with plausible wrong answers",
+                    "Every question ships with an explanation",
+                    "Saved locally — retake, replay, yours forever",
+                    "True/False fallback when the model isn't loaded",
+                ],
+            },
             {
                 "h2": "Question banks for every topic",
                 "paras": [
@@ -281,6 +299,8 @@ TOOL_PAGES = {
             },
         ],
         "faqs": [
+            ("Can AI turn my PDF into a quiz?",
+             "Yes — the Bonk AI quiz maker on this page accepts PDFs (parsed locally on your device), pasted text and URLs, and generates a multiple-choice quiz with explanations. One-time ~874 MB model download, cached for offline use after that. No model? A True/False generator still works."),
             ("Are the quizzes free and unlimited?",
              "Yes. Take any quiz, any number of times, forever free. No streak-gates, no hearts that run out, no paywall disguised as a \"premium question bank\"."),
             ("Where do the questions come from?",
@@ -441,10 +461,9 @@ TOOL_PAGES = {
         "lead": (
             "Bonk AI is a tiny-but-smart assistant that runs 100% on your "
             "device. Instant Mode answers in milliseconds with zero download. "
-            "Or unlock a distilled, quantized language model (Qwen 2.5, "
-            "Phi-3.5 Mini or Gemma 2, 0.5–2B parameters) that runs locally "
-            "via WebGPU — no API, no server, no data ever leaving your "
-            "browser."
+            "Or activate the full Bonk AI — a real quantized language model "
+            "that runs locally in your browser — no API, no server, no data "
+            "ever leaving your browser."
         ),
         "keywords": [
             "local ai tutor",
@@ -475,10 +494,11 @@ TOOL_PAGES = {
                 ],
                 "bullets": [
                     "Instant Mode: zero download, zero-latency template intelligence",
-                    "Bonk Lite: Qwen 2.5 0.5B quantized — fits low-RAM devices",
-                    "Bonk Core: Qwen 2.5 1.5B quantized — the daily driver",
-                    "Bonk Pro: Phi-3.5 Mini or Gemma 2 2B quantized — maximum brain",
-                    "WebGPU acceleration with WASM fallback, offline after first load",
+                    "Bonk AI: a real quantized language model, cached for offline use",
+                    "Runs on any device — GPU acceleration when available, CPU otherwise",
+                    "One activation button — the engine picks the best path automatically",
+                    "Flashcard + quiz generation from PDFs, notes and URLs",
+                    "WebGPU acceleration with automatic CPU fallback",
                 ],
             },
             {

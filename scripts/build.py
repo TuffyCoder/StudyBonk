@@ -1006,7 +1006,7 @@ TOOL_MOUNTS = {
 
 TOOL_SCRIPTS = {
     "flashcards": ["/assets/js/study-data.js", "/assets/js/bonk-model.js", "/assets/js/flashcards.js"],
-    "quiz": ["/assets/js/study-data.js", "/assets/js/quiz.js"],
+    "quiz": ["/assets/js/study-data.js", "/assets/js/bonk-model.js", "/assets/js/quiz.js"],
     "focus": ["/assets/js/focus.js"],
     "dashboard": ["/assets/js/dashboard.js"],
     "ai": ["/assets/js/study-data.js", "/assets/js/bonk-model.js", "/assets/js/ai.js"],

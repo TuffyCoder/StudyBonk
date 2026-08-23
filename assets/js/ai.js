@@ -288,54 +288,40 @@
   const modelStatus = document.getElementById("model-status");
 
   function renderModelPanel() {
-    const webgpu = M.hasWebGPU();
-    let cards = M.MODELS.map((m) => {
-      const rec = m.recommended ? '<span class="model-tag chip chip-yellow">recommended</span>' : "";
-      return (
-        '<button class="card model-card' + (m.recommended ? " recommended" : "") + '" data-model="' + m.key + '" type="button">' + rec +
-        '<div class="model-emoji">' + m.emoji + "</div><h3>" + m.name + "</h3>" +
-        '<p class="small muted mb-1">' + m.note + "</p>" +
-        '<div class="model-ram">' + m.ram + "</div></button>"
-      );
-    }).join("");
-    if (!webgpu) {
-      const w = M.WASM_MODEL;
-      cards =
-        '<button class="card model-card recommended" data-model="wasm" type="button">' +
-        '<div class="model-emoji">' + w.emoji + "</div><h3>" + w.name + " — Qwen 2.5 0.5B</h3>" +
-        '<p class="small muted mb-1">WebGPU not detected — CPU fallback (slower, still fully local)</p>' +
-        '<div class="model-ram">' + w.ram + "</div></button>";
-    }
     modelStatus.innerHTML =
-      "<h3>Pick a local model</h3>" +
-      "<p class='small muted'>Distilled + quantized models streamed once, cached forever, run on <strong>your</strong> " +
-      (webgpu ? "GPU (WebGPU detected 🚀)" : "device via WASM — or stick with Instant Mode.") + "</p>" +
-      '<div class="model-cards">' + cards + "</div>" +
-      '<div class="progress-track mt-2" id="dl-bar" hidden><div></div></div>' +
-      '<p class="small muted mt-1 mb-0" id="dl-text"></p>';
-    modelPanel.querySelectorAll("[data-model]").forEach((btn) => {
-      btn.addEventListener("click", () => loadModel(btn.dataset.model));
-    });
+      '<div class="card card-glass model-card recommended" style="max-width:460px;margin-inline:auto;text-align:center;padding:2rem">' +
+      '<div style="font-size:2.4rem">🦊</div>' +
+      "<h3 style='margin:.4rem 0 .2rem'>Bonk AI</h3>" +
+      "<p class='small mb-1' style='color:var(--text-2)'>A real language model running <strong>100% inside your browser</strong> — no API, no account, nothing leaves this device.</p>" +
+      "<p class='model-ram'>~874 MB one-time download · cached for offline · works with or without WebGPU</p>" +
+      '<button class="btn btn-primary mt-2" id="activate-bonk-ai" type="button">⚡ Activate Bonk AI</button>' +
+      "</div>" +
+      '<div class="progress-track mt-2" id="dl-bar" hidden style="max-width:460px;margin-inline:auto"><div></div></div>' +
+      '<p class="small mt-1 mb-0" id="dl-text" style="color:var(--text-2)"></p>';
+    const btn = document.getElementById("activate-bonk-ai");
+    if (btn) btn.addEventListener("click", () => loadModel());
   }
 
-  async function loadModel(key) {
+  async function loadModel() {
     if (busy) return;
     busy = true;
     const bar = document.getElementById("dl-bar");
     const txt = document.getElementById("dl-text");
+    const btn = document.getElementById("activate-bonk-ai");
+    if (btn) btn.disabled = true;
     try {
-      txt.textContent = "Loading Bonk's local engine…";
       bar.hidden = false;
-      const info = await M.load(key, (progress, text) => {
-        bar.firstElementChild.style.width = Math.round(progress * 100) + "%";
+      const info = await M.load(null, (progress, text) => {
+        bar.firstElementChild.style.width = Math.round((progress || 0) * 100) + "%";
         txt.textContent = text;
       });
-      txt.textContent = "✅ " + info.model.name + " ready — running locally on your " + (info.kind === "webgpu" ? "GPU" : "CPU") + ".";
-      statusLine.textContent = "🧠 " + info.model.name + " · local model · cached for offline";
-      addMsg("ai", "🧠 <strong>" + info.model.name + " online.</strong> A whole language model, running inside this tab — no API, no server. Ask me anything study-shaped. (I'm small: I'll flag what you should double-check.)");
+      txt.textContent = "✅ Bonk AI ready — running fully local on your device.";
+      statusLine.textContent = "🦊 Bonk AI · local model · cached for offline";
+      addMsg("ai", "🦊 <strong>Bonk AI online.</strong> A whole language model, running inside this tab — no API, no server, nothing leaves your device. Ask me anything study-shaped. (I'm small: I'll flag what you should double-check.)");
     } catch (err) {
-      txt.textContent = "⚠️ Couldn't load the model (" + (err && err.message ? err.message.slice(0, 120) : "unknown error") + "). Instant Mode still works perfectly.";
+      txt.textContent = "⚠️ Bonk AI couldn't load (" + (err && err.message ? err.message.slice(0, 120) : "unknown error") + "). Instant Mode still works perfectly.";
       statusLine.textContent = "⚡ Instant Mode · model load failed · still fully local";
+      if (btn) btn.disabled = false;
     }
     busy = false;
   }
@@ -418,7 +404,7 @@
     modelPanel.hidden = activeMode !== "model";
     if (activeMode === "model" && !M.info().ready) renderModelPanel();
     statusLine.textContent = activeMode === "model"
-      ? "🧠 Model mode · " + (M.info().ready ? "ready" : "pick a model below") + " · runs locally, cached offline"
+      ? "🦊 Bonk AI · " + (M.info().ready ? "ready" : "activate below") + " · runs locally, cached offline"
       : "⚡ Instant Mode · runs offline · zero download";
   });
 
