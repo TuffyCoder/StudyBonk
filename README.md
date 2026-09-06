@@ -1,6 +1,6 @@
 # StudyBonk 🦊⚡
 
-**A free, ethical, privacy-first study platform — with Duolingo-style gamification and a local AI tutor.**
+**A free, ethical, privacy-first study platform — with Duolingo-style gamification and an AI tutor.**
 
 🌐 **Live:** https://tuffycoder.github.io/StudyBonk/
 📦 **Source:** https://github.com/TuffyCoder/StudyBonk
@@ -15,14 +15,15 @@ StudyBonk is a complete study toolkit that respects students:
 - 🃏 **Flashcards** with Leitner spaced repetition — 40+ built-in decks
 - 🎯 **Practice quizzes** with instant, explained feedback
 - ⏱️ **Pomodoro focus timer** with mascot hype
-- 🤖 **Bonk AI** — a tiny-but-smart tutor running **100% in your browser** (Instant Mode + optional local quantized LLMs via WebGPU — no API, ever)
+- 🤖 **Bonk AI** — a smart tutor powered by API-based AI models for personalized learning assistance
 - 🔥 **Gamification**: XP, levels, streaks (with freezes), daily quests, weekly challenges, 15 badges, Bonk Challenges
 - 🌙 Light/dark mode, offline support (PWA), zero sign-up
 
-**Privacy architecture:** no accounts · no cookies · no analytics · no third-party scripts · no server-side storage · everything in `localStorage` on the user's device. Verifiable — the code is right here.
+**Privacy architecture:** no accounts · no cookies · no analytics · no third-party scripts · no server-side storage · everything in `localStorage` on the user's device. Verifiable — the code is open source.
 
 ## Built with
 
+<<<<<<< HEAD
 ![Built with Python](https://img.shields.io/badge/built%20with-Python-3776AB) ![HTML & CSS](https://img.shields.io/badge/powered%20by-HTML%20%26%20CSS-E34F26) ![Enhanced with JavaScript](https://img.shields.io/badge/enhanced%20with-JavaScript-F7DF1E) ![Hosted on GitHub Pages](https://img.shields.io/badge/hosted%20on-GitHub%20Pages-181717) ![AI via OpenAI API](https://img.shields.io/badge/AI-OpenAI%20API%20(bring%20your%20own%20free%20key)-412991)
 
 - **Python** — the static-site generator (`scripts/build.py`, stdlib only)
@@ -84,6 +85,9 @@ Opt-in **Model Mode** loads a distilled, quantized model into the browser:
 | WASM fallback — Qwen 2.5 0.5B Q8 | ~510 MB | ~500 MB | WASM |
 
 Models are downloaded once from public model CDNs (the only cross-origin request StudyBonk ever makes, and it contains zero user data), cached by the browser, and run fully offline afterwards. Chat history is AES-GCM encrypted in `localStorage` with a one-click destroy button.
+=======
+![Built with Python](https://img.shields.io/badge/built%20with-Python-3776AB) ![HTML & CSS](https://img.shields.io/badge/powered%20by-HTML%20%26%20CSS-E34F26) ![Enhanced with JavaScript](https://img.shields.io/badge/enhanced%20with-JavaScript-F7DF1E)
+>>>>>>> 030721603a59d5763999a7489561b78ddb7906b1
 
 ## Security & disclosure
 
