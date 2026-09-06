@@ -11,8 +11,10 @@ Run:  python3 scripts/build.py
 
 import html
 import json
+import re
 import sys
 from datetime import date, datetime, timezone
+from urllib.parse import urlparse
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -30,6 +32,12 @@ except ImportError as e:
     TERMS = PRIVACY = COOKIES = LICENSE_PAGE = None
 
 S = site.SITE
+# Normalize: no trailing slash, so S["url"] + "/..." never doubles slashes.
+S["url"] = S["url"].rstrip("/")
+# GitHub Pages project sites serve from a subpath (e.g. /StudyBonk/).
+# All generated HTML uses absolute paths at build time and is rewritten
+# to relative paths per page in write(), so the site works at any base.
+BASE = urlparse(S["url"]).path if "urlparse" in globals() else "/"
 PILLARS = topics.get_pillars(site.PILLAR_ORDER)
 TODAY = date.today().isoformat()
 NOW_ISO = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -187,7 +195,7 @@ SOCIAL_ICONS = {
 
 def head_html(page):
     path = page["path"]
-    canonical = S["url"] + ("" if path == "/" else path)
+    canonical = S["url"] + ("/" if path == "/" else path)
     kw = list(page.get("keywords", [])) + list(page.get("longtail", []))
     schemas = page.get("schema", [])
     ld = "\n".join(
@@ -197,7 +205,8 @@ def head_html(page):
     return f"""<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="google-site-verification" content="tOkOPOpDyPZoDlFZc0LQm5t3YLm3O89T6ci_YGpoHH0" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self'; connect-src 'self' https:; worker-src 'self' blob:; base-uri 'self'; form-action 'none'">
+<meta name="google-site-verification" content="IxoywIwuwaZ9Em3Hw8DhbrnT-L0dMRIQuPFKbtOjg9k" />
 <title>{E(page['title'])}</title>
 <meta name="description" content="{E(page['description'])}">
 <meta name="keywords" content="{E(', '.join(kw))}">
@@ -278,7 +287,7 @@ def footer_html():
         <img class="brand-logo" src="/assets/img/logo.svg" alt="" width="38" height="38">
         <span class="brand-name">Study<em>Bonk</em></span>
       </a>
-      <p>{E(S['tagline'])} A free, ethical, privacy-focused study platform: flashcards, quizzes, focus timer, XP and a local AI tutor. Created by <a href="/about/">TuffyCoder</a>.</p>
+      <p>{E(S['tagline'])} A free, ethical, privacy-focused study platform: flashcards, quizzes, focus timer, XP and an AI tutor using your own OpenAI key. Created by <a href="/about/">TuffyCoder</a>.</p>
       <div class="social-row">{socials}</div>
       <div class="mt-2 creator-creds">{creds}</div>
       <p class="creator-sign mt-2">{E(site.CREATOR['signature'])}</p>
@@ -574,7 +583,7 @@ def home_page():
     <div class="section-head">
       <span class="eyebrow">Everything you need</span>
       <h2 id="features-h">A complete study toolkit — every piece free</h2>
-      <p>Flashcards with spaced repetition, explained quizzes, a focus timer, XP and streaks, and a private local AI tutor. Built for how students actually study.</p>
+      <p>Flashcards with spaced repetition, explained quizzes, a focus timer, XP and streaks, and an AI tutor powered by your own OpenAI key. Built for how students actually study.</p>
     </div>
     <div class="grid grid-3">{features}</div>
   </div>
@@ -618,7 +627,7 @@ def home_page():
 <section class="section" aria-labelledby="ai-h">
   <div class="container">
     <div class="section-head">
-      <span class="eyebrow">Local AI · No API</span>
+      <span class="eyebrow">AI · Your API key</span>
       <h2 id="ai-h">{E(h['ai_title'])}</h2>
       <p>{E(h['ai_sub'])}</p>
     </div>
@@ -646,10 +655,10 @@ def home_page():
     return render(
         {
             "path": "/",
-            "title": S["name"] + " — Free Study App with Local AI | No Sign-Up",
+            "title": S["name"] + " — Free Study App with AI Tutor | No Sign-Up",
             "description": (
                 "Free gamified study platform: flashcards, explained quizzes, focus timer, XP & streaks, "
-                "plus a local AI tutor. No ads, no tracking, no account."
+                "plus an AI tutor you connect with your own free API key. No ads, no tracking, no account."
             ),
             "keywords": S["keywords"],
             "longtail": [
@@ -967,7 +976,7 @@ TOOL_MOUNTS = {
 <section class="section-sm"><div class="container" id="ai-app" data-tool="ai">
   <div class="mode-switch mb-2" id="ai-mode-switch" role="tablist" aria-label="AI engine mode">
     <button class="active" data-mode="instant" role="tab" aria-selected="true" type="button">⚡ Instant Mode</button>
-    <button data-mode="model" role="tab" aria-selected="false" type="button">🧠 Full Model (local)</button>
+    <button data-mode="model" role="tab" aria-selected="false" type="button">🌐 API Mode</button>
   </div>
   <div class="card card-glass mb-2" id="model-panel" hidden>
     <div id="model-status"></div>
@@ -1293,7 +1302,7 @@ def marketing_page():
             "isFamilyFriendly": True,
         })
     body = f"""
-{page_hero('The StudyBonk Creator Kit', 'Ready-to-film hooks, Shorts scripts, captions and POV concepts for spreading the bonk. Everything here is yours to use — no attribution required, though a link to studybonk.pages.dev is always appreciated.', eyebrow='Marketing kit', chips=['Free to use', 'Meme-friendly', 'Creator-approved'])}
+{page_hero('The StudyBonk Creator Kit', 'Ready-to-film hooks, Shorts scripts, captions and POV concepts for spreading the bonk. Everything here is yours to use — no attribution required, though a link to tuffycoder.github.io/StudyBonk is always appreciated.', eyebrow='Marketing kit', chips=['Free to use', 'Meme-friendly', 'Creator-approved'])}
 <section class="section-sm" aria-labelledby="hooks-h"><div class="container">
   <div class="section-head"><span class="eyebrow">TikTok</span><h2 id="hooks-h">10 scroll-stopping hooks</h2></div>
   <div class="article" style="margin-inline:auto">{hooks}</div>
@@ -1307,7 +1316,7 @@ def marketing_page():
   <div><div class="section-head"><span class="eyebrow">POV</span><h2>Viral POV concepts</h2></div>{povs}</div>
 </div></section>
 <section class="section-sm"><div class="container"><div class="cta-band reveal">
-  <h2>{E(m.get('cta_line', 'Study free at studybonk.pages.dev'))}</h2>
+  <h2>{E(m.get('cta_line', 'Study free at tuffycoder.github.io/StudyBonk'))}</h2>
   <div class="btn-row" style="justify-content:center;margin-top:1.2rem"><a class="btn btn-lg" href="/">Open StudyBonk</a></div>
 </div></div></section>
 {trust_band()}"""
@@ -1560,14 +1569,15 @@ def manifest_json():
         "name": "StudyBonk — Free Study App",
         "short_name": "StudyBonk",
         "description": S["description"],
-        "start_url": "/",
+        "start_url": BASE + "/",
+        "scope": BASE + "/",
         "display": "standalone",
         "background_color": "#f6f9fd",
         "theme_color": "#4A90E2",
         "icons": [
-            {"src": "/assets/img/icon-192.png", "sizes": "192x192", "type": "image/png"},
-            {"src": "/assets/img/icon-512.png", "sizes": "512x512", "type": "image/png"},
-            {"src": "/assets/img/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
+            {"src": BASE + "/assets/img/icon-192.png", "sizes": "192x192", "type": "image/png"},
+            {"src": BASE + "/assets/img/icon-512.png", "sizes": "512x512", "type": "image/png"},
+            {"src": BASE + "/assets/img/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
         ],
     }, indent=2)
 
@@ -1587,6 +1597,7 @@ def sitemap_xml(all_pages):
 
 def service_worker_js(all_paths):
     # Precache the app shell only (keep first-visit light); pages cache on demand.
+    # Paths are base-prefixed so the SW works under GitHub Pages subpaths.
     cache_files = [
         "/", "/learn/", "/flashcards/", "/quiz/", "/focus/", "/ai/", "/dashboard/",
         "/manifest.webmanifest",
@@ -1601,6 +1612,7 @@ def service_worker_js(all_paths):
         "/assets/fonts/Baloo2-normal-800.woff2", "/assets/fonts/Nunito-normal-400.woff2",
         "/assets/fonts/Nunito-normal-700.woff2",
     ]
+    cache_files = [BASE + p if not p.startswith(BASE) else p for p in cache_files]
     files_json = json.dumps(cache_files)
     cache_version = "studybonk-" + datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
     return f"""// Generated by scripts/build.py — StudyBonk service worker.
@@ -1648,29 +1660,43 @@ self.addEventListener("fetch", (e) => {{
 # Build
 # --------------------------------------------------------------------------
 
+def relativize(html, page_path):
+    """Rewrite root-absolute href/src to paths relative to the page so the
+    site works under a GitHub Pages subpath (tuffycoder.github.io/StudyBonk/)."""
+    depth = page_path.count("/")
+    prefix = "../" * depth if depth else ""
+    def repl(m):
+        attr, path = m.group(1), m.group(2)
+        rel = prefix + path.lstrip("/")
+        if rel == "":
+            rel = "./"
+        return attr + '="' + rel + '"'
+    return re.sub(r'\b(href|src)="/([^"]*)"', repl, html)
+
+
 def write(path_str, content):
-    if path_str.endswith("index.html") or path_str == "404.html":
-        target = ROOT / path_str
-    else:
-        target = ROOT / path_str
+    target = ROOT / path_str
     target.parent.mkdir(parents=True, exist_ok=True)
-    if target.name == "index.html":
-        pass
+    if path_str.endswith(".html"):
+        content = relativize(content, path_str)
     target.write_text(content, encoding="utf-8")
     return target
 
 def check_internal_links(files):
-    """Verify every internal href/src in generated HTML resolves on disk."""
-    import re
+    """Verify every internal href/src (absolute or relative) resolves on disk."""
     broken = []
     for t in files:
         if t.suffix != ".html":
             continue
         text = t.read_text(encoding="utf-8")
-        for match in re.findall(r'(?:href|src)="/([^"?#]+)[?#]?[^"]*"', text):
-            if not match:
+        page_dir = t.parent
+        for match in re.findall(r'(?:href|src)="([^"?#]+)[?#]?[^"]*"', text):
+            if not match or match.startswith(("http://", "https://", "//", "mailto:", "data:", "#")):
                 continue
-            target = ROOT / match
+            if match.startswith("/"):
+                target = ROOT / match.lstrip("/")
+            else:
+                target = (page_dir / match).resolve()
             if not (target.is_file() or (target.is_dir() and (target / "index.html").is_file())):
                 broken.append((str(t.relative_to(ROOT)), match))
     return broken

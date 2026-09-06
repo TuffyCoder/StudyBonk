@@ -10,7 +10,7 @@ Fairness rule: competitors are described accurately and hedged where
 their pricing or features may change ("typically", "check their current
 pricing"). StudyBonk's edge is stated as verifiable fact: 100% free with
 zero paywalls, no account, no ads or trackers, gamified XP/streaks/
-quests, a local AI tutor, and open-source code.
+quests, an optional AI tutor (your own OpenAI key), and open-source code.
 """
 
 COMPARES = [
@@ -29,7 +29,7 @@ COMPARES = [
             "modes, but StudyBonk is 100% free with no account, no ads and "
             "no paywalled features, while Quizlet typically places advanced "
             "modes behind a paid subscription. StudyBonk adds XP, streaks, "
-            "daily quests and a local AI tutor that runs entirely in your "
+            "daily quests and an optional AI tutor (your own OpenAI key). "
             "browser."
         ),
         "rows": [
@@ -46,7 +46,7 @@ COMPARES = [
              "Practice tests typically limited or premium-gated"),
             ("Gamification", "XP, streaks, daily quests, levels, mascot",
              "Streaks and some progress stats"),
-            ("AI tutor", "Local AI that runs in your browser, no API, no account",
+            ("AI tutor", "Optional AI via your own OpenAI API key",
              "AI study features typically tied to the paid plan"),
             ("Source code", "Fully open-source on GitHub", "Closed source"),
         ],
@@ -57,7 +57,7 @@ COMPARES = [
             "pricing, because the free tier has changed over the years. "
             "Choose StudyBonk if you want every feature free with no "
             "account, no ads and no subscription prompt mid-session, plus "
-            "gamification and a private, local AI tutor. Plenty of students "
+            "gamification and an optional private AI tutor. Plenty of students "
             "happily use both: Quizlet for a shared class set, StudyBonk "
             "for the daily reps that actually build memory."
         ),
@@ -108,7 +108,7 @@ COMPARES = [
             "StudyBonk vs Anki: Anki is the gold standard for customizable "
             "spaced repetition, while StudyBonk focuses on making daily "
             "study feel like a game — XP, streaks and quests — with "
-            "built-in decks, explained quizzes and a local AI tutor. "
+            "built-in decks, explained quizzes and an optional AI tutor. "
             "StudyBonk needs no install and no setup; Anki rewards users "
             "who invest time in configuring it."
         ),
@@ -125,7 +125,7 @@ COMPARES = [
              "Review streaks only; motivation is self-supplied"),
             ("Quizzes & lessons", "Explained quizzes and short guides per topic",
              "Flashcards only — no built-in lessons or quizzes"),
-            ("AI tutor", "Local AI tutor in the browser, no install",
+            ("AI tutor", "Optional AI tutor via your own OpenAI key",
              "No built-in AI; third-party add-ons exist"),
             ("Source code", "Fully open-source on GitHub",
              "Open-source on desktop; the iOS app is closed"),
@@ -138,7 +138,7 @@ COMPARES = [
             "— check their current pricing). Choose StudyBonk if you want "
             "zero-friction daily studying: open the browser, earn XP, "
             "protect a streak, quiz yourself with explanations, and chat "
-            "with an AI tutor that never leaves your device. Anki rewards "
+            "with an optional AI tutor (bring your own OpenAI key). Anki rewards "
             "investment; StudyBonk rewards showing up."
         ),
         "faqs": [
@@ -229,7 +229,7 @@ COMPARES = [
             ("Does StudyBonk have a leaderboard?",
              "Your progress is the leaderboard: XP, levels from Bonk Novice to Bonk Legend, streaks and daily quests, all stored privately in your browser. There's no public ranking of students, because nothing about you ever leaves your device."),
             ("Do I need a game PIN or a host account to use StudyBonk?",
-             "No. There is no host, no PIN and no account — open studybonk.pages.dev and you're studying in seconds. Kahoot is built around a host creating games; StudyBonk is built around you, alone, getting better."),
+             "No. There is no host, no PIN and no account — open tuffycoder.github.io/StudyBonk and you're studying in seconds. Kahoot is built around a host creating games; StudyBonk is built around you, alone, getting better."),
         ],
         "longtail": [
             "kahoot alternatives free for students",

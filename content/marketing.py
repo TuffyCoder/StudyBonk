@@ -3,7 +3,7 @@
 Consumed by scripts/build.py::marketing_page. Everything here is free
 for anyone to use — hooks, scripts, captions and POV concepts for
 promoting StudyBonk. Socials: TikTok @tuffycoderdev, YouTube @TuffyCoder.
-Site: https://studybonk.pages.dev.
+Site: https://tuffycoder.github.io/StudyBonk.
 """
 
 MARKETING = {
@@ -28,7 +28,7 @@ MARKETING = {
                  "Close-up of a phone showing a study app paywall pop-up",
                  "Another study app wants twelve dollars a month to let me memorize vocabulary."),
                 ("0:04",
-                 "Overdramatic sigh, tab closed, typing studybonk.pages.dev into a new tab",
+                 "Overdramatic sigh, tab closed, typing tuffycoder.github.io/StudyBonk into a new tab",
                  "So I tried the one that asks for literally nothing."),
                 ("0:08",
                  "Screen recording: the site loads instantly, no sign-up modal in sight",
@@ -41,7 +41,7 @@ MARKETING = {
                  "Daily quests and streaks make it feel like a game instead of homework."),
                 ("0:26",
                  "AI chat panel answering a question; the Local badge gets circled",
-                 "And the AI tutor runs on your device, so your questions never leave your browser. Study free at studybonk.pages.dev."),
+                 "And the AI tutor runs on your device, so your questions never leave your browser. Study free at tuffycoder.github.io/StudyBonk."),
             ],
         },
         {
@@ -68,7 +68,7 @@ MARKETING = {
                  "Streak at forty-one days. I'm not saying it's addictive. I'm saying I haven't missed a day since September."),
                 ("0:42",
                  "End card with the URL over the mascot",
-                 "studybonk.pages.dev — free forever, private by design. Go bonk your brain into shape."),
+                 "tuffycoder.github.io/StudyBonk — free forever, private by design. Go bonk your brain into shape."),
             ],
         },
         {
@@ -98,21 +98,21 @@ MARKETING = {
                  "So the catch is... there isn't one. It's just free, and the receipts are public."),
                 ("0:44",
                  "End card with the URL and mascot",
-                 "studybonk.pages.dev — verify it yourself, then go keep your streak alive."),
+                 "tuffycoder.github.io/StudyBonk — verify it yourself, then go keep your streak alive."),
             ],
         },
     ],
     "captions": [
-        "No account. No ads. No paywall. Just flashcards, XP and a 2 a.m.-friendly AI tutor. Study free at studybonk.pages.dev #StudyTok #StudyApp #FreeTools #StudyHacks",
+        "No account. No ads. No paywall. Just flashcards, XP and a 2 a.m.-friendly AI tutor. Study free at tuffycoder.github.io/StudyBonk #StudyTok #StudyApp #FreeTools #StudyHacks",
         "POV: your streak hit 40 days and the app never once asked for your email. Follow @tuffycoderdev for the build. #StudyTok #Streak #StudentLife #StudyMotivation",
         "Built a whole study platform with no accounts and no tracking — and the AI runs in your browser. Full build videos on YouTube @TuffyCoder. #StudyTips #SideProject #Coding #EdTech",
-        "Turned my bio notes into a flashcard deck in under a minute. Free, private, no sign-up: studybonk.pages.dev #Shorts #StudyHacks #Flashcards #FinalsWeek",
+        "Turned my bio notes into a flashcard deck in under a minute. Free, private, no sign-up: tuffycoder.github.io/StudyBonk #Shorts #StudyHacks #Flashcards #FinalsWeek",
         "The study app equivalent of a library card: free, quiet, and it never asks about you. Bonus: XP and streaks so you actually show up. #StudyGram #StudyMotivation #FreeApp #StudyWithMe",
-        "Zero cookies. Zero trackers. Zero excuses. Bonk your brain into shape at studybonk.pages.dev #StudyGram #PrivacyMatters #StudentLife #FocusTimer",
-        "A study app with a one-sentence privacy policy: we collect nothing. It's open-source, so you can check yourself. studybonk.pages.dev #BuildInPublic #EdTech #Privacy #OpenSource",
-        "Streaks, quests, flashcards, quizzes, a focus timer and an AI that never leaves your laptop — all free, all private. #StudyTok #StudyWithMe #FocusTimer #Gamified",
+        "Zero cookies. Zero trackers. Zero excuses. Bonk your brain into shape at tuffycoder.github.io/StudyBonk #StudyGram #PrivacyMatters #StudentLife #FocusTimer",
+        "A study app with a one-sentence privacy policy: we collect nothing. It's open-source, so you can check yourself. tuffycoder.github.io/StudyBonk #BuildInPublic #EdTech #Privacy #OpenSource",
+        "Streaks, quests, flashcards, quizzes, a focus timer and an AI you connect with your own key —ves your laptop — all free, all private. #StudyTok #StudyWithMe #FocusTimer #Gamified",
         "I read the source code of a study app to find the catch. There wasn't one. github.com/TuffyCoder/StudyBonk #OpenSource #EdTech #Privacy #StudentLife",
-        "Homework: read chapter 7. Me: paste chapter 7 into a free local AI that makes flashcards and quizzes from it. studybonk.pages.dev #StudyTok #AITools #StudyHacks #ExamSeason",
+        "Homework: read chapter 7. Me: paste chapter 7 into a free AI study tutor that makes flashcards and quizzes from it. tuffycoder.github.io/StudyBonk #StudyTok #AITools #StudyHacks #ExamSeason",
     ],
     "pov_ideas": [
         "POV: it's 1 a.m., you ask the AI tutor one more question, and you realize the answer never left your laptop.",
@@ -127,7 +127,7 @@ MARKETING = {
         "POV: your future self thanks you for twenty focused minutes a day, every day, all stored privately on your own device.",
     ],
     "cta_line": (
-        "Study free right now at https://studybonk.pages.dev — no account, "
+        "Study free right now at https://tuffycoder.github.io/StudyBonk — no account, "
         "no ads, no catch. Follow the build on TikTok @tuffycoderdev and "
         "YouTube @TuffyCoder."
     ),

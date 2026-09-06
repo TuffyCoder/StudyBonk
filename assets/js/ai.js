@@ -27,8 +27,7 @@
     "You generate quizzes.",
     "You help students learn fast.",
     "You use memes when helpful.",
-    "You run fully local.",
-    "You use almost no RAM.",
+    "You are connected via the student's own OpenAI API key.",
     "Rules: stay on studying and learning topics — kindly redirect anything else.",
     "Keep answers short and structured with short lines and lists.",
     "If you are not sure of a fact, say so and tell the student to double-check — never invent dates, formulas, or numbers.",
@@ -142,11 +141,11 @@
   const pick = (a) => a[Math.floor(Math.random() * a.length)];
 
   const COACHES = [
-    { name: "The 2-Minute Launch", body: "Commit to just two minutes of the task. Starting is the hard part; momentum does the rest. 9 times out of 10 you'll keep going past two minutes.", href: "/focus/" },
-    { name: "Pomodoro Protocol", body: "25 minutes on, 5 off, long break every 4 rounds. Small timed chunks make dreadful work survivable — and finishable.", href: "/focus/" },
+    { name: "The 2-Minute Launch", body: "Commit to just two minutes of the task. Starting is the hard part; momentum does the rest. 9 times out of 10 you'll keep going past two minutes.", href: (window.SB_BASE || "/") + "focus/" },
+    { name: "Pomodoro Protocol", body: "25 minutes on, 5 off, long break every 4 rounds. Small timed chunks make dreadful work survivable — and finishable.", href: (window.SB_BASE || "/") + "focus/" },
     { name: "Active Recall Switch", body: "Close the notes and make yourself produce answers from memory (flashcards, blank page brain dump). It feels harder because it's working.", href: "/flashcards/" },
-    { name: "The One-Thing Rule", body: "Pick exactly one topic for today. Not 'study biology' — 'master the organelles'. Small targets get hit; vague ones get scrolled past.", href: "/learn/" },
-    { name: "Energy First", body: "Match tasks to energy: hard thinking when you're fresh, flashcard grinding when you're tired. Studying at 5% battery is mostly vibes.", href: "/focus/" },
+    { name: "The One-Thing Rule", body: "Pick exactly one topic for today. Not 'study biology' — 'master the organelles'. Small targets get hit; vague ones get scrolled past.", href: (window.SB_BASE || "/") + "learn/" },
+    { name: "Energy First", body: "Match tasks to energy: hard thinking when you're fresh, flashcard grinding when you're tired. Studying at 5% battery is mostly vibes.", href: (window.SB_BASE || "/") + "focus/" },
   ];
 
   function instantReply(raw) {
@@ -157,13 +156,13 @@
 
     /* -- identity / trust -- */
     if (/who (are|r) (you|u)|what are you|are you (real|ai|chatgpt|gpt)/i.test(lower)) {
-      return { html: "I'm <strong>Bonk AI</strong> — StudyBonk's study tutor" + (name ? ", at your service, " + esc(name) : "") + ". I run <strong>100% inside your browser</strong>: no API, no account, no server, no data leaving this device. Small brain, big heart. 🦊", actions: [{ label: "How I work", href: "/ai/#how-it-works" }] };
+      return { html: "I'm <strong>Bonk AI</strong> — StudyBonk's study tutor" + (name ? ", at your service, " + esc(name) : "") + ". I run <strong>100% inside your browser</strong>: no API, no account, no server, no data leaving this device. Small brain, big heart. 🦊", actions: [{ label: "How I work", href: (window.SB_BASE || "/") + "ai/#how-it-works" }] };
     }
     if (/private|track|data collect|spy|telemetr|do you store/i.test(lower)) {
-      return { html: "Short answer: <strong>nothing leaves your device</strong>. Our chat is stored encrypted in your browser's local storage, and the Clear Memory button deletes it for good. There is no server — you can read the code, it's open-source.", actions: [{ label: "Privacy proof", href: "/trust/" }, { label: "Privacy policy", href: "/privacy/" }] };
+      return { html: "Short answer: <strong>nothing leaves your device</strong>. Our chat is stored encrypted in your browser's local storage, and the Clear Memory button deletes it for good. There is no server — you can read the code, it's open-source.", actions: [{ label: "Privacy proof", href: (window.SB_BASE || "/") + "trust/" }, { label: "Privacy policy", href: (window.SB_BASE || "/") + "privacy/" }] };
     }
     if (/who made (you|studybonk)|creator|tuffy/i.test(lower)) {
-      return { html: "<strong>TuffyCoder</strong> — an ethical developer who builds free, privacy-first tools for students and documents it all on YouTube. I'm the mascot-with-a-job of that mission.", actions: [{ label: "Meet the creator", href: "/about/" }] };
+      return { html: "<strong>TuffyCoder</strong> — an ethical developer who builds free, privacy-first tools for students and documents it all on YouTube. I'm the mascot-with-a-job of that mission.", actions: [{ label: "Meet the creator", href: (window.SB_BASE || "/") + "about/" }] };
     }
     if (/call me ([a-z0-9 ]{1,20})/i.test(lower)) {
       const nick = text.match(/call me ([a-z0-9 ]{1,20})/i)[1].trim();
@@ -187,7 +186,7 @@
         if (deck) {
           return {
             html: "Bonk! I found a ready-made deck: <strong>" + esc(deck.title) + "</strong> — " + deck.cards.length + " cards with spaced-repetition scheduling.\n\nSample:\n• <strong>" + esc(deck.cards[0][0]) + "</strong> → " + esc(deck.cards[0][1]),
-            actions: [{ label: "Study this deck →", href: "/flashcards/?deck=" + deck.id }],
+            actions: [{ label: "Study this deck →", href: (window.SB_BASE || "/") + "flashcards/?deck=" + deck.id }],
           };
         }
       }
@@ -205,7 +204,7 @@
         S.set("userDecks", decks);
         return {
           html: "Deck created! These are <strong>active-recall starters</strong> for '" + esc(topic) + "' — the kind of questions that force your brain to produce answers instead of recognizing them. Want cards from YOUR notes or a PDF? Use the instant importer on the flashcards page (it can even use a full local AI model).",
-          actions: [{ label: "Open the deck →", href: "/flashcards/?deck=" + id }, { label: "Instant importer (PDF → cards)", href: "/flashcards/" }],
+          actions: [{ label: "Open the deck →", href: (window.SB_BASE || "/") + "flashcards/?deck=" + id }, { label: "Instant importer (PDF → cards)", href: "/flashcards/" }],
         };
       }
       return { html: "Happy to make flashcards! Try:\n• <code>flashcards about the periodic table</code>\n• or paste your notes into the <strong>instant importer</strong> on the flashcards page — it handles PDFs, text files and URLs, with optional AI-powered generation.", actions: [{ label: "Open the importer →", href: "/flashcards/" }] };
@@ -222,14 +221,14 @@
             const sample = quiz.questions[0];
             return {
               html: "Found it: <strong>" + esc(quiz.title) + "</strong> — " + quiz.questions.length + " questions, every answer explained.\n\nWarm-up:\n" + md(sample.q) + "\n(No spoilers — answers are in the quiz.)",
-              actions: [{ label: "Start this quiz →", href: "/quiz/?topic=" + quiz.id }],
+              actions: [{ label: "Start this quiz →", href: (window.SB_BASE || "/") + "quiz/?topic=" + quiz.id }],
             };
           }
         }
         const topics = window.SB_DATA.pillars.map((p) => p.emoji + " " + p.title).join(" · ");
         return {
           html: "Let's do this. I have explained question banks for: " + md(topics) + ".\n\nTry <code>quiz me on algebra</code> — or hit a speed round if you're feeling bold.",
-          actions: [{ label: "All quizzes", href: "/quiz/" }, { label: "⚡ Speed round", href: "/quiz/?challenge=1" }],
+          actions: [{ label: "All quizzes", href: (window.SB_BASE || "/") + "quiz/" }, { label: "⚡ Speed round", href: (window.SB_BASE || "/") + "quiz/?challenge=1" }],
         };
       }
     }
@@ -260,7 +259,7 @@
       const deckId = matches[0].id;
       return {
         html: "Here's what our study guides say:\n\n" + found + "\n\nFor the full lesson (with examples, tips and a quiz), open the guide — and verify anything exam-critical against your own materials too. I'm a tiny brain; your textbook is the boss. 🦊",
-        actions: [{ label: "Drill this topic →", href: "/flashcards/?deck=" + deckId }, { label: "Quiz me on it", href: "/quiz/?topic=" + deckId }],
+        actions: [{ label: "Drill this topic →", href: (window.SB_BASE || "/") + "flashcards/?deck=" + deckId }, { label: "Quiz me on it", href: (window.SB_BASE || "/") + "quiz/?topic=" + deckId }],
       };
     }
 
@@ -289,39 +288,54 @@
 
   function renderModelPanel() {
     modelStatus.innerHTML =
-      '<div class="card card-glass model-card recommended" style="max-width:460px;margin-inline:auto;text-align:center;padding:2rem">' +
+      '<div class="card card-glass model-card recommended" style="max-width:520px;margin-inline:auto;text-align:center;padding:2rem">' +
       '<div style="font-size:2.4rem">🦊</div>' +
-      "<h3 style='margin:.4rem 0 .2rem'>Bonk AI</h3>" +
-      "<p class='small mb-1' style='color:var(--text-2)'>A real language model running <strong>100% inside your browser</strong> — no API, no account, nothing leaves this device.</p>" +
-      "<p class='model-ram'>~874 MB one-time download · cached for offline · works with or without WebGPU</p>" +
-      '<button class="btn btn-primary mt-2" id="activate-bonk-ai" type="button">⚡ Activate Bonk AI</button>' +
+      "<h3 style='margin:.4rem 0 .2rem'>Bonk AI — API Mode</h3>" +
+      "<p class='small mb-1' style='color:var(--text-2)'>Connect your own <strong>free OpenAI API key</strong>. It is stored encrypted on your device and requests go straight from your browser to OpenAI — StudyBonk has no server in between.</p>" +
+      '<div class="mt-2" style="text-align:left;max-width:420px;margin-inline:auto">' +
+      '<p class="small" style="margin:0 0 .4rem"><strong>How to get a free API key:</strong></p>' +
+      '<ol class="small" style="margin:0 0 .8rem;color:var(--text-2)">' +
+      '<li>Create an account at <a href="https://platform.openai.com/signup" target="_blank" rel="noopener">platform.openai.com/signup</a></li>' +
+      '<li>Open <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener">platform.openai.com/api-keys</a></li>' +
+      '<li>Click <strong>"Create new secret key"</strong> and copy it (starts with <code>sk-</code>)</li>' +
+      '<li>Paste it below — done. New accounts get free trial credit.</li>' +
+      "</ol></div>" +
+      '<div class="btn-row" style="justify-content:center">' +
+      '<input id="openai-key" type="password" placeholder="sk-..." autocomplete="off" style="flex:1;min-width:200px;padding:12px 16px;border-radius:12px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font-body)">' +
+      '<button class="btn btn-primary" id="connect-openai" type="button">🔑 Connect key</button>' +
       "</div>" +
-      '<div class="progress-track mt-2" id="dl-bar" hidden style="max-width:460px;margin-inline:auto"><div></div></div>' +
-      '<p class="small mt-1 mb-0" id="dl-text" style="color:var(--text-2)"></p>';
-    const btn = document.getElementById("activate-bonk-ai");
-    if (btn) btn.addEventListener("click", () => loadModel());
+      '<p class="small mt-2 mb-0" id="connect-status" style="color:var(--text-2)"></p>' +
+      "</div>";
+    const btn = document.getElementById("connect-openai");
+    if (btn) {
+      btn.addEventListener("click", async () => {
+        const input = document.getElementById("openai-key");
+        const status = document.getElementById("connect-status");
+        if (!input.value.trim()) { status.textContent = "Paste your API key first (it starts with sk-)."; return; }
+        btn.disabled = true;
+        status.textContent = "Verifying your key with OpenAI…";
+        try {
+          await M.setKey(input.value.trim());
+          status.textContent = "✅ Key connected and stored encrypted on this device.";
+          input.value = "";
+          statusLine.textContent = "🌐 Bonk AI · API Mode · connected";
+          addMsg("ai", "🌐 <strong>Bonk AI connected.</strong> Your OpenAI key is stored encrypted on this device and requests go straight to OpenAI. Full-power flashcards, quizzes and tutoring unlocked. Your key stays on this device only.");
+        } catch (err) {
+          status.textContent = "⚠️ " + (err && err.message ? err.message : "Connection failed");
+        }
+        btn.disabled = false;
+      });
+    }
   }
 
   async function loadModel() {
     if (busy) return;
     busy = true;
-    const bar = document.getElementById("dl-bar");
-    const txt = document.getElementById("dl-text");
-    const btn = document.getElementById("activate-bonk-ai");
-    if (btn) btn.disabled = true;
     try {
-      bar.hidden = false;
-      const info = await M.load(null, (progress, text) => {
-        bar.firstElementChild.style.width = Math.round((progress || 0) * 100) + "%";
-        txt.textContent = text;
-      });
-      txt.textContent = "✅ Bonk AI ready — running fully local on your device.";
-      statusLine.textContent = "🦊 Bonk AI · local model · cached for offline";
-      addMsg("ai", "🦊 <strong>Bonk AI online.</strong> A whole language model, running inside this tab — no API, no server, nothing leaves your device. Ask me anything study-shaped. (I'm small: I'll flag what you should double-check.)");
+      await M.load(null, null);
+      statusLine.textContent = "🌐 Bonk AI · API Mode · connected";
     } catch (err) {
-      txt.textContent = "⚠️ Bonk AI couldn't load (" + (err && err.message ? err.message.slice(0, 120) : "unknown error") + "). Instant Mode still works perfectly.";
-      statusLine.textContent = "⚡ Instant Mode · model load failed · still fully local";
-      if (btn) btn.disabled = false;
+      statusLine.textContent = "🌐 API Mode · not connected · open the panel to add your key";
     }
     busy = false;
   }
@@ -342,7 +356,7 @@
     const history = await loadHistory();
     const typing = addTyping();
 
-    const useModel = activeMode === "model" && M.info().ready;
+    const useModel = activeMode === "model" && (await M.isReady());
     let reply;
     try {
       if (useModel) {
@@ -392,7 +406,7 @@
     }
   });
 
-  modeSwitch.addEventListener("click", (e) => {
+  modeSwitch.addEventListener("click", async (e) => {
     const btn = e.target.closest("[data-mode]");
     if (!btn) return;
     activeMode = btn.dataset.mode;
@@ -402,9 +416,9 @@
       b.setAttribute("aria-selected", String(on));
     });
     modelPanel.hidden = activeMode !== "model";
-    if (activeMode === "model" && !M.info().ready) renderModelPanel();
+    if (activeMode === "model" && !(await M.isReady()) && !modelPanel.querySelector("#connect-openai")) renderModelPanel();
     statusLine.textContent = activeMode === "model"
-      ? "🦊 Bonk AI · " + (M.info().ready ? "ready" : "activate below") + " · runs locally, cached offline"
+      ? "🌐 API Mode · " + ((await M.isReady()) ? "connected" : "add your OpenAI key below")
       : "⚡ Instant Mode · runs offline · zero download";
   });
 
@@ -434,7 +448,7 @@
     const returning = history.length > 0;
     addMsg("ai", returning
       ? "Welcome back" + (mem().name ? ", <strong>" + esc(mem().name) + "</strong>" : "") + "! 🦊 Your last " + history.filter((m) => m.role === "user").length + " questions are still in local memory. What are we bonking today?"
-      : "Hey, I'm <strong>Bonk AI</strong> 🦊 — a tiny-but-smart study tutor that runs <strong>entirely in your browser</strong>. No API, no account, no data leaving this device.\n\nInstant Mode is on: flashcard generation, quiz building, homework breakdowns and study coaching at zero download. Want a real language model instead? Switch to <strong>Full Model</strong> — a quantized Qwen/Phi/Gemma brain that runs locally via WebGPU (CPU WASM fallback included).\n\nTry: <code>flashcards about cell biology</code>");
+      : "Hey, I'm <strong>Bonk AI</strong> 🦊 — a tiny-but-smart study tutor that runs <strong>entirely in your browser</strong>. No API, no account, no data leaving this device.\n\nInstant Mode is on: study coaching, quiz finding and homework breakdowns at zero download. Want full-power AI? Switch to <strong>API Mode</strong> and connect your own free OpenAI API key (takes about a minute — instructions in the panel).\n\nTry: <code>flashcards about cell biology</code>");
   }
 
   greet();

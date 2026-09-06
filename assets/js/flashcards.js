@@ -104,8 +104,8 @@
   }
 
   async function pdfToText(file) {
-    const pdfjs = await import("/assets/vendor/pdf.min.mjs");
-    pdfjs.GlobalWorkerOptions.workerSrc = "/assets/vendor/pdf.worker.min.mjs";
+    const pdfjs = await import((window.SB_BASE || "/") + "assets/vendor/pdf.min.mjs");
+    pdfjs.GlobalWorkerOptions.workerSrc = (window.SB_BASE || "/") + "assets/vendor/pdf.worker.min.mjs";
     const buf = await file.arrayBuffer();
     const doc = await pdfjs.getDocument({ data: buf }).promise;
     const parts = [];
@@ -175,20 +175,9 @@
       feedbackEl.textContent = "AI engine unavailable in this browser — using the smart extractor instead.";
       return false;
     }
-    if (window.SB.model.info().ready) return true;
-    const gpu = window.SB.model.hasWebGPU();
-    feedbackEl.textContent = (gpu ? "🧠 Loading Bonk Core (Qwen 2.5 1.5B, ~900 MB, one-time)…" : "🧊 No WebGPU — loading the WASM model (Qwen 2.5 0.5B, ~510 MB, one-time)…") +
-      " Runs 100% locally; cached for offline after this.";
-    try {
-      const info = await window.SB.model.load(gpu ? "core" : "wasm", (progress, text) => {
-        feedbackEl.textContent = "🧠 Downloading & compiling — " + Math.round((progress || 0) * 100) + "% · " + String(text).slice(0, 90);
-      });
-      feedbackEl.textContent = "✅ " + info.model.name + " loaded — generating flashcards locally…";
-      return true;
-    } catch (err) {
-      feedbackEl.textContent = "⚠️ Model couldn't load (" + String(err && err.message || err).slice(0, 100) + ") — using the smart extractor instead.";
-      return false;
-    }
+    if (await window.SB.model.isReady()) return true;
+    feedbackEl.textContent = "🔑 No OpenAI API key connected yet — connect one free on the Bonk AI page (takes ~60 seconds), or keep going with the smart extractor.";
+    return false;
   }
 
   async function aiGenerateCards(text, feedbackEl) {
@@ -250,7 +239,7 @@
       '<button data-tab="url" type="button">🔗 From URL</button>' +
       "</div>" +
       '<input id="new-deck-title" type="text" placeholder="Deck name (optional — e.g. Bio Chapter 4)" maxlength="60" style="width:100%;padding:12px 16px;border-radius:12px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font-body)">' +
-      '<label class="chip chip-purple mt-2" style="cursor:pointer;display:inline-flex"><input type="checkbox" id="ai-toggle" style="accent-color:var(--purple);width:16px;height:16px"> 🧠 Generate with a real local AI model (better on messy text — one-time download, runs on-device)</label>' +
+      '<label class="chip chip-purple mt-2" style="cursor:pointer;display:inline-flex"><input type="checkbox" id="ai-toggle" style="accent-color:var(--purple);width:16px;height:16px"> 🌐 Generate with Bonk AI (OpenAI API — connect your free key on the AI page; better on messy text)</label>' +
       '<div id="import-tab-paste" class="mt-2">' +
       '<textarea id="paste-text" rows="6" placeholder="Paste anything: class notes, a chapter, vocab lists…\n\nFormats it understands:\nMitochondria | The cell power plant\nQ: What is osmosis?\nA: Water moving across a membrane" style="width:100%;padding:12px;border-radius:12px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font-body)"></textarea>' +
       '<button class="btn btn-primary mt-2" id="paste-go">⚡ Turn it into flashcards</button>' +
@@ -327,7 +316,7 @@
           }
           fb.textContent = "ℹ️ The model's output wasn't clean card format — using the smart extractor instead.";
         } catch (e) {
-          fb.textContent = "ℹ️ AI generation unavailable (" + String(e && e.message || e).slice(0, 80) + ") — using the smart extractor.";
+          fb.textContent = "ℹ️ Bonk AI unavailable (" + String(e && e.message || e).slice(0, 80) + ") — using the smart extractor.";
         }
       }
       finishImport(title, extractCards(text), fb);
@@ -467,7 +456,7 @@
       ? " · last card: " + session.lastRating
       : "";
     mount.innerHTML =
-      '<div class="text-center mb-2"><a href="/flashcards/" class="btn btn-ghost btn-sm">← All decks</a> ' +
+      '<div class="text-center mb-2"><a href="' + (window.SB_BASE || "/") + 'flashcards/" class="btn btn-ghost btn-sm">← All decks</a> ' +
       '<span class="chip chip-blue">' + esc(deck.title) + "</span> " +
       '<span class="chip">' + (pos + 1) + " / " + queue.length + "</span>" +
       '<span class="chip chip-green">box ' + box + "/6</span>" +
@@ -510,7 +499,7 @@
         session = null;
         document.onkeydown = null;
         window.SB.ui.toast("🗑️ Deck deleted", "info");
-        history.replaceState(null, "", "/flashcards/");
+        history.replaceState(null, "", (window.SB_BASE || "/") + "flashcards/");
         renderLibrary();
       };
     }
@@ -523,7 +512,7 @@
     if (!deck) return;
     document.onkeydown = null;
     mount.innerHTML =
-      '<div class="text-center mb-2"><a href="/flashcards/" class="btn btn-ghost btn-sm">← All decks</a> ' +
+      '<div class="text-center mb-2"><a href="' + (window.SB_BASE || "/") + 'flashcards/" class="btn btn-ghost btn-sm">← All decks</a> ' +
       '<span class="chip chip-blue">' + esc(deck.title) + "</span> " +
       '<span class="chip">' + deck.cards.length + " cards</span></div>" +
       '<div class="card card-glass" style="max-width:620px;margin-inline:auto">' +
@@ -625,9 +614,9 @@
       '<div class="stat-row mb-2"><div class="stat-box"><strong>+' + (session.reviewed * 10 + 20) + "</strong><span>XP this session</span></div>" +
       '<div class="stat-box"><strong>' + session.reviewed + "</strong><span>cards reviewed</span></div></div>" +
       '<div class="btn-row" style="justify-content:center">' +
-      '<a class="btn btn-primary" href="/flashcards/">Back to decks</a></div></div>';
+      '<a class="btn btn-primary" href="' + (window.SB_BASE || "/") + 'flashcards/">Back to decks</a></div></div>';
     session = null;
-    history.replaceState(null, "", "/flashcards/");
+    history.replaceState(null, "", (window.SB_BASE || "/") + "flashcards/");
   }
 
   function esc(s) {

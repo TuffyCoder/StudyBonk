@@ -4,6 +4,8 @@
 (function () {
   "use strict";
   window.SB = window.SB || {};
+  // Site base path (works under GitHub Pages subpaths)
+  try { window.SB_BASE = new URL(document.querySelector("script[src$=\"storage.js\"]").src).pathname.replace(/assets\/js\/storage\.js.*$/, ""); } catch (e) { window.SB_BASE = window.SB_BASE || "/"; }
   const PREFIX = "sb.";
   const KEYNAME = PREFIX + "devicekey";
 

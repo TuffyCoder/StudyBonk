@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://studybonk.pages.dev/sitemap.xml
+Sitemap: https://tuffycoder.github.io/StudyBonk/sitemap.xml

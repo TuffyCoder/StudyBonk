@@ -1,8 +1,15 @@
-/* StudyBonk boot snippet: applies saved theme before first paint and
- * registers the service worker for offline support. Loaded synchronously
- * in <head> (tiny, no dependencies). */
+/* StudyBonk boot snippet: applies saved theme before first paint, derives
+ * the site base path (GitHub Pages subpath safe) and registers the service
+ * worker. Loaded synchronously in <head> (tiny, no dependencies). */
 (function () {
   "use strict";
+  var base = "/";
+  try {
+    if (document.currentScript && document.currentScript.src) {
+      base = new URL(document.currentScript.src).pathname.replace(/assets\/js\/theme-boot\.js.*$/, "");
+    }
+  } catch (e) { /* fall back to "/" */ }
+  window.SB_BASE = base;
   try {
     var t = localStorage.getItem("sb.theme");
     if (t !== "light" && t !== "dark") {
@@ -14,7 +21,7 @@
   }
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", function () {
-      navigator.serviceWorker.register("/sw.js").catch(function () {
+      navigator.serviceWorker.register(base + "sw.js").catch(function () {
         /* offline support unavailable — site still works fine online */
       });
     });

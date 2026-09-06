@@ -1,6 +1,6 @@
 """Global StudyBonk FAQs — shown on the homepage (top 6) and the /faq/ page.
 Used for FAQPage JSON-LD schema. Answers must stay accurate to the site's
-real architecture (no accounts, no tracking, local storage, local AI)."""
+real architecture (no accounts, no tracking, local storage, bring-your-own-key AI)."""
 
 FAQS = [
     ("Is StudyBonk really 100% free?",
@@ -10,9 +10,9 @@ FAQS = [
     ("Where is my progress saved?",
      "In your browser's local storage on your device: XP, streaks, badges, flashcard schedules, custom decks, focus stats and AI chat history. Export everything as a JSON file from the dashboard to back it up or move devices."),
     ("Does the Bonk AI send my questions to a server?",
-     "No. Instant Mode has zero network activity. The optional full models run entirely in your browser via WebGPU — the only network request is the one-time model download (public weights, no user data), cached for offline use afterward."),
+     "In Instant Mode there's zero network activity. In API Mode, your prompts go directly from your browser to OpenAI's API using your own free key — StudyBonk has no server and never sees them. Chat history stays in your browser's local storage."),
     ("Can I use StudyBonk offline?",
-     "Yes. After your first visit, StudyBonk caches itself as a progressive web app. Guides, flashcards, quizzes, the timer and Instant Mode AI all work offline; earned XP syncs nowhere because there's nothing to sync to."),
+     "Yes. After your first visit, StudyBonk caches itself as a progressive web app. Guides, flashcards, quizzes, the timer and Instant Mode all work offline; API Mode needs a connection since it talks to OpenAI."),
     ("Is StudyBonk open source?",
      "Completely. The generator, design system, tools and AI integration are on GitHub (github.com/TuffyCoder/StudyBonk) — code under MIT, content under CC BY 4.0. You can verify every privacy claim yourself."),
     ("Who made StudyBonk?",
@@ -22,7 +22,7 @@ FAQS = [
     ("What topics does StudyBonk cover?",
      "Seven pillars — math, biology, chemistry, physics, history, SAT prep and study skills — each with six deep-dive guides, a flashcard deck and explained quizzes for every guide. More pillars ship over time."),
     ("Do I need to install anything?",
-     "No. StudyBonk runs in any modern browser at studybonk.pages.dev. Optionally install it as an app (PWA) for a home-screen icon and offline access."),
+     "No. StudyBonk runs in any modern browser at tuffycoder.github.io/StudyBonk. Optionally install it as an app (PWA) for a home-screen icon and offline access."),
     ("What happens if I clear my browser data?",
      "Clearing site data erases your local progress — the one real cost of a no-account design. Export a backup from the dashboard before clearing, switching browsers, or using private mode."),
     ("Is StudyBonk safe for kids?",

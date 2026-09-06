@@ -7,7 +7,7 @@ marketing copy. Consumed by scripts/build.py.
 
 SITE = {
     "name": "StudyBonk",
-    "url": "https://studybonk.pages.dev",
+    "url": "https://tuffycoder.github.io/StudyBonk/",
     "tagline": "Bonk your brain into shape.",
     "description": (
         "StudyBonk is a free, private, gamified study platform. Flashcards, "
@@ -36,7 +36,7 @@ NAV = [
     {"label": "Flashcards", "href": "/flashcards/"},
     {"label": "Quiz", "href": "/quiz/"},
     {"label": "Focus", "href": "/focus/"},
-    {"label": "Bonk AI", "href": "/ai/", "badge": "Local"},
+    {"label": "Bonk AI", "href": "/ai/", "badge": "API"},
     {"label": "Dashboard", "href": "/dashboard/"},
     {"label": "Support 💛", "href": "/support/"},
 ]
@@ -97,7 +97,7 @@ TECH_BADGES = [
     ("Enhanced with JavaScript", "Vanilla JS — zero frameworks, zero trackers."),
     ("Hosted on Cloudflare", "Served safely from Cloudflare's global edge network."),
     ("Open-source on GitHub", "Every line is public and auditable."),
-    ("Local AI — No API", "The AI tutor runs 100% in your browser."),
+    ("AI via OpenAI API", "Optional AI features use your own free OpenAI API key."),
 ]
 
 # Every page renders these guarantees in the trust strip / footer details.
@@ -171,11 +171,11 @@ TRUST_REASONS = [
     },
     {
         "icon": "🧠",
-        "title": "Local AI, verified behavior",
+        "title": "AI you control",
         "body": (
-            "The StudyBonk AI tutor runs a tiny quantized model inside "
-            "your browser. No prompts are ever uploaded, and it works "
-            "offline after the first load."
+            "AI features are optional and use YOUR own OpenAI API key, "
+            "stored encrypted on your device. Instant Mode needs no key "
+            "and no network at all."
         ),
     },
     {
@@ -229,11 +229,11 @@ FEATURES = [
     },
     {
         "icon": "🤖",
-        "title": "Local AI Tutor",
+        "title": "AI Study Tutor",
         "body": (
-            "A tiny-but-smart AI that runs in your browser — flashcard "
-            "generation, quiz building, homework explanations. No API, "
-            "no account, no data leaving your device."
+            "Bonk AI explains, generates flashcards and builds quizzes. "
+            "Connect your own free OpenAI API key — or use Instant Mode "
+            "with zero setup."
         ),
         "href": "/ai/",
     },
@@ -268,7 +268,7 @@ COMPARISON_CARDS = [
             ("Flashcards + spaced repetition", True),
             ("Quizzes with explanations", True),
             ("Gamification (XP, streaks, quests)", True),
-            ("Local AI tutor, no API", True),
+            ("Optional AI tutor (your own OpenAI key)", True),
             ("No account needed", True),
             ("No ads or trackers, ever", True),
             ("Open-source code", True),
@@ -284,7 +284,7 @@ COMPARISON_CARDS = [
             ("Flashcards + spaced repetition", "Limited on free plan"),
             ("Quizzes with explanations", "Premium feature"),
             ("Gamification (XP, streaks, quests)", "Partially paywalled"),
-            ("Local AI tutor, no API", False),
+            ("Optional AI tutor (your own OpenAI key)", False),
             ("No account needed", False),
             ("No ads or trackers, ever", False),
             ("Open-source code", False),

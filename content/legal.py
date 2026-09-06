@@ -18,11 +18,11 @@ TERMS = {
     "h1": "Terms of Use",
     "intro": [
         "StudyBonk is free, open-source and account-free, so these terms are shorter than most. The short version: use the site freely, keep ownership of everything you create, and remember that the AI tutor can make mistakes. The longer version is below, written in plain English rather than legalese.",
-        "By using studybonk.pages.dev you agree to these terms. If you disagree with them, simply stop using the site — since there are no accounts, there is nothing to cancel.",
+        "By using tuffycoder.github.io/StudyBonk you agree to these terms. If you disagree with them, simply stop using the site — since there are no accounts, there is nothing to cancel.",
     ],
     "sections": [
         ("Acceptance of terms", [
-            "These Terms of Use govern your use of StudyBonk, a free educational website available at studybonk.pages.dev. By accessing or using the site, you accept these terms in full. If you do not accept them, please do not use the site.",
+            "These Terms of Use govern your use of StudyBonk, a free educational website available at tuffycoder.github.io/StudyBonk. By accessing or using the site, you accept these terms in full. If you do not accept them, please do not use the site.",
             "Because StudyBonk has no accounts or sign-ups, there is no click-through agreement to accept — your use of the site is the agreement. These terms apply to every page and feature, including the flashcards, quizzes, focus timer and AI tutor.",
         ], []),
         ("What StudyBonk is", [
@@ -33,7 +33,7 @@ TERMS = {
             "Practice quizzes with explanations for every answer",
             "A focus timer and progress dashboard",
             "Gamification: XP, streaks, daily quests and levels",
-            "A local AI tutor that runs entirely in your browser",
+            "An optional AI tutor connected to OpenAI with your own API key",
         ]),
         ("No accounts & acceptable use", [
             "StudyBonk has no user accounts, no profiles and no user-to-user messaging. You never provide an email address, name or payment information, and the site never asks for one.",
@@ -55,9 +55,9 @@ TERMS = {
             "Content: CC BY 4.0 — share and adapt with attribution to StudyBonk by TuffyCoder.",
             "Everything is public and auditable on GitHub.",
         ]),
-        ("The local AI assistant", [
-            "StudyBonk includes an AI tutor that runs locally in your browser. It is a small language model, not an infallible oracle: it can and occasionally will produce answers that are outdated, incorrect or confidently wrong. Use it as a study companion, not as a final authority.",
-            "Verify important facts against your textbook, teacher or other reliable sources before acting on them, especially for graded work. The AI's output does not constitute professional advice of any kind — not medical, legal, financial or otherwise.",
+        ("The AI assistant (OpenAI API)", [
+            "StudyBonk's optional AI features call the OpenAI API using your own API key. AI models are not infallible oracles: they can and occasionally will produce answers that are outdated, incorrect or confidently wrong. Use the AI as a study companion, not as a final authority.",
+            "Verify important facts against your textbook, teacher or other reliable sources before acting on them, especially for graded work. AI output does not constitute professional advice of any kind — not medical, legal, financial or otherwise. Your use of OpenAI's API is also governed by OpenAI's own terms.",
         ], []),
         ("Disclaimer of warranties", [
             "StudyBonk is provided on an 'as is' and 'as available' basis, without warranties of any kind, express or implied. Every effort is made to keep the study content accurate and the site available, but accuracy is pursued, not guaranteed.",
@@ -99,7 +99,7 @@ PRIVACY = {
             "No cookies of any kind",
             "No third-party trackers, ad networks or scripts",
             "No server-side storage of anything you do",
-            "No AI prompts or chats sent to any server",
+            "No AI prompts or chats sent to StudyBonk (API Mode talks directly to OpenAI with your key)",
         ]),
         ("Local storage: what lives in your browser", [
             "StudyBonk saves your progress in your browser's local storage — a small amount of data written by the site itself, stored on your device, and readable only by StudyBonk in that browser. It is never transmitted anywhere, and if you never tell anyone, no one — including the site's creator — can see it. Here is the complete list of keys StudyBonk uses and what each one stores.",
@@ -113,14 +113,15 @@ PRIVACY = {
             "sb.ai.history.enc — your AI tutor chat history, stored encrypted.",
             "sb.ai.memory — short notes the AI tutor keeps to stay useful across chats.",
             "sb.devicekey — a locally generated key used to encrypt sensitive values like AI history.",
+            "sb.api.enc — your OpenAI API key for optional AI features, stored encrypted.",
         ]),
-        ("The local AI", [
-            "StudyBonk's AI tutor runs entirely in your browser. Your prompts, questions and files are processed on your device and never leave it — there is no AI API, no server-side model and no chat log anywhere but your own machine. After the first load, the AI even works offline.",
-            "The single exception is the first time you enable the full model: the model weights are downloaded once from public model CDNs. This is the only external request the AI feature ever makes, and it contains no user data — it is functionally the same download any visitor of the CDN would make.",
+        ("The AI (optional, bring-your-own-key)", [
+            "StudyBonk's AI features are optional. Instant Mode runs entirely in your browser with zero network activity. When you connect an OpenAI API key, requests are sent directly from your browser to OpenAI's API over HTTPS — StudyBonk has no server in between, receives nothing, and stores nothing.",
+            "Your API key is stored encrypted (AES-GCM) in your browser's local storage and can be deleted at any time from the AI page or by clearing site data. Your prompts become subject to OpenAI's privacy policy once they reach OpenAI's API.",
         ], [
-            "Prompts and chats: processed on-device, never uploaded.",
+            "API key: stored encrypted locally (sb.api.enc), never sent to StudyBonk.",
+            "Prompts: sent directly from your browser to OpenAI using your key.",
             "AI history: encrypted in local storage (sb.ai.history.enc) with a local key (sb.devicekey).",
-            "External requests: one-time model download from public CDNs, containing no user data.",
         ]),
         ("Children's privacy", [
             "StudyBonk is designed to be safe for students aged 13 and up, and the zero-collection architecture applies equally to younger visitors: the site collects no personal information from anyone, of any age, because it collects no information at all. There are no ads, no chat between users and no prompts asking children for personal details. As with any study tool, parents should still use common sense about screen time and content.",
@@ -155,7 +156,7 @@ COOKIES = {
     "sections": [
         ("Zero cookies, zero trackers", [
             "StudyBonk does not set any cookies — not analytics cookies, not advertising cookies, not even strictly-necessary ones. It also loads no third-party scripts, pixels or fingerprinting libraries of any kind.",
-            "You don't have to take this on faith. The site is open-source at github.com/TuffyCoder/StudyBonk, and you can inspect every page's network activity in your browser's developer tools: the cookies tab for studybonk.pages.dev will stay empty.",
+            "You don't have to take this on faith. The site is open-source at github.com/TuffyCoder/StudyBonk, and you can inspect every page's network activity in your browser's developer tools: the cookies tab for tuffycoder.github.io/StudyBonk will stay empty.",
         ], []),
         ("What we use instead: localStorage", [
             "To remember your progress between visits, StudyBonk uses your browser's localStorage — a standard web feature that lets a site save small amounts of data on your own device. Your XP, streaks, flashcard decks, focus stats, theme preference and encrypted AI chat history are written there.",
@@ -165,7 +166,7 @@ COOKIES = {
             "sb.gamification — XP, streaks, badges and quests.",
             "sb.srs and sb.userDecks — review schedules and custom decks.",
             "sb.focusSettings and sb.focusStats — timer settings and session history.",
-            "sb.ai.history.enc, sb.ai.memory and sb.devicekey — encrypted local AI data.",
+            "sb.ai.history.enc, sb.ai.memory, sb.api.enc and sb.devicekey — encrypted local AI data.",
         ]),
         ("How localStorage differs from cookies", [
             "Cookies and localStorage are both browser storage, but they behave very differently where privacy is concerned — which is why a site full of localStorage can honestly call itself cookie-free.",
@@ -176,10 +177,10 @@ COOKIES = {
             "Clearing cookies in your browser does not necessarily clear localStorage — see the next section.",
         ]),
         ("How to clear your StudyBonk data", [
-            "If you want a fresh start — or you're on a shared computer — you can wipe everything StudyBonk has saved. In most browsers: open Settings, find the privacy or site-data section, view site data for studybonk.pages.dev, and delete it. Browsers usually also let you clear site data for the site you're currently on via the padlock icon in the address bar.",
+            "If you want a fresh start — or you're on a shared computer — you can wipe everything StudyBonk has saved. In most browsers: open Settings, find the privacy or site-data section, view site data for tuffycoder.github.io/StudyBonk, and delete it. Browsers usually also let you clear site data for the site you're currently on via the padlock icon in the address bar.",
             "One friendly warning: clearing site data erases your XP, streaks, decks and AI history permanently — that's the flip side of a no-account design. Export a JSON backup from the dashboard first if you want to keep your progress.",
         ], [
-            "Browser settings → Privacy → Site data → studybonk.pages.dev → delete.",
+            "Browser settings → Privacy → Site data → tuffycoder.github.io/StudyBonk → delete.",
             "Or: padlock icon next to the address bar → site settings → clear data.",
             "Export a dashboard backup first if you want to keep your progress.",
         ]),
@@ -221,10 +222,10 @@ LICENSE_PAGE = {
             "No additional restrictions: don't add legal terms or technology that limit others' reuse.",
         ]),
         ("How to attribute", [
-            "Attribution should name the source and link back. The recommended form is a line like: 'StudyBonk by TuffyCoder (studybonk.pages.dev), licensed under CC BY 4.0' — placed wherever you would naturally cite a source: a caption, a footer or a credits page. For code, keeping the LICENSE file and a mention of the repository is sufficient under MIT.",
+            "Attribution should name the source and link back. The recommended form is a line like: 'StudyBonk by TuffyCoder (tuffycoder.github.io/StudyBonk), licensed under CC BY 4.0' — placed wherever you would naturally cite a source: a caption, a footer or a credits page. For code, keeping the LICENSE file and a mention of the repository is sufficient under MIT.",
         ], [
             "Credit line: StudyBonk by TuffyCoder.",
-            "Link: https://studybonk.pages.dev (and/or github.com/TuffyCoder/StudyBonk for code).",
+            "Link: https://tuffycoder.github.io/StudyBonk (and/or github.com/TuffyCoder/StudyBonk for code).",
             "Note changes if you modified the content.",
         ]),
         ("Where the source lives", [

@@ -89,9 +89,9 @@
     /* quests */
     '<div class="grid grid-2 mb-3"><div class="card"><h2 class="mt-0" style="font-size:1.3rem">🎯 Today\'s quests</h2><div class="quest-list">' +
     questList + weeklyHtml + "</div>" +
-    '<div class="btn-row mt-3"><a class="btn btn-primary btn-sm" href="/flashcards/">Flashcards</a>' +
-    '<a class="btn btn-ghost btn-sm" href="/quiz/">Quiz</a>' +
-    '<a class="btn btn-ghost btn-sm" href="/focus/">Focus</a></div></div>' +
+    '<div class="btn-row mt-3"><a class="btn btn-primary btn-sm" href="' + (window.SB_BASE || "/") + 'flashcards/">Flashcards</a>' +
+    '<a class="btn btn-ghost btn-sm" href="' + (window.SB_BASE || "/") + 'quiz/">Quiz</a>' +
+    '<a class="btn btn-ghost btn-sm" href="' + (window.SB_BASE || "/") + 'focus/">Focus</a></div></div>' +
     /* heatmap */
     '<div class="card"><h2 class="mt-0" style="font-size:1.3rem">📅 Last 12 weeks</h2>' +
     '<div class="heatmap">' + heatCells() + "</div>" +

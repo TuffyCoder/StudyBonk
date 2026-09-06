@@ -8,8 +8,7 @@ HOME = {
     "hero_sub": (
         "The 100% free, 100% private study platform. Flashcards with spaced "
         "repetition, practice quizzes, a focus timer, Duolingo-style XP and "
-        "streaks, and a local AI tutor that runs entirely inside your "
-        "browser. No sign-up. No ads. No tracking. Ever."
+        "streaks, and an AI tutor powered by your own free OpenAI API key. No sign-up. No ads. No tracking. Ever."
     ),
     "how_title": "How StudyBonk works",
     "how_sub": (
@@ -59,12 +58,12 @@ HOME = {
         ("🥊", "Bonk Challenges", "Timed speed rounds for when you want to turn practice into a boss fight."),
         ("🌙", "Dark mode built in", "Study at 2am without searing your retinas. One tap toggles light/dark."),
     ],
-    "ai_title": "Meet Bonk AI — tiny, smart, and it never phones home",
+    "ai_title": "Meet Bonk AI — your key, your chats, full power",
     "ai_sub": (
-        "Most \"AI study apps\" ship your questions to a server. Bonk AI runs "
-        "a distilled, quantized language model (1–2B parameters) directly in "
-        "your browser using WebGPU — no API, no account, no data leaving "
-        "your device. Instant Mode works on any hardware with zero download."
+        "Bonk AI uses YOUR own free OpenAI API key, stored encrypted on your "
+        "device — requests go straight from your browser to OpenAI, with no "
+        "StudyBonk server in between. Instant Mode needs no key and no "
+        "network at all."
     ),
     "ai_points": [
         ("🃏", "Flashcard generator", "Type a topic, get a deck. Saved locally, ready to drill."),
@@ -294,7 +293,7 @@ TOOL_PAGES = {
         ],
         "faqs": [
             ("Can AI turn my PDF into a quiz?",
-             "Yes — the Bonk AI quiz maker on this page accepts PDFs (parsed locally on your device), pasted text and URLs, and generates a multiple-choice quiz with explanations. One-time ~874 MB model download, cached for offline use after that. No model? A True/False generator still works."),
+             "Yes — the Bonk AI quiz maker on this page accepts PDFs (parsed locally on your device), pasted text and URLs, and generates a multiple-choice quiz with explanations. Connect your own free OpenAI API key on the AI page (takes about a minute); no key? A True/False generator still works."),
             ("Are the quizzes free and unlimited?",
              "Yes. Take any quiz, any number of times, forever free. No streak-gates, no hearts that run out, no paywall disguised as a \"premium question bank\"."),
             ("Where do the questions come from?",
@@ -449,22 +448,21 @@ TOOL_PAGES = {
     "ai": {
         "path": "/ai/",
         "nav": "Bonk AI",
-        "meta_title": "Local AI Study Tutor — No API, No Account | StudyBonk",
-        "meta_description": "A tiny but smart AI tutor that runs fully in your browser: flashcards, quizzes, homework help and study coaching. No API, no sign-up, works offline.",
+        "meta_title": "Free AI Study Tutor — Use Your Own API Key | StudyBonk",
+        "meta_description": "A smart AI study tutor: flashcard generation, quizzes, homework help and coaching. Connect your own free OpenAI API key — or use Instant Mode with zero setup.",
         "h1": "Bonk AI: A Study Tutor That Lives in Your Browser",
         "lead": (
-            "Bonk AI is a tiny-but-smart assistant that runs 100% on your "
-            "device. Instant Mode answers in milliseconds with zero download. "
-            "Or activate the full Bonk AI — a real quantized language model "
-            "that runs locally in your browser — no API, no server, no data "
-            "ever leaving your browser."
+            "Bonk AI is a tiny-but-smart study assistant. Instant Mode answers "
+            "in milliseconds with zero setup. Connect your own free OpenAI API "
+            "key and unlock full-power AI: flashcard generation, quiz building "
+            "and open-ended tutoring — your key stays encrypted on your device."
         ),
         "keywords": [
-            "local ai tutor",
+            "ai study tutor",
             "free ai study assistant",
             "ai flashcard generator",
             "offline ai assistant",
-            "browser ai no api",
+            "ai flashcard generator openai",
             "private ai tutor",
         ],
         "longtail": [
@@ -475,7 +473,7 @@ TOOL_PAGES = {
             "ai homework explainer that works offline",
             "does studybonk ai send my chats to a server",
             "webgpu ai assistant in browser free",
-            "quantized small language model in browser",
+            "free openai api key for students",
             "ai study help without api keys",
             "meme mode ai study assistant",
         ],
@@ -483,16 +481,16 @@ TOOL_PAGES = {
             {
                 "h2": "Tiny, smart, and entirely yours",
                 "paras": [
-                    "Most AI study tools are wrappers around cloud APIs: your questions, your homework, your doubts — shipped to someone else's server. Bonk AI flips the model. The model comes to you: a distilled 1–2B parameter language model, quantized to 4-bit weights, running on your own GPU (or CPU via WASM) inside this tab.",
-                    "Your conversations are stored only in your browser's local storage. There is no telemetry, no account, no server-side log, and a Clear Memory button that deletes everything instantly. You can read the code — it's open-source.",
+                    "Most AI study tools ask you to trust their servers with your questions. Bonk AI takes a different route: you connect your own OpenAI API key, stored encrypted on your device, and every request goes directly from your browser to OpenAI. StudyBonk has no server, no account and no copy of your chats.",
+                    "Conversations are stored in your browser's local storage. There is no telemetry and a Clear Memory button deletes everything instantly. You can read the code — it's open-source.",
                 ],
                 "bullets": [
                     "Instant Mode: zero download, zero-latency template intelligence",
-                    "Bonk AI: a real quantized language model, cached for offline use",
-                    "Runs on any device — GPU acceleration when available, CPU otherwise",
-                    "One activation button — the engine picks the best path automatically",
+                    "Bonk AI: full-power OpenAI API mode using your own free key",
+                    "Key verified, encrypted (AES-GCM) and stored only on your device",
+                    "One-time setup: paste a sk- key, connect, done",
                     "Flashcard + quiz generation from PDFs, notes and URLs",
-                    "WebGPU acceleration with automatic CPU fallback",
+                    "Clear Memory wipes chats and the stored key instantly",
                 ],
             },
             {
@@ -524,11 +522,13 @@ TOOL_PAGES = {
         ],
         "faqs": [
             ("Does Bonk AI send my questions to a server?",
-             "No. In Instant Mode there's no network activity at all. In model mode, the only network traffic is the one-time download of the model weights from a public model CDN — it contains none of your data. Your prompts and chats are processed on your device and stored only locally."),
-            ("Why does the model need to download once?",
-             "Quantized models are 300MB–1.4GB of weights. The download happens once, is cached by your browser, and after that Bonk AI runs fully offline. Instant Mode skips this entirely with zero download."),
-            ("What devices can run the full model?",
-             "Any device with WebGPU (Chrome, Edge, or recent Safari on desktop; Chrome on Android) handles Bonk Lite comfortably in ~600MB of RAM. Without WebGPU, StudyBonk falls back to WASM (slower) or Instant Mode. Detection is automatic."),
+             "In Instant Mode there's no network activity at all. In API Mode, your prompts go directly from your browser to OpenAI's API using your own key — StudyBonk never sees them, because there is no StudyBonk server. Chat history stays in your browser's local storage."),
+            ("How do I get a free OpenAI API key?",
+             "Create an account at platform.openai.com/signup, open platform.openai.com/api-keys, click Create new secret key, and paste the sk-... key into the API Mode panel on this page. New accounts include free trial credit. The key is verified, encrypted with AES-GCM, and stored only in your browser."),
+            ("Where is my API key stored?",
+             "Encrypted on your device. StudyBonk encrypts the key with AES-GCM using a device-local key (WebCrypto) and keeps it in your browser's local storage. Requests go directly from your browser to OpenAI's API — StudyBonk has no server that could see it."),
+            ("What can API Mode do that Instant Mode can't?",
+             "Open-ended tutoring, nuanced explanations, and high-quality flashcards and quizzes from messy source material. Instant Mode is a fast template engine with retrieval over StudyBonk's built-in knowledge base — great offline, but small. API Mode is a full-size model."),
             ("Can Bonk AI do my homework for me?",
              "It can help you understand it — breaking down what a problem asks, explaining the method, checking your steps. It won't just hand over answers to paste, because that would bonk your education. Ethical AI is the whole brand."),
             ("Is my chat history really deleted when I clear it?",
@@ -606,7 +606,7 @@ TRUST = {
     ),
     "verify_title": "Verify it yourself in 60 seconds",
     "verify_steps": [
-        ("Open your browser dev tools → Network tab, reload any page", "You'll see requests for this site's own files only. No analytics, no ad networks, no trackers. In Instant Mode, not even a model download."),
+        ("Open your browser dev tools → Network tab, reload any page", "You'll see requests for this site's own files only. No analytics, no ad networks, no trackers. Instant Mode makes zero external calls; API Mode talks only to OpenAI with your key."),
         ("Check Application → Cookies", "Zero cookies. Ever. StudyBonk uses localStorage — device-local storage that is never transmitted to any server."),
         ("Read the source on GitHub", "Every line of this site is public. Search for any fetch/XHR call — outside the one-time opt-in model download, there are none."),
         ("Disconnect from the internet and keep using it", "StudyBonk is a progressive web app that caches itself. Offline studying is the proof of local-first architecture."),
@@ -663,10 +663,10 @@ SECURITY = {
             ],
         },
         {
-            "h2": "The local AI's security model",
+            "h2": "The AI's security model",
             "paras": [
-                "Bonk AI runs inside your browser sandbox. In Instant Mode there is no network activity at all. When you opt into a full model, the only network request is a one-time download of public, read-only model weights from a public model CDN — it contains no information about you, and model weights can't record prompts.",
-                "Prompts are processed by your own GPU/CPU, and history is stored encrypted in local storage with a one-click destroy button.",
+                "Bonk AI has two modes. Instant Mode runs entirely in your browser with zero network activity. In API Mode, prompts go directly from your browser to OpenAI's API over HTTPS using your own key — StudyBonk has no server in the path and never sees your prompts or your key.",
+                "Your API key is stored AES-GCM encrypted in local storage, and chat history is encrypted the same way with a one-click destroy button. Disconnecting the key deletes it from the device instantly.",
             ],
         },
         {

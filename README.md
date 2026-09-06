@@ -2,7 +2,7 @@
 
 **A free, ethical, privacy-first study platform — with Duolingo-style gamification and a local AI tutor.**
 
-🌐 **Live:** https://studybonk.pages.dev
+🌐 **Live:** https://tuffycoder.github.io/StudyBonk/
 📦 **Source:** https://github.com/TuffyCoder/StudyBonk
 👤 **Creator:** [TuffyCoder](https://www.youtube.com/@TuffyCoder) · ethical developer, privacy-focused builder, open-source contributor
 
@@ -23,12 +23,12 @@ StudyBonk is a complete study toolkit that respects students:
 
 ## Built with
 
-![Built with Python](https://img.shields.io/badge/built%20with-Python-3776AB) ![HTML & CSS](https://img.shields.io/badge/powered%20by-HTML%20%26%20CSS-E34F26) ![Enhanced with JavaScript](https://img.shields.io/badge/enhanced%20with-JavaScript-F7DF1E) ![Hosted on Cloudflare](https://img.shields.io/badge/hosted%20on-Cloudflare-F38020) ![Local AI — No API](https://img.shields.io/badge/local%20AI-no%20API-4A90E2)
+![Built with Python](https://img.shields.io/badge/built%20with-Python-3776AB) ![HTML & CSS](https://img.shields.io/badge/powered%20by-HTML%20%26%20CSS-E34F26) ![Enhanced with JavaScript](https://img.shields.io/badge/enhanced%20with-JavaScript-F7DF1E) ![Hosted on GitHub Pages](https://img.shields.io/badge/hosted%20on-GitHub%20Pages-181717) ![AI via OpenAI API](https://img.shields.io/badge/AI-OpenAI%20API%20(bring%20your%20own%20free%20key)-412991)
 
 - **Python** — the static-site generator (`scripts/build.py`, stdlib only)
 - **HTML & CSS** — hand-crafted semantic markup + design system
 - **JavaScript** — vanilla ES2020 modules, zero frameworks, zero trackers
-- **Cloudflare Pages** — static hosting on the global edge network
+- **GitHub Pages** — free static hosting straight from the repo
 - **Local AI** — vendored WebLLM + Transformers.js; quantized Qwen 2.5 / Phi-3.5 Mini / Gemma 2 models
 
 ## Repository layout
@@ -64,11 +64,11 @@ python3 -m http.server 8080   # → http://localhost:8080
 python3 scripts/fetch_avatar.py
 ```
 
-The generated HTML is committed, so Cloudflare Pages deploys with **no build step**. After editing `content/` or `assets/`, re-run `build.py` and commit the result.
+The generated HTML is committed, so GitHub Pages deploys with **no build step**. After editing `content/` or `assets/`, re-run `build.py` and commit the result.
 
-## Deployment (Cloudflare Pages)
+## Deployment (GitHub Pages)
 
-Connect the repo in Cloudflare Pages (Workers & Pages → Create → Pages). No build command, no output directory — the repo root is the site. The `_headers` file ships security headers (strict CSP, no framing, no-referrer) and immutable asset caching.
+The site is published from the repo itself: push to `main`, then GitHub serves the root as a static site at `https://tuffycoder.github.io/StudyBonk/`. No build command, no output directory — the committed HTML *is* the site. Because it serves from a `/StudyBonk/` subpath, the generator rewrites every asset link to a relative path at build time, so it works unchanged at any base URL. A `<meta>` CSP ships the security policy (GitHub Pages can't set HTTP headers).
 
 ## The local AI
 

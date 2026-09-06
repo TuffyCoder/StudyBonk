@@ -29,8 +29,8 @@
   function setUserQuizzes(list) { window.SB.storage.set("userQuizzes", list); }
 
   async function pdfToText(file) {
-    const pdfjs = await import("/assets/vendor/pdf.min.mjs");
-    pdfjs.GlobalWorkerOptions.workerSrc = "/assets/vendor/pdf.worker.min.mjs";
+    const pdfjs = await import((window.SB_BASE || "/") + "assets/vendor/pdf.min.mjs");
+    pdfjs.GlobalWorkerOptions.workerSrc = (window.SB_BASE || "/") + "assets/vendor/pdf.worker.min.mjs";
     const buf = await file.arrayBuffer();
     const doc = await pdfjs.getDocument({ data: buf }).promise;
     const parts = [];
@@ -129,18 +129,9 @@
 
   async function ensureModel(fb) {
     if (!window.SB.model) { fb.textContent = "Bonk AI unavailable here — using the True/False generator."; return false; }
-    if (window.SB.model.info().ready) return true;
-    fb.textContent = "🦊 Loading Bonk AI (one-time ~874 MB download, cached offline, runs on-device)…";
-    try {
-      await window.SB.model.load(null, (p, t) => {
-        fb.textContent = "🦊 Bonk AI — " + Math.round((p || 0) * 100) + "% · " + String(t).slice(0, 90);
-      });
-      fb.textContent = "🦊 Bonk AI ready — writing your quiz locally…";
-      return true;
-    } catch (e) {
-      fb.textContent = "⚠️ Bonk AI couldn't load (" + String(e && e.message || e).slice(0, 90) + ") — using the True/False generator.";
-      return false;
-    }
+    if (await window.SB.model.isReady()) return true;
+    fb.textContent = "🔑 No OpenAI API key connected yet — connect one free on the Bonk AI page, or keep going with the True/False generator.";
+    return false;
   }
 
   function saveAndPlayQuiz(title, questions, fb) {
@@ -154,7 +145,7 @@
   }
 
   async function processTextToQuiz(text, title, fb) {
-    fb.textContent = "🦊 Asking Bonk AI to write your quiz…";
+    fb.textContent = "🌐 Asking Bonk AI to write your quiz…";
     try {
       const ai = await aiQuizFromText(text, fb);
       if (ai) { saveAndPlayQuiz(title, ai, fb); return; }
@@ -176,14 +167,14 @@
     wrap.className = "card card-glass mt-3";
     wrap.innerHTML =
       "<h2 class='mt-0' style='font-size:1.25rem'>🦊 Bonk AI quiz maker — PDF, notes or URL to quiz</h2>" +
-      "<p class='muted small'>Upload a PDF, paste text, or drop a URL. Bonk AI (a real language model running inside your browser) writes multiple-choice questions with explanations. Falls back to a True/False generator without the model.</p>" +
+      "<p class='muted small'>Upload a PDF, paste text, or drop a URL. Bonk AI (via your OpenAI API key) writes multiple-choice questions with explanations. Falls back to a True/False generator without a key.</p>" +
       '<div class="mode-switch mb-2" id="quiz-import-tabs">' +
       '<button class="active" data-tab="paste" type="button">📝 Paste text</button>' +
       '<button data-tab="file" type="button">📄 Upload PDF / file</button>' +
       '<button data-tab="url" type="button">🔗 From URL</button></div>' +
       '<input id="quiz-title" type="text" placeholder="Quiz name (optional — e.g. Chapter 4 review)" maxlength="60" style="width:100%;padding:12px 16px;border-radius:12px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font-body)">' +
       '<div id="qtab-paste" class="mt-2"><textarea id="quiz-paste" rows="5" placeholder="Paste your notes, chapter or article…" style="width:100%;padding:12px;border-radius:12px;border:2px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font-body)"></textarea>' +
-      '<button class="btn btn-primary mt-2" id="quiz-paste-go">🦊 Generate quiz with Bonk AI</button></div>' +
+      '<button class="btn btn-primary mt-2" id="quiz-paste-go">🌐 Generate quiz with Bonk AI</button></div>' +
       '<div id="qtab-file" class="mt-2" hidden><label class="btn btn-yellow" style="cursor:pointer" for="quiz-file">📄 Choose PDF, .txt or .md</label>' +
       '<input id="quiz-file" type="file" accept=".pdf,.txt,.md,.markdown,.csv,application/pdf,text/plain" hidden>' +
       '<p class="small muted mt-2 mb-0" id="quiz-file-status">PDFs parsed locally — files never leave your device.</p></div>' +
@@ -285,7 +276,7 @@
       };
     });
     wireImporter(mount);
-    history.replaceState(null, "", "/quiz/");
+    history.replaceState(null, "", (window.SB_BASE || "/") + "quiz/");
   }
 
   function allQuestions() {
@@ -297,7 +288,7 @@
 
   function startQuiz(questions, title, isChallenge) {
     quiz = { questions, title, pos: 0, correct: 0, answered: false, isChallenge: !!isChallenge, startedAt: Date.now() };
-    history.replaceState(null, "", quiz.isChallenge ? "/quiz/?challenge=1" : location.search);
+    history.replaceState(null, "", quiz.isChallenge ? (window.SB_BASE || "/") + "quiz/?challenge=1" : location.search);
     renderQuestion();
   }
 
@@ -324,7 +315,7 @@
       '<p class="quiz-question">' + esc(q.q) + "</p>" +
       '<div class="quiz-choices">' + choices + "</div>" +
       '<div id="quiz-feedback"></div>' +
-      '<div class="btn-row mt-3" style="justify-content:space-between"><a href="/quiz/" class="btn btn-ghost btn-sm">Quit</a>' +
+      '<div class="btn-row mt-3" style="justify-content:space-between"><a href="' + (window.SB_BASE || "/") + 'quiz/" class="btn btn-ghost btn-sm">Quit</a>' +
       '<button class="btn btn-primary" id="quiz-next" style="visibility:hidden">Next →</button></div></div>';
 
     mount.querySelector(".quiz-choices").addEventListener("click", (e) => {
@@ -396,10 +387,10 @@
       '<div class="stat-box"><strong>+' + (quiz.correct * 15 + 20) + "</strong><span>XP earned</span></div></div>" +
       '<div class="btn-row" style="justify-content:center">' +
       '<a class="btn btn-primary" href="' + location.pathname + location.search + '">Retry quiz</a>' +
-      '<a class="btn btn-ghost" href="/quiz/">Pick another topic</a>' +
-      '<a class="btn btn-ghost" href="/dashboard/">Dashboard →</a></div></div>';
+      '<a class="btn btn-ghost" href="' + (window.SB_BASE || "/") + 'quiz/">Pick another topic</a>' +
+      '<a class="btn btn-ghost" href="' + (window.SB_BASE || "/") + 'dashboard/">Dashboard →</a></div></div>';
     quiz = null;
-    history.replaceState(null, "", "/quiz/");
+    history.replaceState(null, "", (window.SB_BASE || "/") + "quiz/");
   }
 
   /* ---------- boot ---------- */
