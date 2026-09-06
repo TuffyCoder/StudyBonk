@@ -308,6 +308,8 @@
       "</div>";
     const btn = document.getElementById("connect-openai");
     if (btn) {
+      const input0 = document.getElementById("openai-key");
+      input0.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); btn.click(); } });
       btn.addEventListener("click", async () => {
         const input = document.getElementById("openai-key");
         const status = document.getElementById("connect-status");

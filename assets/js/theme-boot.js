@@ -21,7 +21,7 @@
   }
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", function () {
-      navigator.serviceWorker.register(base + "sw.js").catch(function () {
+      navigator.serviceWorker.register(base + "sw.js", { updateViaCache: "none" }).catch(function () {
         /* offline support unavailable — site still works fine online */
       });
     });

@@ -11,6 +11,8 @@
 
   const API_URL = "https://api.openai.com/v1/chat/completions";
   const DEFAULT_MODEL = "gpt-4o-mini";
+  // Tried in order if OpenAI says the current default is unavailable for the key.
+  const MODEL_FALLBACKS = ["gpt-4.1-mini", "gpt-3.5-turbo"];
   const KEY_STORE = "api.enc";
 
   const hasWebGPU = () => !!navigator.gpu; // kept for UI compat
@@ -27,12 +29,12 @@
 
   async function setKey(key) {
     key = String(key || "").trim();
+    keyEnvCheck();
     if (!/^sk-[A-Za-z0-9_-]{20,}$/.test(key)) {
       throw new Error("That doesn't look like an OpenAI API key (they start with sk-)");
     }
     // verify the key with a tiny real request before saving
-    const ok = await testKey(key);
-    if (!ok) throw new Error("OpenAI rejected that key — double-check it and try again");
+    await testKey(key);
     const enc = await window.SB.crypto.encryptString(JSON.stringify({ key }));
     window.SB.storage.set(KEY_STORE, enc);
     return true;
@@ -42,15 +44,24 @@
     window.SB.storage.remove(KEY_STORE);
   }
 
+  function keyEnvCheck() {
+    if (!window.isSecureContext || !window.crypto || !window.crypto.subtle) {
+      throw new Error("Your browser can't encrypt here — open StudyBonk over HTTPS (or localhost) and try again");
+    }
+  }
+
   async function testKey(key) {
+    let res;
     try {
-      const res = await fetch("https://api.openai.com/v1/models", {
+      res = await fetch("https://api.openai.com/v1/models", {
         headers: { Authorization: "Bearer " + key },
       });
-      return res.ok;
     } catch (e) {
-      return false;
+      throw new Error("Couldn't reach OpenAI — check your internet, VPN or ad-blocker and try again");
     }
+    if (res.status === 401) throw new Error("OpenAI rejected that key — make sure you copied the full sk- key from platform.openai.com/api-keys");
+    if (!res.ok) throw new Error("OpenAI responded with HTTP " + res.status + " — try again in a moment");
+    return true;
   }
 
   /* ---------- interface compatible with the old local engine ---------- */
@@ -66,26 +77,34 @@
     opts = opts || {};
     const key = await getKey();
     if (!key) throw new Error("No API key connected — open the Bonk AI page to connect one");
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + key,
-      },
-      body: JSON.stringify({
-        model: opts.model || DEFAULT_MODEL,
-        messages,
-        temperature: opts.temperature != null ? opts.temperature : 0.5,
-        max_tokens: opts.maxTokens || 700,
-      }),
-    });
-    if (!res.ok) {
+    const models = [opts.model || DEFAULT_MODEL].concat(MODEL_FALLBACKS.filter((m) => m !== (opts.model || DEFAULT_MODEL)));
+    let res, lastErr = "";
+    for (const model of models) {
+      res = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + key,
+        },
+        body: JSON.stringify({
+          model,
+          messages,
+          temperature: opts.temperature != null ? opts.temperature : 0.5,
+          max_tokens: opts.maxTokens || 700,
+        }),
+      });
+      if (res.ok) break;
       let msg = "HTTP " + res.status;
       try {
         const err = await res.json();
         if (err && err.error && err.error.message) msg = err.error.message;
       } catch (e) { /* keep status */ }
-      throw new Error(msg.slice(0, 160));
+      lastErr = msg;
+      // only a missing/retired model is worth retrying with the next candidate
+      if (!/model|deprecat/i.test(msg)) break;
+    }
+    if (!res.ok) {
+      throw new Error(lastErr.slice(0, 160));
     }
     const data = await res.json();
     const out = data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content || "";
