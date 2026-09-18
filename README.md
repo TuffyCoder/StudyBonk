@@ -26,8 +26,6 @@ StudyBonk is a complete study toolkit that respects students:
 <<<<<<< HEAD
 ![Built with Python](https://img.shields.io/badge/built%20with-Python-3776AB) ![HTML & CSS](https://img.shields.io/badge/powered%20by-HTML%20%26%20CSS-E34F26) ![Enhanced with JavaScript](https://img.shields.io/badge/enhanced%20with-JavaScript-F7DF1E) ![Hosted on GitHub Pages](https://img.shields.io/badge/hosted%20on-GitHub%20Pages-181717) ![AI via OpenAI API](https://img.shields.io/badge/AI-OpenAI%20API%20(bring%20your%20own%20free%20key)-412991)
 
-=======
-![Built with Python](https://img.shields.io/badge/built%20with-Python-3776AB) ![HTML & CSS](https://img.shields.io/badge/powered%20by-HTML%20%26%20CSS-E34F26) ![Enhanced with JavaScript](https://img.shields.io/badge/enhanced%20with-JavaScript-F7DF1E)
 >>>>>>> 030721603a59d5763999a7489561b78ddb7906b1
 
 ## Security & disclosure
